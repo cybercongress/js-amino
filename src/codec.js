@@ -2,7 +2,10 @@ const RegisteredType = require("./registeredType").RegisteredType
 const Reflection = require("./reflect")
 const BinaryEncoder = require("./binaryEncoder")
 const TypeFactory = require("./typeFactory")
-let { Types,WireType } = require('./types')
+let {
+    Types,
+    WireType
+} = require('./types')
 
 
 let instance = null;
@@ -11,7 +14,7 @@ let privObj = {
     typeMap: null
 }
 
-class Codec {    
+class Codec {
 
     constructor() {
         if (!instance) {
@@ -23,53 +26,53 @@ class Codec {
 
     registerConcrete(instance, name, opt) {
         let typeName = Reflection.typeOf(instance);
-        if( this.typeMap.get(typeName) ) {
-            throw new Error(`${typeName} was registered`)           
-        }         
-        let registeredType = new RegisteredType(name,typeName)
-        
-        privObj.typeMap.set(typeName, registeredType)       
+        if (this.typeMap.get(typeName)) {
+            throw new Error(`${typeName} was registered`)
+        }
+        let registeredType = new RegisteredType(name, typeName)
+
+        privObj.typeMap.set(typeName, registeredType)
 
     }
 
     marshalJson(obj) {
-        if(!obj) return null;
-        let typeInfo = this.typeMap.get( Reflection.typeOf(obj) )
+        if (!obj) return null;
+        let typeInfo = this.typeMap.get(Reflection.typeOf(obj))
         let serializedObj = {
             type: typeInfo.disfix.toString('hex'),
             value: {}
         }
-        serializedObj.value = Object.assign({},obj)
+        serializedObj.value = Object.assign({}, obj)
 
-        return JSON.stringify(serializedObj);       
+        return JSON.stringify(serializedObj);
 
     }
 
     unMarshalJson(json, instance) {
         let deserializedObj = JSON.parse(json)
         let typeName = Reflection.typeOf(instance);
-        if( !this.typeMap.get(typeName) ) {
+        if (!this.typeMap.get(typeName)) {
             throw new Error(`No ${typeName} was registered`)
-            return;          
-        }       
-        Object.assign(instance, deserializedObj.value)               
-        
+            return;
+        }
+        Object.assign(instance, deserializedObj.value)
+
     }
 
     marshalBinary(obj) {
-        if(!obj) return null;
-        let typeInfo = this.typeMap.get( Reflection.typeOf(obj) )
-        if(!typeInfo) return null;
-       let encodedData =  BinaryEncoder.encodeBinaryStruct(obj)     
-       let binWithoutLenPrefix = typeInfo.prefix.concat(encodedData); 
-       let lengthPrefix = binWithoutLenPrefix.length;
-       return [lengthPrefix].concat(binWithoutLenPrefix)
+        if (!obj) return null;
+        let typeInfo = this.typeMap.get(Reflection.typeOf(obj))
+        if (!typeInfo) return null;
+        let encodedData = BinaryEncoder.encodeBinaryStruct(obj)
+        let binWithoutLenPrefix = typeInfo.prefix.concat(encodedData);
+        let lengthPrefix = binWithoutLenPrefix.length;
+        return [lengthPrefix].concat(binWithoutLenPrefix)
 
     }
 
     unMarshalBinary(json, instance) {
-                
-        
+
+
     }
     get typeMap() {
         return privObj.typeMap;
@@ -80,44 +83,65 @@ module.exports = {
     Codec
 }
 
-class MyStruct 
-{
-    constructor(a,b,c,d,e) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
-        this.e = e;      
 
-    }
-}
 
 if (require.main === module) {
     let codec1 = new Codec();
 
-    let A = TypeFactory.create('TestAmino', [{
+    let SubA = TypeFactory.create('SubA', [{
         name: "a",
-        type: Types.Int8
+        type: Types.String
     },
     {
         name: "b",
+        type: Types.Int64
+    },
+    {
+        name: "sub2",
+        type: Types.Struct
+    }])
+
+    let SubA2 = TypeFactory.create('SubA2', [{
+        name: "c",
         type: Types.String
+    },
+    {
+        name: "d",
+        type: Types.Int8
     }
 ])
 
-   
-    
-    codec1.registerConcrete(new A(),"SimpleStruct",{})
-   // codec1.registerConcrete(new A(),"SimpleStruct",{})
-    let aObj = new A(127,"toi la tan")
-   // let myStruct = new MyStruct(100,200,300,"SimpleStruct",400)
-   
+
+    let A = TypeFactory.create('A', [{
+            name: "a",
+            type: Types.Int64
+        },
+        {
+            name: "b",
+            type: Types.String
+        },
+        {
+            name: "sub",
+            type: Types.Struct
+        }
+    ])
+
+
+
+    codec1.registerConcrete(new A(), "SimpleStruct", {})
+   // codec1.registerConcrete(new SubA(), "SubStruct", {})
+    // codec1.registerConcrete(new A(),"SimpleStruct",{})
+    let subObj = new SubA(10)
+    let subObj2 = new SubA2("Do Ngoc Tan",21)
+    let aObj = new A(234,"Sanh la tin", new SubA("Toi la Tan",999,subObj2))
+    // let myStruct = new MyStruct(100,200,300,"SimpleStruct",400)
+
 
     let binary = codec1.marshalBinary(aObj)
     console.log(binary)
-    
-    
-  
-   
+
+
+
+
 
 }

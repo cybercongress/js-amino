@@ -3,7 +3,8 @@ const Types = {
     Int32: Symbol('Int32'),
     Int16: Symbol('Int16'),
     Int8: Symbol('Int8'),
-    String: Symbol('String')
+    String: Symbol('String'),
+    Struct: Symbol('Struct')
 }
 
 //reference this link: https://developers.google.com/protocol-buffers/docs/encoding

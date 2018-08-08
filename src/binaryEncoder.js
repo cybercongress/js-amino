@@ -2,7 +2,7 @@ const Reflection = require("./reflect")
 const Encoder = require("./encoder")
 let { Types,WireType } = require('./types')
 
-const encodeBinaryStruct = instance => {
+const encodeBinaryStruct = (instance,isBare = true) => {
     let result = []    
     Reflect.ownKeys(instance).forEach((key, idx) => {
         let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking   
@@ -11,6 +11,9 @@ const encodeBinaryStruct = instance => {
             result = result.concat(encodeData)
         }
     })
+    if(!isBare) {
+        result = [result.length].concat(result)
+    }
 
     return result;
 
@@ -22,7 +25,7 @@ const encodeBinary = (typeInstance, idx, type) => {
 
         case Types.Int64:
             {
-                let encodedInt = encodeFunc(typeInstance,idx,Encoder.encodeSignedVarint,WireType.Varint)
+                let encodedInt = encodeFunc(typeInstance,idx,Encoder.encodeSignedVarint,WireType.Varint)                
                     //encodeBinaryInt(typeInstance, idx)
                 data = encodedInt
                 break;
@@ -38,6 +41,12 @@ const encodeBinary = (typeInstance, idx, type) => {
                 data = encodeData
                 break;
             }
+            case Types.Struct: {
+                let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireType.ByteLength)
+                let encodedData = encodeBinaryStruct(typeInstance,false)                
+                data = encodeField.concat(encodedData);                
+                break;
+            }
         default: {
             console.log("There is no data type to encode")
         }
@@ -48,6 +57,7 @@ const encodeBinary = (typeInstance, idx, type) => {
 
 const encodeBinaryInt = (input, idx) => {
     let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireType.Varint)
+    
     let encodedVal = Encoder.encodeSignedVarint(input)
     return encodeField.concat(encodedVal)
 }
@@ -60,7 +70,7 @@ const encodeBinaryString = (input, idx) => {
 }
 
 const encodeFunc = (input,idx,callBack, wireType) => {
-    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, wireType)
+    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, wireType)    
     let encodedVal = callBack(input)
     return encodeField.concat(encodedVal)
 }
