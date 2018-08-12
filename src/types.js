@@ -7,7 +7,7 @@ const Types = {
     Struct: Symbol('Struct')
 }
 
-//reference this link: https://developers.google.com/protocol-buffers/docs/encoding
+//reference : https://developers.google.com/protocol-buffers/docs/encoding
 const WireType = {
     Varint: 0, //int32, int64, uint32, uint64, sint32, sint64, bool, enum
     Type8Byte: 1, //fixed64, sfixed64, double
@@ -15,7 +15,19 @@ const WireType = {
     Type4Byte: 5  //fixed32, sfixed32, float
 }
 
+const WireMap = {
+    [Types.Int64]: WireType.Varint,
+    [Types.Int32]: WireType.Varint,
+    [Types.Int16]: WireType.Varint,
+    [Types.Int8]: WireType.Varint,
+    [Types.String]: WireType.ByteLength,
+    [Types.Struct]: WireType.ByteLength
+   
+
+}
+
 module.exports = {
     Types,
-    WireType
+    WireType,
+    WireMap
 }

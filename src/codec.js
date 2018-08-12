@@ -63,7 +63,7 @@ class Codec {
         if (!obj) return null;
         let typeInfo = this.typeMap.get(Reflection.typeOf(obj))
         if (!typeInfo) return null;
-        let encodedData = BinaryEncoder.encodeBinaryStruct(obj)
+        let encodedData = BinaryEncoder.encodeBinary(obj)
         let binWithoutLenPrefix = typeInfo.prefix.concat(encodedData);
         let lengthPrefix = binWithoutLenPrefix.length;
         return [lengthPrefix].concat(binWithoutLenPrefix)

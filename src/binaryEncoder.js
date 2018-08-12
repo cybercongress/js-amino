@@ -1,17 +1,21 @@
 const Reflection = require("./reflect")
 const Encoder = require("./encoder")
-let { Types,WireType } = require('./types')
+let {
+    Types,
+    WireType,
+    WireMap
+} = require('./types')
 
-const encodeBinaryStruct = (instance,isBare = true) => {
-    let result = []    
+const encodeBinary = (instance, isBare = true) => {
+    let result = []
     Reflect.ownKeys(instance).forEach((key, idx) => {
         let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking   
-        let encodeData = encodeBinary(instance[key], idx, type)
-        if (encodeData) {            
+        let encodeData = encodeBinaryField(instance[key], idx, type)
+        if (encodeData) {
             result = result.concat(encodeData)
         }
     })
-    if(!isBare) {
+    if (!isBare) {
         result = [result.length].concat(result)
     }
 
@@ -19,14 +23,13 @@ const encodeBinaryStruct = (instance,isBare = true) => {
 
 }
 
-const encodeBinary = (typeInstance, idx, type) => {
+const encodeBinaryField = (typeInstance, idx, type) => {
     let data = null;
     switch (type) {
 
         case Types.Int64:
             {
-                let encodedInt = encodeFunc(typeInstance,idx,Encoder.encodeSignedVarint,WireType.Varint)                
-                    //encodeBinaryInt(typeInstance, idx)
+                let encodedInt = encodeFunc(typeInstance, idx, Encoder.encodeSignedVarint, WireMap[Types.Int64])
                 data = encodedInt
                 break;
             }
@@ -36,45 +39,41 @@ const encodeBinary = (typeInstance, idx, type) => {
                 data = encodedString
                 break;
             }
-            case Types.Int8: {
-                let encodeData = encodeFunc(typeInstance,idx,Encoder.encodeSignedVarint,WireType.Varint)
+        case Types.Int8:
+            {
+                let encodeData = encodeFunc(typeInstance, idx, Encoder.encodeSignedVarint, WireMap[Types.Int8] )
                 data = encodeData
                 break;
             }
-            case Types.Struct: {
-                let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireType.ByteLength)
-                let encodedData = encodeBinaryStruct(typeInstance,false)                
-                data = encodeField.concat(encodedData);                
+        case Types.Struct:
+            {
+                let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.Struct])
+                let encodedData = encodeBinary(typeInstance, false)
+                data = encodeField.concat(encodedData);
                 break;
             }
-        default: {
-            console.log("There is no data type to encode")
-        }
+        default:
+            {
+                console.log("There is no data type to encode")
+            }
     }
     return data;
 
 }
 
-const encodeBinaryInt = (input, idx) => {
-    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireType.Varint)
-    
-    let encodedVal = Encoder.encodeSignedVarint(input)
-    return encodeField.concat(encodedVal)
-}
-
 const encodeBinaryString = (input, idx) => {
-    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireType.ByteLength)
+    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.String])
     let encodedString = Encoder.encodeString(input)
     return encodeField.concat(encodedString);
 
 }
 
-const encodeFunc = (input,idx,callBack, wireType) => {
-    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, wireType)    
+const encodeFunc = (input, idx, callBack, wireType) => {
+    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, wireType)
     let encodedVal = callBack(input)
     return encodeField.concat(encodedVal)
 }
 
 module.exports = {
-    encodeBinaryStruct
+    encodeBinary
 }
