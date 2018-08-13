@@ -1,15 +1,12 @@
 
+let Utils = require('./utils')
+
 
 const PrefixBytesLen = 4;
 const DisambBytesLen = 3;
 const DisfixBytesLen = PrefixBytesLen + DisambBytesLen;
 const DelimiterValue = 0x00;
 
-const getHash256 = input => {
-    let sha256 = require('js-sha256');
-    let hash2 = sha256.update(input);   
-    return hash2.array();
-}
 
 let privObj = {
     disamb:null,
@@ -20,8 +17,7 @@ let privObj = {
  class RegisteredType {
 
     constructor(name, rtype) {
-        this.name = name;
-        this._nameHash = getHash256(name);            
+        this.name = name;                    
         privObj = this.calculateDisambAndPrefix();
         privObj.reflectType = rtype           
     }
@@ -42,25 +38,33 @@ let privObj = {
         return privObj.rtype;
     }
      /**
-     * save KeyInfo with name to Db.  
+     * save Disamb and prefix.
+     * refer the calculation: https://github.com/tendermint/go-amino  
      * @param {None}      * 
      * @return {Object} : 2 properties :disAmb and prefix
      */
-
+     
     calculateDisambAndPrefix() {
-        let nameHash = getHash256(this.name)
-        while( this._nameHash[0] == DelimiterValue) {
-            nameHash = nameHash.slice(1)
-        }
+        let nameHash = Utils.getHash256(this.name)
+        nameHash = this.dropLeadingZeroByte(nameHash)        
         let disamb = nameHash.slice(0, DisambBytesLen)
-        nameHash = nameHash.slice(3);
-        while( this._nameHash[0] == DelimiterValue) {
-            nameHash = nameHash.slice(1)
-        }
+        nameHash = this.dropLeadingZeroByte(nameHash.slice(3))      
         let prefix = nameHash.slice(0,PrefixBytesLen)
+       
+        return {disamb, prefix};        
+    }
 
-        return {disamb, prefix};
-        
+    /**
+     * remove the first item in hash until there is no DelimiterValue at 1st element .
+     * refer the calculation: https://github.com/tendermint/go-amino  
+     * @param {array}      * hash input
+     * @return {array} : array that contains no DelimiterValue at 1st position
+     */
+    dropLeadingZeroByte(hash) {
+        while(hash[0] == DelimiterValue) {
+            hash = hash.slice(1)
+        }
+        return hash;
     }
 }
 

@@ -16,7 +16,7 @@ const encodeInt8 = input => {
 }
 
 const encodeInt16 = input => {
-    return encodeSignedVarint(input)
+    return encodeSignedVarint(input) //todo: add Int16Array ?
 }
 
 const encodeString = input => {
@@ -31,7 +31,7 @@ const encodeString = input => {
 }
 
 const encodeUint8 = input => {
-    return encodeUVarint(input)
+    return encodeUVarint(input) //todo: add Uint8Array
 }
 
 const encodeBoolean = input => {
@@ -50,5 +50,6 @@ module.exports = {
     encodeFieldNumberAndType,
     encodeString,
     encodeInt8,
-    encodeInt16
+    encodeInt16,
+    encodeBoolean
 }

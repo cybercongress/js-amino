@@ -55,6 +55,7 @@ const encodeBinaryField = (typeInstance, idx, type) => {
         default:
             {
                 console.log("There is no data type to encode")
+                break;
             }
     }
     return data;
