@@ -8,7 +8,7 @@ const Types = {
 }
 
 //reference : https://developers.google.com/protocol-buffers/docs/encoding
-const WireType = {
+let WireType = {
     Varint: 0, //int32, int64, uint32, uint64, sint32, sint64, bool, enum
     Type8Byte: 1, //fixed64, sfixed64, double
     ByteLength: 2, //string, bytes, embedded messages, packed repeated fields
@@ -24,6 +24,28 @@ const WireMap = {
     [Types.Struct]: WireType.ByteLength
    
 
+}
+
+WireType.keysOf = number => {
+    let resultKey = null
+    Reflect.ownKeys(WireType).forEach(key => {        
+        if(WireType[key] == number ) {
+            resultKey = key
+            return;
+        }
+    })
+    return resultKey
+}
+
+WireMap.keysOf = wireType => {
+    let resultKey = null
+    Reflect.ownKeys(WireMap).forEach(key => {                
+        if(WireMap[key] == wireType ) {
+            resultKey = key
+            return;
+        }
+    })
+    return resultKey
 }
 
 module.exports = {

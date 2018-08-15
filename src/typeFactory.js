@@ -6,6 +6,12 @@ const Reflection = require("./reflect")
 
 let privTypeMap = Symbol("privateTypeMap")
 
+let aminoTypes  = new Array()
+
+const isExisted = name => {
+    return aminoTypes.includes(name)
+}
+
 
 class BaseAminoType {
 
@@ -19,6 +25,7 @@ class BaseAminoType {
     lookup(name) {
         return this[privTypeMap].get(name)
     }
+    
 }
 
 
@@ -54,12 +61,14 @@ let create = (className, properties) => {
             return className;
         }
     }
+    aminoTypes.push(className)
     return AminoType;
 
 }
 
 module.exports = {
-    create
+    create,
+    isExisted
 }
 
 

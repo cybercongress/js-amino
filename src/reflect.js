@@ -1,4 +1,5 @@
 let { Types } = require('./types')
+let Factory = require('./typeFactory')
 
 const typeOf = instance => {
     if ((typeof instance) === "undefined") {
@@ -17,6 +18,15 @@ const typeOf = instance => {
     return typeof instance;
 }
 
+const ownKeys = instance => {    
+    if( !Factory.isExisted(typeOf(instance)) ) throw new TypeError("instance must be amino type")
+    return Reflect.ownKeys(instance).filter(key => {
+        let val = instance.lookup(key)
+        return val != null || val != undefined
+    })
+}
+
 module.exports = {
-    typeOf
+    typeOf,
+    ownKeys
 }

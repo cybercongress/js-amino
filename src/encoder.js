@@ -19,8 +19,15 @@ const encodeInt16 = input => {
     return encodeSignedVarint(input) //todo: add Int16Array ?
 }
 
-const encodeString = input => {
-    console.log(input)
+const encodeInt32 = input => {
+
+}
+
+const encodeInt64 = input => {
+    
+}
+
+const encodeString = input => {    
     let data = input.split('')
     let encodedData =[]
     data.forEach(element => {        

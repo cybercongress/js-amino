@@ -8,7 +8,7 @@ let {
 
 const encodeBinary = (instance, isBare = true) => {
     let result = []
-    Reflect.ownKeys(instance).forEach((key, idx) => {
+    Reflection.ownKeys(instance).forEach((key, idx) => {
         let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking   
         let encodeData = encodeBinaryField(instance[key], idx, type)
         if (encodeData) {
