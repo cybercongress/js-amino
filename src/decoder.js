@@ -52,14 +52,40 @@ const decodeInt16 = input => {
 }
 
 const decodeString = input => {
-    let decodedData = decodeUVarint(input)
+    /* let {data,byteLength} = decodeUVarint(input)
+    let strLength = data
+    if(input.length < strLength) throw new RangeError(`insufficient bytes decoding string of length ${strLength}`)
+    
+    let str = input.slice(byteLength,strLength+1); */
+    let decodedSlice = decodeSlice(input)
+    let str = decodedSlice.data
+    str.forEach( (element,idx) => { //for-each instead of map to prevent copy js array
+        str[idx] = String.fromCharCode(element)                
+    });
+    str = str.join('')    
 
-
+    return {
+        data:str,
+        byteLength: decodedSlice.byteLength
+    } 
 }
 
-const decodeFieldNumberAndType = bz => {     
-    let decodedData =  decodeUVarint(bz)
-    let wiretypeNumber = decodedData.data & 0x07    
+const decodeSlice = input =>{
+    let {data,byteLength} = decodeUVarint(input)
+    let length = data
+    if(input.length < length) throw new RangeError(`insufficient bytes decoding string of length ${strLength}`)
+    
+    let slicedData = input.slice(byteLength,length+1);
+
+    return {
+        data:slicedData,
+        byteLength: byteLength + length
+    } 
+}
+
+const decodeFieldNumberAndType = bz => {  
+    let decodedData = decodeUVarint(bz)   
+    let wiretypeNumber = decodedData.data & 0x07
     let type = WireMap.keysOf(wiretypeNumber)  
     let idx =  decodedData.data >> 3    
 
@@ -74,7 +100,8 @@ module.exports = {
     decodeInt8,
     decodeInt16,
     decodeString,
-    decodeFieldNumberAndType
+    decodeFieldNumberAndType,
+    decodeSlice
 }
 
 if (require.main === module) {

@@ -8,24 +8,31 @@ let {
 } = require('./types')
 
 const decodeBinary = (bz, instance, isBare = true) => {
-    Reflection.ownKeys(instance).forEach((key, idx) => {
-        let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking        
-        let {
-            data,
-            newBz
-        } = decodeBinaryField(bz, idx, type)
+   
+    Reflection.ownKeys(instance).forEach((key, idx) => {    
+         
+        let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking         
+                     
+        let {data, newBz} = decodeBinaryField(bz, idx, type,instance[key])
         instance[key] = data
-        bz = newBz     
-
+        bz = newBz  
     })
+    if(!isBare) {
+       // console.log("data=",instance)
+        return {
+            data: instance,
+            newBz:bz
+        }
+    }
+    else return;
 
 }
 
-const decodeBinaryField = (bz, idx, type) => {
-    let decodedFieldtype = Decoder.decodeFieldNumberAndType(bz)
-
-    if (type.toString() != decodedFieldtype.type.toString()) throw new TypeError("Type does not match in decoding")
-
+const decodeBinaryField = (bz, idx, type,instance) => {
+    let decodedFieldtype = Decoder.decodeFieldNumberAndType(bz)     
+    //if (type.toString() != decodedFieldtype.type.toString()) throw new TypeError("Type does not match in decoding")
+    if (WireMap[type] != WireMap[decodedFieldtype.type]) throw new TypeError("Type does not match in decoding")
+    
     if (idx + 1 != decodedFieldtype.idx) throw new RangeError("Index of Field is not match while decoding")
     bz = bz.slice(decodedFieldtype.byteLength)
     let decodedData = null;
@@ -33,7 +40,7 @@ const decodeBinaryField = (bz, idx, type) => {
 
         case Types.Int64:
             {
-
+               //todo
                 break;
             }
         case Types.String:
@@ -48,8 +55,9 @@ const decodeBinaryField = (bz, idx, type) => {
                 break;
             }
         case Types.Struct:
-            {
-
+            {   let firstField = Decoder.decodeSlice(bz)
+                bz = bz.slice(1)                
+                decodedData = decodeBinary(bz, instance, false)               
                 break;
             }
         default:

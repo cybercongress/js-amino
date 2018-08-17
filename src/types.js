@@ -37,7 +37,7 @@ WireType.keysOf = number => {
     return resultKey
 }
 
-WireMap.keysOf = wireType => {
+WireMap.keysOf = wireType => {    
     let resultKey = null
     Reflect.ownKeys(WireMap).forEach(key => {                
         if(WireMap[key] == wireType ) {

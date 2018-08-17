@@ -1,12 +1,14 @@
 //let privTypeMap = undefined
-let { Types } = require('./types')
+let {
+    Types
+} = require('./types')
 
-const Reflection = require("./reflect") 
+const Reflection = require("./reflect")
 
 
 let privTypeMap = Symbol("privateTypeMap")
 
-let aminoTypes  = new Array()
+let aminoTypes = new Array()
 
 const isExisted = name => {
     return aminoTypes.includes(name)
@@ -16,16 +18,19 @@ const isExisted = name => {
 class BaseAminoType {
 
     constructor() {
-        this[privTypeMap] = new Map();
+        this[privTypeMap] = new Map();       
+
     }
 
     set(name, type) {
+        if( this[privTypeMap].has(name) ) throw new RangeError(`property '${name}' existed`)
         this[privTypeMap].set(name, type)
     }
+
     lookup(name) {
         return this[privTypeMap].get(name)
     }
-    
+
 }
 
 
@@ -48,20 +53,41 @@ let create = (className, properties) => {
             let idx = 0;
             properties.forEach(prop => {
                 Reflect.ownKeys(prop).forEach(key => {
+
                     if (key == 'name') {
                         this[prop[key]] = args[idx++]
                     } else if (key == 'type') {
                         this.set(prop['name'], prop['type'])
+                        if (prop['type'] == Types.Struct) { //set up the default value for Type.Struct field
+                            if (this[prop['name']]) {
+                                let defaultAminotye = Object.assign({}, this[prop['name']])
+                                Object.setPrototypeOf(defaultAminotye, AminoType.prototype);
+                                AminoType.defaultMap.set(prop['name'], defaultAminotye)
+                            }
+                        }
                     }
                 })
             })
+            if (args.length == 0) {
+
+                this[privTypeMap].forEach((value, key, map) => {
+                    if (value == Types.Struct) {
+                        this[key] = AminoType.defaultMap.get(key)
+                    }
+                })
+            }          
 
         }
+
         typeName() {
             return className;
         }
+
+       
     }
     aminoTypes.push(className)
+    AminoType.defaultMap = new Map(); //static map for default value-dirty hack
+
     return AminoType;
 
 }
@@ -84,14 +110,14 @@ if (require.main === module) {
     ])
 
     let B = create('B', [{
-        name: "a",
-        type: Types.Int32
-    },
-    {
-        name: "b",
-        type: Types.Int16
-    }
-])
+            name: "a",
+            type: Types.Int32
+        },
+        {
+            name: "b",
+            type: Types.Int16
+        }
+    ])
 
 
 

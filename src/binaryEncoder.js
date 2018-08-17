@@ -47,7 +47,7 @@ const encodeBinaryField = (typeInstance, idx, type) => {
             }
         case Types.Struct:
             {
-                let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.Struct])
+                let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.Struct])                
                 let encodedData = encodeBinary(typeInstance, false)
                 data = encodeField.concat(encodedData);
                 break;

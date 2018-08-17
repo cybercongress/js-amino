@@ -19,7 +19,7 @@ const typeOf = instance => {
 }
 
 const ownKeys = instance => {    
-    if( !Factory.isExisted(typeOf(instance)) ) throw new TypeError("instance must be amino type")
+    if( !Factory.isExisted(typeOf(instance)) ) throw new TypeError("instance must be amino type") //remember to check it again
     return Reflect.ownKeys(instance).filter(key => {
         let val = instance.lookup(key)
         return val != null || val != undefined
