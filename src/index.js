@@ -1,17 +1,17 @@
-const Address = require('./address');
-const Encode = require('./encode');
+let {Codec} = require("./codec")
+const TypeFactory = require("./typeFactory")
+
+let {Types,WireType} = require('./types')
+const Utils = require("./utils")
 
 
+
+//let codec = new Codec();
 
 module.exports = {
-    marsalJson: data => {
-        
-    },
-    unMarsalJson: (data,type) => {
-       
-    },
-    registerConreteType: (type,id) => {
-       
-    }
-
+    Codec,
+    TypeFactory,
+    Utils,
+    Types,
+    WireType
 }
