@@ -7,7 +7,8 @@ const Utils = require("./utils")
 
 let {
     Types,
-    WireType
+    WireType,
+    WireMap
 } = require('./types')
 
 
@@ -72,10 +73,14 @@ class Codec {
         if (!obj) return null;
         let typeInfo = this.lookup(Reflection.typeOf(obj))
         if (!typeInfo) return null;
-        let encodedData = BinaryEncoder.encodeBinary(obj)
-        let binWithoutLenPrefix = typeInfo.prefix.concat(encodedData);
-        let lengthPrefix = binWithoutLenPrefix.length;
-        return [lengthPrefix].concat(binWithoutLenPrefix)
+        let encodedData = BinaryEncoder.encodeBinary(obj,typeInfo)
+       // let binWithoutLenPrefix = typeInfo.prefix.concat(encodedData);
+        let lengthPrefix = encodedData.length//binWithoutLenPrefix.length;
+       // return [lengthPrefix].concat(binWithoutLenPrefix)
+       typeInfo.prefix[3] |= WireMap[Types.Struct] //new code  
+       let binWithoutLenPrefix = typeInfo.prefix.concat(encodedData);  
+       
+       return [binWithoutLenPrefix.length].concat(binWithoutLenPrefix)
 
     }
 
@@ -100,9 +105,9 @@ class Codec {
     }
 }
 
-module.exports = {
-    Codec
-}
+
+
+module.exports =  Codec;
 
 
 

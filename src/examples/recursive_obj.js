@@ -1,6 +1,6 @@
 let {Codec,TypeFactory,Utils, Types, WireTypes} = require('../index')
 
-let codec1 = new Codec();
+let codec = new Codec();
 
 let SubA = TypeFactory.create('SubA', [{
     name: "a",
@@ -58,25 +58,47 @@ let B = TypeFactory.create('B', [{
     type: Types.Struct
 }
 ])
+let subC = TypeFactory.create('SubC', [ {
+     name: "a",
+     type: Types.String
+ }
+ ])
 
+let C = TypeFactory.create('C', [{
+    name: "a",
+    type: Types.Int64
+},
+{
+    name: "b",
+    type: Types.Int8
+},
+{
+    name: "c",
+    type: Types.String
+},
+{
+    name: "d",
+    type: Types.Struct
+}
+])
 
-
-codec1.registerConcrete(new A(), "SimpleStruct", {})  
+codec.registerConcrete(new A(), "SimpleStruct", {}) 
+codec.registerConcrete(new C(), "shareledger/MsgSend", {}) 
 let subObj = new SubA(10)
 let subObj2 = new SubA2("Do Ngoc Tan",21)
 let aObj = new A(23,"Sanh la tin", new SubA("Toi la Tan",12,subObj2))    
 let bObj = new A()
 
-let binary = codec1.marshalBinary(aObj)
- 
+let binary = codec.marshalBinary(new C(100,10,"Toi La Tan", new subC("Truong Huynh Anh Thu")))
+ console.log(binary)
 
-codec1.unMarshalBinary(binary,bObj)
+/*codec.unMarshalBinary(binary,bObj)
 if( Utils.isEqual(aObj,bObj)) {
     console.log("equal")
 }
 else console.log("Not equal")
+*/
 
-//console.log(bObj)
 
 
 

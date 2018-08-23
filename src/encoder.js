@@ -1,5 +1,6 @@
 let varint = require('varint')
 var svarint = require('signed-varint')
+let Int53 = require("int53")
 
 const encodeSignedVarint = input => {
     let buf = svarint.encode(input)
@@ -24,16 +25,18 @@ const encodeInt32 = input => {
 }
 
 const encodeInt64 = input => {
-    
+    let buff = Buffer(8)
+    Int53.writeInt64BE(input, buff, 0)
+    return Array.from(new Int32Array(buff))
 }
 
-const encodeString = input => {    
+const encodeString = input => {
     let data = input.split('')
-    let encodedData =[]
-    data.forEach(element => {        
-        encodedData = encodedData.concat(encodeUVarint(element.charCodeAt()))        
+    let encodedData = []
+    data.forEach(element => {
+        encodedData = encodedData.concat(encodeUVarint(element.charCodeAt()))
     });
-    
+
     return [input.length].concat(encodedData)
 }
 
@@ -42,12 +45,12 @@ const encodeUint8 = input => {
 }
 
 const encodeBoolean = input => {
-    if(input) return encodeUint8(1)
+    if (input) return encodeUint8(1)
     return encodeUint8(0)
 }
 
-const encodeFieldNumberAndType = (num,type) => { //reference:https://developers.google.com/protocol-buffers/docs/encoding
-    let encodedVal = (num <<3 | type )
+const encodeFieldNumberAndType = (num, type) => { //reference:https://developers.google.com/protocol-buffers/docs/encoding
+    let encodedVal = (num << 3 | type)
     return varint.encode(encodedVal)
 }
 
@@ -58,5 +61,6 @@ module.exports = {
     encodeString,
     encodeInt8,
     encodeInt16,
+    encodeInt64,
     encodeBoolean
 }

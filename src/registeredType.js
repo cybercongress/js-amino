@@ -49,8 +49,8 @@ let privObj = {
         nameHash = this.dropLeadingZeroByte(nameHash)        
         let disamb = nameHash.slice(0, DisambBytesLen)
         nameHash = this.dropLeadingZeroByte(nameHash.slice(3))      
-        let prefix = nameHash.slice(0,PrefixBytesLen)
-       
+        let prefix = nameHash.slice(0,PrefixBytesLen)      
+        prefix[3] &= 0xF8
         return {disamb, prefix};        
     }
 
@@ -72,7 +72,7 @@ module.exports = {
     RegisteredType
 }
 if (require.main === module) {
-    let type = new RegisteredType("SimpleStruct");
+    let type = new RegisteredType("shareledger/MsgSend");
     console.log("disAmb=",type.disamb)
     console.log("prefix=",type.prefix)
     console.log("disfix=", type.disfix)
