@@ -8,22 +8,29 @@ const DisfixBytesLen = PrefixBytesLen + DisambBytesLen;
 const DelimiterValue = 0x00;
 
 
-let privObj = {
+let private = {
     disamb:null,
     prefix: null,
-    reflectType: null
+    reflectType: null,
+    isRegistered: false
 }
+
+let privObject = Symbol("privateObj")
 
  class RegisteredType {
 
     constructor(name, rtype) {
-        this.name = name;                    
-        privObj = this.calculateDisambAndPrefix();
-        privObj.reflectType = rtype           
+        this.name = name;
+                             
+        this[privObject]  = this.calculateDisambAndPrefix();
+        this[privObject].reflectType = rtype
+        this[privObject].isRegistered = false;
+       // privObj.reflectType = rtype 
+       // privObj.isRegistered = false          
     }
 
     get prefix() {
-        return privObj.prefix
+        return this[privObject].prefix
     }
 
     get disfix() {       
@@ -31,12 +38,22 @@ let privObj = {
     }
 
     get disamb() {
-        return privObj.disamb
+        return this[privObject].disamb
     }
 
     get reflectType() {
-        return privObj.rtype;
+        return this[privObject].rtype;
     }
+
+    get registered() {
+        return this[privObject].isRegistered
+    }
+
+    set registered(status) {
+        this[privObject].isRegistered = status;
+    }
+
+
      /**
      * save Disamb and prefix.
      * refer the calculation: https://github.com/tendermint/go-amino  

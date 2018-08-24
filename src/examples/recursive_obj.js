@@ -84,6 +84,7 @@ let C = TypeFactory.create('C', [{
 
 codec.registerConcrete(new A(), "SimpleStruct", {}) 
 codec.registerConcrete(new C(), "shareledger/MsgSend", {}) 
+codec.registerConcrete(new subC(),"shareledger/SubStruct",{})
 let subObj = new SubA(10)
 let subObj2 = new SubA2("Do Ngoc Tan",21)
 let aObj = new A(23,"Sanh la tin", new SubA("Toi la Tan",12,subObj2))    

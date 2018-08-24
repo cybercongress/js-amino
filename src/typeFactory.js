@@ -18,7 +18,8 @@ const isExisted = name => {
 class BaseAminoType {
 
     constructor() {
-        this[privTypeMap] = new Map();       
+        this[privTypeMap] = new Map(); 
+        //this.info = null      
 
     }
 
@@ -30,6 +31,7 @@ class BaseAminoType {
     lookup(name) {
         return this[privTypeMap].get(name)
     }
+   
 
 }
 
@@ -53,7 +55,6 @@ let create = (className, properties) => {
             let idx = 0;
             properties.forEach(prop => {
                 Reflect.ownKeys(prop).forEach(key => {
-
                     if (key == 'name') {
                         this[prop[key]] = args[idx++]
                     } else if (key == 'type') {
@@ -69,7 +70,6 @@ let create = (className, properties) => {
                 })
             })
             if (args.length == 0) {
-
                 this[privTypeMap].forEach((value, key, map) => {
                     if (value == Types.Struct) {
                         this[key] = AminoType.defaultMap.get(key)
@@ -83,10 +83,19 @@ let create = (className, properties) => {
             return className;
         }
 
+        get info() {
+            return AminoType.info
+        }
+
+        set info(_info) {
+            AminoType.info = _info;
+        }
+
        
     }
     aminoTypes.push(className)
     AminoType.defaultMap = new Map(); //static map for default value-dirty hack
+    AminoType.info = null //static registered type info
 
     return AminoType;
 

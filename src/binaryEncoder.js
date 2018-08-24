@@ -16,13 +16,20 @@ const encodeBinary = (instance, typeInfo, isBare = true) => {
         }
     })
     if (!isBare) {
-       // result = [result.length].concat(result)
+        // result = [result.length].concat(result)
     }
+
+    if (instance.info) {
+        if (instance.info.registered) {            
+            instance.info.prefix[3] |= WireMap[Types.Struct] //new code    
+            console.log(instance.info)
+            result = instance.info.prefix.concat(result)
+        }
+    }
+
+
     result = result.concat(4) //append 4 as denoted for struct
-    /*
-    typeInfo.prefix[3] |= WireMap[Types.Struct] //new code    
-    result = typeInfo.prefix.concat(result)
-    */
+
     return result;
 
 }
@@ -51,8 +58,8 @@ const encodeBinaryField = (typeInstance, idx, type, typeInfo) => {
             }
         case Types.Struct:
             {
-                let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.Struct])                 
-                let encodedData = encodeBinary(typeInstance, typeInfo, false)                 
+                let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.Struct])
+                let encodedData = encodeBinary(typeInstance, typeInfo, false)
                 data = encodeField.concat(encodedData);
                 break;
             }
@@ -67,7 +74,7 @@ const encodeBinaryField = (typeInstance, idx, type, typeInfo) => {
 }
 
 const encodeBinaryString = (input, idx) => {
-    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.String])    
+    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.String])
     let encodedString = Encoder.encodeString(input)
     return encodeField.concat(encodedString);
 
@@ -77,7 +84,7 @@ const encodeFunc = (input, idx, callBack, wireType, typeInfo) => {
     let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, wireType)
     // typeInfo.prefix[3] |= wireType //new code    
     // encodeField = typeInfo.prefix.concat(encodeField)
-       
+
     let encodedVal = callBack(input)
     return encodeField.concat(encodedVal)
 }
