@@ -89,9 +89,9 @@ let subObj = new SubA(10)
 let subObj2 = new SubA2("Do Ngoc Tan",21)
 let aObj = new A(23,"Sanh la tin", new SubA("Toi la Tan",12,subObj2))    
 let bObj = new A()
-
-let binary = codec.marshalBinary(new C(100,10,"Toi La Tan", new subC("Truong Huynh Anh Thu")))
- console.log(binary)
+let c = new C(100,10,"Toi La Tan", new subC("Truong Huynh Anh Thu"))
+let binary = codec.marshalBinary(c)
+ console.log("aObj=",aObj.JsObject())
 
 /*codec.unMarshalBinary(binary,bObj)
 if( Utils.isEqual(aObj,bObj)) {

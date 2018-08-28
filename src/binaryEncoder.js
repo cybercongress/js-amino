@@ -21,8 +21,8 @@ const encodeBinary = (instance, typeInfo, isBare = true) => {
 
     if (instance.info) {
         if (instance.info.registered) {            
-            instance.info.prefix[3] |= WireMap[Types.Struct] //new code    
-            console.log(instance.info)
+            instance.info.prefix[3] |= WireMap[Types.Struct] //new code  
+            
             result = instance.info.prefix.concat(result)
         }
     }

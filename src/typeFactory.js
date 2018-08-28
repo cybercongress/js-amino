@@ -18,9 +18,7 @@ const isExisted = name => {
 class BaseAminoType {
 
     constructor() {
-        this[privTypeMap] = new Map(); 
-        //this.info = null      
-
+        this[privTypeMap] = new Map();          
     }
 
     set(name, type) {
@@ -91,6 +89,20 @@ let create = (className, properties) => {
             AminoType.info = _info;
         }
 
+        JsObject() {
+            let obj = {}
+            Reflect.ownKeys(this).forEach((key) => {               
+                if( typeof key != 'symbol' &&  this.lookup(key) != Types.Struct) {
+                    if( this[key] ) {
+                       obj[key] = this[key]
+                    }                
+                }
+                else if( this.lookup(key) == Types.Struct ) {
+                    obj[key] = this[key].JsObject()
+                }
+            })
+            return obj;
+        }
        
     }
     aminoTypes.push(className)
@@ -134,7 +146,7 @@ if (require.main === module) {
     let obj = new B(100, 200);
 
 
-    console.log(Reflection.typeOf(obj))
+    console.log(aObj.JsObject())
 
 
 

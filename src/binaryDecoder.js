@@ -17,8 +17,7 @@ const decodeBinary = (bz, instance, isBare = true) => {
         instance[key] = data
         bz = newBz  
     })
-    if(!isBare) {
-       // console.log("data=",instance)
+    if(!isBare) {       
         return {
             data: instance,
             newBz:bz
