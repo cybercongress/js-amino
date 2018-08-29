@@ -6,62 +6,58 @@ let {
     WireMap
 } = require('./types')
 
-const encodeBinary = (instance, typeInfo, isBare = true) => {
-    let result = []
-    Reflection.ownKeys(instance).forEach((key, idx) => {
-        let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking   
-        let encodeData = encodeBinaryField(instance[key], idx, type, typeInfo)
-        if (encodeData) {
-            result = result.concat(encodeData)
-        }
-    })
-    if (!isBare) {
-        // result = [result.length].concat(result)
+const encodeBinary = (instance, type) => {
+    //let aminoType = instance.type
+    let tmpInstance = null
+
+    if (type != Types.Struct) { //only get the first property with type != Struct        
+        let keys = Reflection.ownKeys(instance);
+        if (keys.length > 0) {
+            keys.forEach(key => {
+                let aminoType = instance.lookup(key)
+                if (type != aminoType) throw new TypeError("Amino type does not match")
+                tmpInstance = instance[key]
+                return;
+            })
+
+        } else tmpInstance = instance //in-case the field of Struct
+
+    } else {
+        tmpInstance = instance        
     }
 
-    if (instance.info) {
-        if (instance.info.registered) {            
-            instance.info.prefix[3] |= WireMap[Types.Struct] //new code  
-            
-            result = instance.info.prefix.concat(result)
-        }
-    }
-
-
-    result = result.concat(4) //append 4 as denoted for struct
-
-    return result;
-
-}
-
-const encodeBinaryField = (typeInstance, idx, type, typeInfo) => {
     let data = null;
     switch (type) {
 
         case Types.Int64:
             {
-                let encodedInt = encodeFunc(typeInstance, idx, Encoder.encodeInt64, WireMap[Types.Int64], typeInfo)
+                let encodedInt = Encoder.encodeInt64(tmpInstance)
                 data = encodedInt
                 break;
             }
         case Types.String:
             {
-                let encodedString = encodeBinaryString(typeInstance, idx)
+                let encodedString = Encoder.encodeString(tmpInstance)
                 data = encodedString
                 break;
             }
         case Types.Int8:
             {
-                let encodeData = encodeFunc(typeInstance, idx, Encoder.encodeSignedVarint, WireMap[Types.Int8], typeInfo)
+                let encodeData = Encoder.encodeSignedVarint(tmpInstance)
                 data = encodeData
                 break;
             }
         case Types.Struct:
             {
-                let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.Struct])
-                let encodedData = encodeBinary(typeInstance, typeInfo, false)
-                data = encodeField.concat(encodedData);
+                let encodedData = encodeBinaryStruct(tmpInstance)
+                data = encodedData
                 break;
+            }
+        case Types.ByteSlice:
+            {
+                data = Encoder.encodeSlice(tmpInstance)
+                break;
+
             }
         default:
             {
@@ -69,7 +65,39 @@ const encodeBinaryField = (typeInstance, idx, type, typeInfo) => {
                 break;
             }
     }
+    if (instance.info) {
+        if (instance.info.registered) {            
+            instance.info.prefix[3] |= WireMap[type] //new code               
+            data = instance.info.prefix.concat(data)
+        }
+    }
     return data;
+
+}
+
+const encodeBinaryStruct = (instance, isBare = true) => {
+    let result = []
+    Reflection.ownKeys(instance).forEach((key, idx) => {
+        let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking   
+        let encodeData = encodeBinaryField(instance[key], idx, type)
+        if (encodeData) {
+            result = result.concat(encodeData)
+        }
+    })
+
+    result = result.concat(4) //append 4 as denoted for struct
+
+    return result;
+
+}
+
+const encodeBinaryField = (typeInstance, idx, type) => {
+    let data = null;
+    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[type])
+    let encodeData = encodeBinary(typeInstance, type)
+
+    return encodeField.concat(encodeData)
+
 
 }
 
@@ -80,7 +108,7 @@ const encodeBinaryString = (input, idx) => {
 
 }
 
-const encodeFunc = (input, idx, callBack, wireType, typeInfo) => {
+const encodeFunc = (input, idx, callBack, wireType) => {
     let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, wireType)
     // typeInfo.prefix[3] |= wireType //new code    
     // encodeField = typeInfo.prefix.concat(encodeField)

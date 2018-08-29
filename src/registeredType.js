@@ -89,7 +89,7 @@ module.exports = {
     RegisteredType
 }
 if (require.main === module) {
-    let type = new RegisteredType("shareledger/MsgSend");
+    let type = new RegisteredType("shareledger/PubSecp256k1");
     console.log("disAmb=",type.disamb)
     console.log("prefix=",type.prefix)
     console.log("disfix=", type.disfix)

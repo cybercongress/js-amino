@@ -2,6 +2,7 @@ const RegisteredType = require("./registeredType").RegisteredType
 const Reflection = require("./reflect")
 const BinaryEncoder = require("./binaryEncoder")
 const BinaryDecoder = require("./binaryDecoder")
+const Encoder = require("./encoder")
 const TypeFactory = require("./typeFactory")
 const Utils = require("./utils")
 
@@ -64,7 +65,7 @@ class Codec {
 
     unMarshalJson(json, instance) {
         let deserializedObj = JSON.parse(json)
-        let typeName = Reflection.typeOf(instance);
+        let typeName = Reflection.typeOf(instance);        
         if (!this.lookup(typeName)) {
             throw new Error(`No ${typeName} was registered`)
         }
@@ -73,14 +74,12 @@ class Codec {
     }
 
     marshalBinary(obj) {
-        if (!obj) return null;
+        if (!obj) return null        
         let typeInfo = this.lookup(Reflection.typeOf(obj))
         if (!typeInfo) return null;
-        let encodedData = BinaryEncoder.encodeBinary(obj, typeInfo)
-       // typeInfo.prefix[3] |= WireMap[Types.Struct] //new code  
-        let binWithoutLenPrefix = encodedData//typeInfo.prefix.concat(encodedData);
-        //console.log("info=",obj.info)
-        return [binWithoutLenPrefix.length].concat(binWithoutLenPrefix)
+        let encodedData = BinaryEncoder.encodeBinary(obj,obj.type)  
+       
+        return [Encoder.encodeUVarint(encodedData.length)].concat(encodedData)
 
     }
 

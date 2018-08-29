@@ -79,19 +79,35 @@ let C = TypeFactory.create('C', [{
 {
     name: "d",
     type: Types.Struct
+},
+{
+    name: "e",
+    type: Types.ByteSlice
 }
 ])
 
+let Slice = TypeFactory.create('Slice', [{
+    name: "a",
+    type: Types.ByteSlice
+}
+],Types.ByteSlice)
+
 codec.registerConcrete(new A(), "SimpleStruct", {}) 
 codec.registerConcrete(new C(), "shareledger/MsgSend", {}) 
-codec.registerConcrete(new subC(),"shareledger/SubStruct",{})
+codec.registerConcrete(new Slice(), "shareledger/PubSecp256k1", {})
+//codec.registerConcrete(new subC(),"shareledger/SubStruct",{})
 let subObj = new SubA(10)
 let subObj2 = new SubA2("Do Ngoc Tan",21)
 let aObj = new A(23,"Sanh la tin", new SubA("Toi la Tan",12,subObj2))    
-let bObj = new A()
-let c = new C(100,10,"Toi La Tan", new subC("Truong Huynh Anh Thu"))
+
+let arr =[100,221,124,1,35]
+let slice = new Slice(arr)
+let c = new C(100,10,"Toi La Tan", new subC("Truong Huynh Anh Thu"),slice)
+
+
 let binary = codec.marshalBinary(c)
- console.log("aObj=",aObj.JsObject())
+ console.log("binary=",binary.toString())
+ //console.log("fullObj=",aObj.type)
 
 /*codec.unMarshalBinary(binary,bObj)
 if( Utils.isEqual(aObj,bObj)) {

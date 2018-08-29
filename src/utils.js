@@ -4,7 +4,7 @@ const getHash256 = input => {
     return hash2.array();
 }
 
-const isEqual =  (value, other) => {
+const isEqual = (value, other) => {
 
     // Get the value type
     var type = Object.prototype.toString.call(value);
@@ -69,6 +69,23 @@ const isEqual =  (value, other) => {
 Number.MaxInt8 = 1 << 7 - 1;
 Number.MaxInt16 = 1 << 15 - 1;
 
+//extension for String
+String.toBytes = str => {
+    let bytes = [];
+    for (let i = 0, n = str.length; i < n; i++) {
+        let char = str.charCodeAt(i);
+        bytes.push(char >>> 8, char & 0xFF);
+    }
+    return bytes;
+}
+
+String.fromBytes = bytes => {
+    let chars = [];
+    for(var i = 0, n = bytes.length; i < n;) {
+        chars.push(((bytes[i++] & 0xff) << 8) | (bytes[i++] & 0xff));
+    }
+    return String.fromCharCode.apply(null, chars);
+}
 
 module.exports = {
     getHash256,
