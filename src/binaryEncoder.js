@@ -7,12 +7,12 @@ let {
 } = require('./types')
 
 const encodeBinary = (instance, type) => {
-    //let aminoType = instance.type
-    let tmpInstance = null
 
-    if (type != Types.Struct) { //only get the first property with type != Struct        
+    let tmpInstance = instance;
+    //retrieve the single property of the Registered AminoType
+    if (type != Types.Struct && type != Types.Interface) { //only get the first property with type != Struct        
         let keys = Reflection.ownKeys(instance);
-        if (keys.length > 0) {
+        if (keys.length > 0) { //type of AminoType class with single property
             keys.forEach(key => {
                 let aminoType = instance.lookup(key)
                 if (type != aminoType) throw new TypeError("Amino type does not match")
@@ -20,11 +20,12 @@ const encodeBinary = (instance, type) => {
                 return;
             })
 
-        } else tmpInstance = instance //in-case the field of Struct
+        } // else tmpInstance = instance //in-case the field of Struct
 
-    } else {
-        tmpInstance = instance        
-    }
+    } //else {
+    //  tmpInstance = instance
+
+    // }
 
     let data = null;
     switch (type) {
@@ -43,14 +44,12 @@ const encodeBinary = (instance, type) => {
             }
         case Types.Int8:
             {
-                let encodeData = Encoder.encodeSignedVarint(tmpInstance)
-                data = encodeData
+                data = Encoder.encodeSignedVarint(tmpInstance)
                 break;
             }
         case Types.Struct:
             {
-                let encodedData = encodeBinaryStruct(tmpInstance)
-                data = encodedData
+                data = encodeBinaryStruct(tmpInstance)
                 break;
             }
         case Types.ByteSlice:
@@ -59,6 +58,11 @@ const encodeBinary = (instance, type) => {
                 break;
 
             }
+        case Types.Interface:
+            {
+                data = encodeBinary(tmpInstance, tmpInstance.type) //dirty-hack
+                return data;            
+            }
         default:
             {
                 console.log("There is no data type to encode")
@@ -66,7 +70,7 @@ const encodeBinary = (instance, type) => {
             }
     }
     if (instance.info) {
-        if (instance.info.registered) {            
+        if (instance.info.registered) {
             instance.info.prefix[3] |= WireMap[type] //new code               
             data = instance.info.prefix.concat(data)
         }
@@ -78,7 +82,8 @@ const encodeBinary = (instance, type) => {
 const encodeBinaryStruct = (instance, isBare = true) => {
     let result = []
     Reflection.ownKeys(instance).forEach((key, idx) => {
-        let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking   
+        let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking 
+
         let encodeData = encodeBinaryField(instance[key], idx, type)
         if (encodeData) {
             result = result.concat(encodeData)
@@ -108,14 +113,6 @@ const encodeBinaryString = (input, idx) => {
 
 }
 
-const encodeFunc = (input, idx, callBack, wireType) => {
-    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, wireType)
-    // typeInfo.prefix[3] |= wireType //new code    
-    // encodeField = typeInfo.prefix.concat(encodeField)
-
-    let encodedVal = callBack(input)
-    return encodeField.concat(encodedVal)
-}
 
 module.exports = {
     encodeBinary

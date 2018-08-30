@@ -45,11 +45,11 @@ let Coin = TypeFactory.create('Coin', [{
 
 let AuthSignature = TypeFactory.create('AuthSignature', [{
     name: "pubKey",
-    type: Types.ByteSlice
+    type: Types.Interface
 },
 {
     name: "signature",
-    type: Types.ByteSlice
+    type: Types.Interface
 },
 {
     name: "nonce",
@@ -59,7 +59,7 @@ let AuthSignature = TypeFactory.create('AuthSignature', [{
 
 let AuthTx = TypeFactory.create('AuthTx', [{
     name: "msg",
-    type: Types.Struct
+    type: Types.Interface
 },
 {
     name: "signature",

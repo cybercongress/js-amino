@@ -12,9 +12,7 @@ const typeOf = instance => {
         return instance.constructor.name;
 
     }
-  //  if (typeof instance == 'number') {
-  //      if (Number.isInteger(instance)) return 'int'
-  //  }
+ 
     return typeof instance;
 }
 

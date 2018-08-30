@@ -78,8 +78,9 @@ class Codec {
         let typeInfo = this.lookup(Reflection.typeOf(obj))
         if (!typeInfo) return null;
         let encodedData = BinaryEncoder.encodeBinary(obj,obj.type)  
-       
-        return [Encoder.encodeUVarint(encodedData.length)].concat(encodedData)
+        let lenBz = Encoder.encodeUVarint(encodedData.length)
+        
+        return lenBz.concat(encodedData)
 
     }
 
