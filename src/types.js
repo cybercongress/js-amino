@@ -3,6 +3,7 @@ const Types = {
     Int32: Symbol('Int32'),
     Int16: Symbol('Int16'),
     Int8: Symbol('Int8'),
+    Boolean: Symbol('Boolean'),
     String: Symbol('String'),
     Struct: Symbol('Struct'),
     ByteSlice: Symbol('ByteSlice'),

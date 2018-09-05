@@ -32,8 +32,12 @@ const encodeBinary = (instance, type) => {
 
         case Types.Int64:
             {
-                let encodedInt = Encoder.encodeInt64(tmpInstance)
-                data = encodedInt
+                data = Encoder.encodeInt64(tmpInstance)                
+                break;
+            }
+        case Types.Boolean:
+            {
+                data = Encoder.encodeBoolean(tmpInstance)
                 break;
             }
         case Types.String:
@@ -61,7 +65,7 @@ const encodeBinary = (instance, type) => {
         case Types.Interface:
             {
                 data = encodeBinary(tmpInstance, tmpInstance.type) //dirty-hack
-                return data;            
+                return data;
             }
         default:
             {
