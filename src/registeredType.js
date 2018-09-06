@@ -8,12 +8,12 @@ const DisfixBytesLen = PrefixBytesLen + DisambBytesLen;
 const DelimiterValue = 0x00;
 
 
-let private = {
-    disamb:null,
-    prefix: null,
-    reflectType: null,
-    isRegistered: false
-}
+//let private = {
+    //disamb:null,
+    //prefix: null,
+    //reflectType: null,
+    //isRegistered: false
+//}
 
 let privObject = Symbol("privateObj")
 

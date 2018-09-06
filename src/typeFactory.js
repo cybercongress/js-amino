@@ -3,7 +3,7 @@ let {
     Types
 } = require('./types')
 
-const Reflection = require("./reflect")
+const Reflect = require("./reflect")
 
 
 let privTypeMap = Symbol("privateTypeMap")
