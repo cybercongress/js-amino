@@ -4,6 +4,6 @@ let Factory = require('./typeFactory')
 
 
 module.exports = {
-    typeOf: Factory.Reflect.typeOf,
-    ownKeys: Factory.Reflect.ownKeys,
+    typeOf: Factory.Reflection.typeOf,
+    ownKeys: Factory.Reflection.ownKeys,
 }
