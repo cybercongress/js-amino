@@ -3,8 +3,6 @@ let {
     Types
 } = require('./types')
 
-const Reflection = require("./reflect")
-
 
 let privTypeMap = Symbol("privateTypeMap")
 
@@ -15,11 +13,38 @@ const isExisted = name => {
     return aminoTypes.includes(name)
 }
 
+const _typeOf = instance => {
+    if ((typeof instance) === "undefined") {
+        throw new Error("Undefined Type");
+    }
+    if( instance in Types ) return Types[instane]
+    
+    if (typeof instance == 'object') {
+        if( instance.constructor.name == 'AminoType' ) return instance.typeName()
+        return instance.constructor.name;
+
+    }
+ 
+    return typeof instance;
+}
+
+const _ownKeys = instance => {
+    if( !isExisted(_typeOf(instance)) ) return []//throw new TypeError("instance must be amino type") //remember to check it again
+    return Reflect.ownKeys(instance).filter(key => {
+        let val = instance.lookup(key)
+        return val != null || val != undefined
+    })
+}
+
+const Reflection = {
+    ownKeys: _ownKeys,
+    typeOf: _typeOf,
+}
 
 class BaseAminoType {
 
     constructor() {
-        this[privTypeMap] = new Map();          
+        this[privTypeMap] = new Map();
     }
 
     set(name, type) {
@@ -119,7 +144,8 @@ let create = (className, properties, type = Types.Struct) => {
 
 module.exports = {
     create,
-    isExisted
+    isExisted,
+    Reflection
 }
 
 
