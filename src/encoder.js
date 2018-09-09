@@ -21,9 +21,13 @@ const encodeInt16 = input => {
 }
 
 const encodeInt32 = input => {
-
+    let buffer = new ArrayBuffer(4); //4 byte
+    let view = new DataView(buffer);
+    view.setUint32(0, input); // big endiant
+    return Array.from(new Uint8Array(buffer));
 }
 
+//todo: using TypeArray for compatibility with React and Web
 const encodeInt64 = input => {
     let buff = Buffer(8)
     Int53.writeInt64BE(input, buff, 0)
@@ -31,7 +35,7 @@ const encodeInt64 = input => {
 }
 
 const encodeSlice = input => {
-    let encodedData = input.slice();  
+    let encodedData = input.slice();
 
     return [encodeUVarint(input.length)].concat(encodedData)
 
@@ -68,15 +72,17 @@ module.exports = {
     encodeString,
     encodeInt8,
     encodeInt16,
+    encodeInt32,
     encodeInt64,
     encodeBoolean,
     encodeSlice,
     encodeUVarint
 }
-if(require.main == module) {
-   let arr =[4,66,153,172,244,182,160,156,54,242,103,168,146,69,89,181,159,160,108,93,62,42,93,252,4,232,
-    56,176,21,70,198,18,48,42,124,225,1,52,30,72,142,47,87,44,217,113,131,20,117,155,23,226,47,118,11,
-    140,178,199,13,157,229,105,196,193,161]
+if (require.main == module) {
+    let arr = [4, 66, 153, 172, 244, 182, 160, 156, 54, 242, 103, 168, 146, 69, 89, 181, 159, 160, 108, 93, 62, 42, 93, 252, 4, 232,
+        56, 176, 21, 70, 198, 18, 48, 42, 124, 225, 1, 52, 30, 72, 142, 47, 87, 44, 217, 113, 131, 20, 117, 155, 23, 226, 47, 118, 11,
+        140, 178, 199, 13, 157, 229, 105, 196, 193, 161
+    ]
 
     let result = encodeSlice(arr)
     console.log(result.toString())

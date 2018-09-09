@@ -12,19 +12,19 @@ const Types = {
 
 //reference : https://developers.google.com/protocol-buffers/docs/encoding
 let WireType = {
-    Varint: 0, //int32, int64, uint32, uint64, sint32, sint64, bool, enum
+    Varint: 0, // int64, uint64, sint32, sint64, bool, enum
     Type8Byte: 1, //fixed64, sfixed64, double
     ByteLength: 2, //string, bytes, embedded messages, packed repeated fields
     ByteStruct: 3, //string, bytes, embedded messages, packed repeated fields
     Struct:4,
-    Type4Byte: 5,  //fixed32, sfixed32, float,
+    Type4Byte: 5,  //fixed32, sfixed32, float,int32,uint32
     Interface: 7
     
 }
 
 const WireMap = {
     [Types.Int64]: WireType.Type8Byte,
-    [Types.Int32]: WireType.Varint,
+    [Types.Int32]: WireType.Type4Byte,
     [Types.Int16]: WireType.Varint,
     [Types.Int8]: WireType.Varint,
     [Types.String]: WireType.ByteLength,

@@ -30,9 +30,22 @@ const encodeBinary = (instance, type) => {
     let data = null;
     switch (type) {
 
+        case Types.Int8:
+        {
+            data = Encoder.encodeSignedVarint(tmpInstance)
+            break;
+        }
+
+        case Types.Int32:
+        {
+            data = Encoder.encodeInt32(tmpInstance)
+            break;
+        }
+
         case Types.Int64:
             {
-                data = Encoder.encodeInt64(tmpInstance)                
+                data = Encoder.encodeInt64(tmpInstance)
+                console.log(data)                
                 break;
             }
         case Types.Boolean:
@@ -46,11 +59,7 @@ const encodeBinary = (instance, type) => {
                 data = encodedString
                 break;
             }
-        case Types.Int8:
-            {
-                data = Encoder.encodeSignedVarint(tmpInstance)
-                break;
-            }
+      
         case Types.Struct:
             {
                 data = encodeBinaryStruct(tmpInstance)
@@ -100,8 +109,7 @@ const encodeBinaryStruct = (instance, isBare = true) => {
 
 }
 
-const encodeBinaryField = (typeInstance, idx, type) => {
-    let data = null;
+const encodeBinaryField = (typeInstance, idx, type) => {    
     let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[type])
     let encodeData = encodeBinary(typeInstance, type)
 
