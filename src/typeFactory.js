@@ -28,7 +28,7 @@ const _typeOf = instance => {
         // as instructor.constructor.name doesn't work in release mobile
         try {
             if ( instance.baseName() == 'AminoType' )
-                return isntance.typeName()
+                return instance.typeName()
         } catch (err) {
             return instance.constructor.name
         }
