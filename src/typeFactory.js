@@ -159,7 +159,7 @@ let create = (className, properties, type = Types.Struct) => {
 module.exports = {
     create,
     isExisted,
-    Reflect
+    Reflection
 }
 
 
