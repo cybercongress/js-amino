@@ -12,14 +12,12 @@ const typeOf = instance => {
         return instance.constructor.name;
 
     }
-    if (typeof instance == 'number') {
-        if (Number.isInteger(instance)) return 'int'
-    }
+ 
     return typeof instance;
 }
 
 const ownKeys = instance => {    
-    if( !Factory.isExisted(typeOf(instance)) ) throw new TypeError("instance must be amino type") //remember to check it again
+    if( !Factory.isExisted(typeOf(instance)) ) return []//throw new TypeError("instance must be amino type") //remember to check it again
     return Reflect.ownKeys(instance).filter(key => {
         let val = instance.lookup(key)
         return val != null || val != undefined

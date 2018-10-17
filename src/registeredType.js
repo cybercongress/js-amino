@@ -1,4 +1,3 @@
-
 let Utils = require('./utils')
 
 
@@ -8,22 +7,27 @@ const DisfixBytesLen = PrefixBytesLen + DisambBytesLen;
 const DelimiterValue = 0x00;
 
 
-let privObj = {
+let private = {
     disamb:null,
     prefix: null,
-    reflectType: null
+    reflectType: null,
+    isRegistered: false
 }
+
+let privObject = Symbol("privateObj")
 
  class RegisteredType {
 
     constructor(name, rtype) {
-        this.name = name;                    
-        privObj = this.calculateDisambAndPrefix();
-        privObj.reflectType = rtype           
+        this.name = name;
+                             
+        this[privObject]  = this.calculateDisambAndPrefix();
+        this[privObject].reflectType = rtype
+        this[privObject].isRegistered = false;               
     }
 
     get prefix() {
-        return privObj.prefix
+        return this[privObject].prefix
     }
 
     get disfix() {       
@@ -31,12 +35,22 @@ let privObj = {
     }
 
     get disamb() {
-        return privObj.disamb
+        return this[privObject].disamb
     }
 
     get reflectType() {
-        return privObj.rtype;
+        return this[privObject].rtype;
     }
+
+    get registered() {
+        return this[privObject].isRegistered
+    }
+
+    set registered(status) {
+        this[privObject].isRegistered = status;
+    }
+
+
      /**
      * save Disamb and prefix.
      * refer the calculation: https://github.com/tendermint/go-amino  
@@ -51,7 +65,7 @@ let privObj = {
         nameHash = this.dropLeadingZeroByte(nameHash.slice(3))      
         let prefix = nameHash.slice(0,PrefixBytesLen)
        
-        return {disamb, prefix};        
+        return {disamb, prefix};          
     }
 
     /**
@@ -72,7 +86,7 @@ module.exports = {
     RegisteredType
 }
 if (require.main === module) {
-    let type = new RegisteredType("SimpleStruct");
+    let type = new RegisteredType("shareledger/AuthTx");
     console.log("disAmb=",type.disamb)
     console.log("prefix=",type.prefix)
     console.log("disfix=", type.disfix)

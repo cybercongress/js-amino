@@ -4,7 +4,9 @@ const Types = {
     Int16: Symbol('Int16'),
     Int8: Symbol('Int8'),
     String: Symbol('String'),
-    Struct: Symbol('Struct')
+    Struct: Symbol('Struct'),
+    ByteSlice: Symbol('ByteSlice'),
+    Interface: Symbol('Interface')
 }
 
 //reference : https://developers.google.com/protocol-buffers/docs/encoding
@@ -17,11 +19,13 @@ let WireType = {
 
 const WireMap = {
     [Types.Int64]: WireType.Varint,
-    [Types.Int32]: WireType.Varint,
+    [Types.Int32]: WireType.Type4Byte,
     [Types.Int16]: WireType.Varint,
     [Types.Int8]: WireType.Varint,
     [Types.String]: WireType.ByteLength,
-    [Types.Struct]: WireType.ByteLength
+    [Types.Struct]: WireType.ByteLength,
+    [Types.ByteSlice]: WireType.ByteLength,
+    [Types.Interface]: WireType.ByteLength,
    
 
 }

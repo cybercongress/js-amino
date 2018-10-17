@@ -2,6 +2,7 @@ const RegisteredType = require("./registeredType").RegisteredType
 const Reflection = require("./reflect")
 const BinaryEncoder = require("./binaryEncoder")
 const BinaryDecoder = require("./binaryDecoder")
+const Encoder = require("./encoder")
 const TypeFactory = require("./typeFactory")
 const Utils = require("./utils")
 
@@ -40,8 +41,10 @@ class Codec {
         if (this.lookup(typeName)) {
             throw new Error(`${typeName} was registered`)
         }
-        let registeredType = new RegisteredType(name, typeName)
-        this.set(typeName, registeredType)
+        let type = new RegisteredType(name, typeName)
+        type.registered = true
+        instance.info = type
+        this.set(typeName, type)
 
     }
 
@@ -69,14 +72,17 @@ class Codec {
     }
 
     marshalBinary(obj) {
-        if (!obj) return null;
+        if (!obj) return null        
         let typeInfo = this.lookup(Reflection.typeOf(obj))
         if (!typeInfo) return null;
-        let encodedData = BinaryEncoder.encodeBinary(obj)
-        let binWithoutLenPrefix = typeInfo.prefix.concat(encodedData);
-        let lengthPrefix = binWithoutLenPrefix.length;
-        return [lengthPrefix].concat(binWithoutLenPrefix)
-
+        let encodedData = BinaryEncoder.encodeBinary(obj,obj.type)  
+        if( obj.info.registered ) {
+            encodedData = obj.info.prefix.concat(encodedData)
+            console.log('prefix=',obj.info.prefix)
+        }
+        let lenBz = Encoder.encodeUVarint(encodedData.length)        
+        
+        return lenBz.concat(encodedData)
     }
 
     unMarshalBinary(bz, instance) {

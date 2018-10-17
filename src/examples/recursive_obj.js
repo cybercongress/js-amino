@@ -58,18 +58,43 @@ let B = TypeFactory.create('B', [{
     type: Types.Struct
 }
 ])
+let SimpleStruct = TypeFactory.create('SimpleStruct', [{
+    name: "a",
+    type: Types.Int64
+}/*,
+{
+    name: "b",
+    type: Types.Int8
+},
+{
+    name: "c",
+    type: Types.String
+},
+{
+    name: "d",
+    type: Types.Struct
+}*/
+])
+
+let SubStruct = TypeFactory.create('SubStruct', [{
+    name: "a",
+    type: Types.ByteSlice
+}])
 
 
 
-codec1.registerConcrete(new A(), "SimpleStruct", {})  
-let subObj = new SubA(10)
+codec1.registerConcrete(new SimpleStruct(), "SimpleStruct", {}) 
+codec1.registerConcrete(new SubStruct(), "SubStruct", {})   
+let obj = new SimpleStruct(100/*,6,'Sanh La Tin',new SubStruct([10,20,30])*/)
+/*let subObj = new SubA(10)
 let subObj2 = new SubA2("Do Ngoc Tan",21)
 let aObj = new A(23,"Sanh la tin", new SubA("Toi la Tan",12,subObj2))    
 let bObj = new A()
-
-let binary = codec1.marshalBinary(aObj)
+*/
+let binary = codec1.marshalBinary(obj)
+console.log(binary.toString())
  
-
+/*
 codec1.unMarshalBinary(binary,bObj)
 if( Utils.isEqual(aObj,bObj)) {
     console.log("equal")
@@ -77,7 +102,7 @@ if( Utils.isEqual(aObj,bObj)) {
 else console.log("Not equal")
 
 //console.log(bObj)
-
+*/
 
 
 /*

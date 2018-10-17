@@ -34,15 +34,13 @@ class BaseAminoType {
 }
 
 
-let create = (className, properties) => {
+let create = (className, properties,type = Types.Struct) => {
 
     if (!properties) {
-        throw new Error("Type List can not be empty")
-        return;
+        throw new Error("Type List can not be empty")        
     }
     if (!properties.length) {
-        throw new Error("Need to provide TypeList")
-        return;
+        throw new Error("Need to provide TypeList")        
     }
 
     /*AminoType*/
@@ -69,7 +67,6 @@ let create = (className, properties) => {
                 })
             })
             if (args.length == 0) {
-
                 this[privTypeMap].forEach((value, key, map) => {
                     if (value == Types.Struct) {
                         this[key] = AminoType.defaultMap.get(key)
@@ -83,10 +80,39 @@ let create = (className, properties) => {
             return className;
         }
 
+        get info() {
+            return AminoType.info
+        }
+
+        set info(_info) {
+            AminoType.info = _info;
+        }
+
+        get type() {
+            return AminoType.type
+        }
+
+        JsObject() {
+            let obj = {}
+            Reflect.ownKeys(this).forEach((key) => {               
+                if( typeof key != 'symbol' &&  this.lookup(key) != Types.Struct) {
+                    if( this[key] ) {
+                       obj[key] = this[key]
+                    }                
+                }
+                else if( this.lookup(key) == Types.Struct ) {
+                    obj[key] = this[key].JsObject()
+                }
+            })
+            return obj;
+        }
+
        
     }
     aminoTypes.push(className)
     AminoType.defaultMap = new Map(); //static map for default value-dirty hack
+    AminoType.info = null //static registered type info
+    AminoType.type = type //describe the type(Struct,Array) for encode/decode
 
     return AminoType;
 
