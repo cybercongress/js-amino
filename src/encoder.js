@@ -38,7 +38,6 @@ const encodeSlice = input => {
     let encodedData = input.slice();
 
     return [encodeUVarint(input.length)].concat(encodedData)
-
 }
 
 const encodeString = input => {

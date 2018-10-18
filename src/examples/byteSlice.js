@@ -17,7 +17,7 @@ let Signature = TypeFactory.create('Signature', [{
 
 let MsgSend = TypeFactory.create('MsgSend', [{
     name: "nonce",
-    type: Types.Int64
+    type: Types.Int8
 },
 {
     name: "from",
@@ -39,7 +39,7 @@ let Coin = TypeFactory.create('Coin', [{
 },
 {
     name: "amount",
-    type: Types.Int64
+    type: Types.Int8
 }
 ])
 
@@ -53,7 +53,7 @@ let AuthSignature = TypeFactory.create('AuthSignature', [{
 },
 {
     name: "nonce",
-    type: Types.Int64
+    type: Types.Int8
 }    
 ])
 

@@ -1,80 +1,62 @@
-let {Codec,TypeFactory,Utils, Types, WireTypes} = require('../index')
+let {
+    Codec,
+    TypeFactory,
+    Utils,
+    Types,
+    WireTypes
+} = require('../index')
 
 let codec1 = new Codec();
 
 let SubA = TypeFactory.create('SubA', [{
-    name: "a",
-    type: Types.String
-},
-{
-    name: "b",
-    type: Types.Int8
-},
-{
-    name: "sub2",
-    type: Types.Struct
-}])
+        name: "a",
+        type: Types.String
+    },
+    {
+        name: "b",
+        type: Types.Int8
+    },
+    {
+        name: "sub2",
+        type: Types.Struct
+    }
+])
 
-let SubA2 = TypeFactory.create('SubA2', [ {
-   name: "a",
-    type: Types.String
-},
-{
-    name: "b",
-    type: Types.Int8
-}
+let SubA2 = TypeFactory.create('SubA2', [{
+        name: "a",
+        type: Types.String
+    },
+    {
+        name: "b",
+        type: Types.Int8
+    }
 ])
 
 
-let A = TypeFactory.create('A', [{
+
+let SimpleStruct = TypeFactory.create('SimpleStruct', [{
         name: "a",
         type: Types.Int8
     },
     {
         name: "b",
+        type: Types.Array
+    },
+    {
+        name: "c",
+        type: Types.Int8
+    },
+    {
+        name: "d",
         type: Types.String
     },
     {
-        name: "sub",
+        name: "e",
         type: Types.Struct
     }
 ])
 
-let B = TypeFactory.create('B', [{
-    name: "a",
-    type: Types.String
-},
-{
-    name: "b",
-    type: Types.Int8
-},
-{
-    name: "c",
-    type: Types.Int8
-},
 
-{
-    name: "d",
-    type: Types.Struct
-}
-])
-let SimpleStruct = TypeFactory.create('SimpleStruct', [{
-    name: "a",
-    type: Types.Int64
-}/*,
-{
-    name: "b",
-    type: Types.Int8
-},
-{
-    name: "c",
-    type: Types.String
-},
-{
-    name: "d",
-    type: Types.Struct
-}*/
-])
 
 let SubStruct = TypeFactory.create('SubStruct', [{
     name: "a",
@@ -83,9 +65,14 @@ let SubStruct = TypeFactory.create('SubStruct', [{
 
 
 
-codec1.registerConcrete(new SimpleStruct(), "SimpleStruct", {}) 
-codec1.registerConcrete(new SubStruct(), "SubStruct", {})   
-let obj = new SimpleStruct(100/*,6,'Sanh La Tin',new SubStruct([10,20,30])*/)
+codec1.registerConcrete(new SimpleStruct(), "SimpleStruct", {})
+codec1.registerConcrete(new SubStruct(), "SubStruct", {})
+let subStructs = []
+for (let i = 0; i < 3; ++i) {
+    let subStruct = new SubStruct([i + 1, i + 2, i + 3]);
+    subStructs.push(subStruct)
+}
+let obj = new SimpleStruct(100, subStructs, 1, "Je Suis Tan", new SubA('Hello', 32, new SubA2('World', 80)))
 /*let subObj = new SubA(10)
 let subObj2 = new SubA2("Do Ngoc Tan",21)
 let aObj = new A(23,"Sanh la tin", new SubA("Toi la Tan",12,subObj2))    
@@ -93,7 +80,7 @@ let bObj = new A()
 */
 let binary = codec1.marshalBinary(obj)
 console.log(binary.toString())
- 
+
 /*
 codec1.unMarshalBinary(binary,bObj)
 if( Utils.isEqual(aObj,bObj)) {

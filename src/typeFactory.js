@@ -53,7 +53,8 @@ let create = (className, properties,type = Types.Struct) => {
                 Reflect.ownKeys(prop).forEach(key => {
 
                     if (key == 'name') {
-                        this[prop[key]] = args[idx++]
+                        this.idx = idx;
+                        this[prop[key]] = args[idx++]                        
                     } else if (key == 'type') {
                         this.set(prop['name'], prop['type'])
                         if (prop['type'] == Types.Struct) { //set up the default value for Type.Struct field
@@ -87,6 +88,15 @@ let create = (className, properties,type = Types.Struct) => {
         set info(_info) {
             AminoType.info = _info;
         }
+
+       /*  get index() {
+            return this.idx
+        }
+
+        set index(_idx) {
+            console.log('set index=',_idx)
+            this.idx = _idx
+        } */
 
         get type() {
             return AminoType.type

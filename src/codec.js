@@ -77,8 +77,7 @@ class Codec {
         if (!typeInfo) return null;
         let encodedData = BinaryEncoder.encodeBinary(obj,obj.type)  
         if( obj.info.registered ) {
-            encodedData = obj.info.prefix.concat(encodedData)
-            console.log('prefix=',obj.info.prefix)
+            encodedData = obj.info.prefix.concat(encodedData)            
         }
         let lenBz = Encoder.encodeUVarint(encodedData.length)        
         

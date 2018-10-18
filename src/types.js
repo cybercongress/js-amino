@@ -6,6 +6,7 @@ const Types = {
     String: Symbol('String'),
     Struct: Symbol('Struct'),
     ByteSlice: Symbol('ByteSlice'),
+    Array: Symbol('Array'),
     Interface: Symbol('Interface')
 }
 
@@ -25,6 +26,7 @@ const WireMap = {
     [Types.String]: WireType.ByteLength,
     [Types.Struct]: WireType.ByteLength,
     [Types.ByteSlice]: WireType.ByteLength,
+    [Types.Array]: WireType.ByteLength,
     [Types.Interface]: WireType.ByteLength,
    
 

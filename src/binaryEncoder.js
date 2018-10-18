@@ -9,8 +9,9 @@ let {
 const encodeBinary = (instance, type, isBare = true) => {
 
     let tmpInstance = instance;
+
     //retrieve the single property of the Registered AminoType
-    if (type != Types.Struct && type != Types.Interface) { //only get the first property with type != Struct        
+    if (type != Types.Struct && type != Types.Interface && type != Types.Array) { //only get the first property with type != Struct        
         let keys = Reflection.ownKeys(instance);
         if (keys.length > 0) { //type of AminoType class with single property
             keys.forEach(key => {
@@ -39,7 +40,7 @@ const encodeBinary = (instance, type, isBare = true) => {
 
         case Types.Int64:
             {
-                data = Encoder.encodeInt64(tmpInstance)                
+                data = Encoder.encodeInt64(tmpInstance)
                 break;
             }
         case Types.Boolean:
@@ -56,43 +57,32 @@ const encodeBinary = (instance, type, isBare = true) => {
 
         case Types.Struct:
             {
-                data = encodeBinaryStruct(tmpInstance,isBare)
+                data = encodeBinaryStruct(tmpInstance, isBare)
                 break;
             }
         case Types.ByteSlice:
             {
                 data = Encoder.encodeSlice(tmpInstance)
                 break;
+            }
 
+        case Types.Array:
+            {
+                data = encodeBinaryArray(tmpInstance, isBare)
+                break;
             }
         case Types.Interface:
-            {  /*
-                //add 0x00 | disAmp | prefix |length(if bare)
-                
-                data = encodeBinary(tmpInstance, tmpInstance.type, true) //dirty-hack
-                data = instance.info.prefix.concat(data)
-                if (!isBare) {
-                    data = Encoder.encodeUVarint(data.length).concat(data)
-                }
-
-                
-                console.log("typeName=", instance.info.name)
-                */
-               let data = encodeBinaryInterface(tmpInstance,isBare)
+            {
+                let data = encodeBinaryInterface(tmpInstance, isBare)
                 return data; //dirty hack
             }
         default:
             {
-                console.log("There is no data type to encode")
+                console.log("There is no data type to encode:", type)
                 break;
             }
     }
-    if (instance.info) {
-        if (instance.info.registered) {
-            //instance.info.prefix[3] |= WireMap[type] //type properties was registered               
-            // data = instance.info.prefix.concat(data)
-        }
-    }
+
     return data;
 
 }
@@ -103,12 +93,6 @@ const encodeBinaryInterface = (instance, isBare) => {
     if (!isBare) {
         data = Encoder.encodeUVarint(data.length).concat(data)
     }
-
-    // data = /[0x00].concat*/(instance.info.disamb).concat(data)
-    // data = instance.info.disamb.concat(data)
-   // console.log("typeName=", instance.info.name)
-  // console.log('isBare=',isBare)
-  // console.log('data=',data)
     return data;
 
 }
@@ -118,17 +102,15 @@ const encodeBinaryStruct = (instance, isBare = true) => {
     let result = []
     Reflection.ownKeys(instance).forEach((key, idx) => {
         let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking 
-
-        let encodeData = encodeBinaryField(instance[key], idx, type,false)
+        let encodeData = null;       
+        encodeData = encodeBinaryField(instance[key], idx, type, isBare)
         if (encodeData) {
             result = result.concat(encodeData)
         }
     })
     if (!isBare) {
         result = Encoder.encodeUVarint(result.length).concat(result)
-    }
-
-    // result = result.concat(4) //append 4 as denoted for struct
+    }   
 
     return result;
 
@@ -136,15 +118,37 @@ const encodeBinaryStruct = (instance, isBare = true) => {
 
 
 
-const encodeBinaryField = (typeInstance, idx, type,isBare) => {
-    console.log('idx=',idx+1)
-    console.log('WireMap[type]=',WireMap[type])
-    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[type])
-    let encodeData = encodeBinary(typeInstance, type,isBare)
+const encodeBinaryField = (typeInstance, idx, type, isBare) => {    
+    let encodeData = null
+    if (type == Types.Array) {        
+        encodeData = encodeBinaryArray(typeInstance, true, idx)
+    } else {
+        encodeData = encodeBinary(typeInstance, type, false)
+        let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[type])
+        encodeData = encodeField.concat(encodeData)
+    }
 
-    return encodeField.concat(encodeData)
+    return encodeData
+}
 
+const encodeBinaryArray = (instance, isBare = true, idx = 0) => {
+    let result = []
 
+    for (let i = 0; i < instance.length; ++i) {
+        let item = instance[i]      
+        
+        let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.Array])
+        let data = encodeBinary(item, item.type, false)        
+        if (data) {
+            data = encodeField.concat(data)            
+            result = result.concat(data)
+        }
+    }
+    if (!isBare) {
+        result = Encoder.encodeUVarint(result.length).concat(result)
+    }
+
+    return result;
 }
 
 
