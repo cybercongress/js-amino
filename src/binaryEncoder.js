@@ -28,11 +28,19 @@ const encodeBinary = (instance, type) => {
     // }
 
     let data = null;
+
+    try {
+        data = tmpInstance.marshalAmino()
+        return Encoder.encodeString(data)
+    } catch (err) {
+        // Doesn't have method marshalAmino, continue
+    }
+
     switch (type) {
 
         case Types.Int64:
             {
-                data = Encoder.encodeInt64(tmpInstance)                
+                data = Encoder.encodeInt64(tmpInstance)
                 break;
             }
         case Types.Boolean:
@@ -75,7 +83,7 @@ const encodeBinary = (instance, type) => {
     }
     if (instance.info) {
         if (instance.info.registered) {
-            instance.info.prefix[3] |= WireMap[type] //new code               
+            instance.info.prefix[3] |= WireMap[type] //new code
             data = instance.info.prefix.concat(data)
         }
     }
