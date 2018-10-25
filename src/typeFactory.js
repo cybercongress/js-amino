@@ -20,8 +20,18 @@ const _typeOf = instance => {
     if( instance in Types ) return Types[instane]
     
     if (typeof instance == 'object') {
-        if( instance.constructor.name == 'AminoType' ) return instance.typeName()
-        return instance.constructor.name;
+        //if( instance.constructor.name == 'AminoType' ) return instance.typeName()
+        //return instance.constructor.name;
+        //
+        //
+        // Checking aminoType
+        // as instructor.constructor.name doesn't work in release mobile
+        try {
+            if ( instance.baseName() == 'AminoType' )
+                return instance.typeName()
+        } catch (err) {
+            return instance.constructor.name
+        }
 
     }
  
@@ -97,12 +107,16 @@ let create = (className, properties, type = Types.Struct) => {
                         this[key] = AminoType.defaultMap.get(key)
                     }
                 })
-            }          
+            }
 
         }
 
         typeName() {
             return className;
+        }
+
+        baseName() {
+            return 'AminoType';
         }
 
         get info() {
