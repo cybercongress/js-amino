@@ -75,8 +75,8 @@ class Codec {
 
     marshalBinary(obj) {
         if (!obj) return null        
-        let typeInfo = this.lookup(Reflection.typeOf(obj))
-        if (!typeInfo) return null;
+        //let typeInfo = this.lookup(Reflection.typeOf(obj))
+        //if (!typeInfo) return null;
         let encodedData = BinaryEncoder.encodeBinary(obj,obj.type)  
         let lenBz = Encoder.encodeUVarint(encodedData.length)
         
