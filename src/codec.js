@@ -65,39 +65,42 @@ class Codec {
         let deserializedObj = JSON.parse(json)
         let typeName = Reflection.typeOf(instance);
         if (!this.lookup(typeName)) {
-            throw new Error(`No ${typeName} was registered`)            
+            throw new Error(`No ${typeName} was registered`)
         }
         Object.assign(instance, deserializedObj.value)
 
     }
 
     marshalBinary(obj) {
-        if (!obj) return null        
-        let typeInfo = this.lookup(Reflection.typeOf(obj))
-        if (!typeInfo) return null;
-        let encodedData = BinaryEncoder.encodeBinary(obj,obj.type)  
-        if( obj.info.registered ) {
-            encodedData = obj.info.prefix.concat(encodedData)            
+        if (!obj) return null
+        // let typeInfo = this.lookup(Reflection.typeOf(obj))        
+        // if (!typeInfo) return null;
+        let encodedData = BinaryEncoder.encodeBinary(obj, obj.type)
+        if (obj.info) { //if this object was registered with prefix
+            if (obj.info.registered) {
+                encodedData = obj.info.prefix.concat(encodedData)
+            }
         }
-        let lenBz = Encoder.encodeUVarint(encodedData.length)        
-        
+
+        let lenBz = Encoder.encodeUVarint(encodedData.length)
+
         return lenBz.concat(encodedData)
     }
 
     unMarshalBinary(bz, instance) {
-        if( bz.length == 0 ) throw new RangeError("UnmarshalBinary cannot decode empty bytes")
-        if( !instance ) throw new TypeError("UnmarshalBinary cannot decode to Null instance")
+        if (bz.length == 0) throw new RangeError("UnmarshalBinary cannot decode empty bytes")
+        if (!instance) throw new TypeError("UnmarshalBinary cannot decode to Null instance")
         let typeName = Reflection.typeOf(instance)
         let typeInfo = this.lookup(typeName)
-        if( !typeInfo ) throw new TypeError(`No ${typeName} was registered`)
+        if (!typeInfo) throw new TypeError(`No ${typeName} was registered`)
         let length = bz[0]
-        let realbz = bz.slice(1);  
-        if(length != realbz.length) throw new RangeError("Wrong length")      
-        if( !Utils.isEqual(realbz.slice(0,4),typeInfo.prefix )) {
+        let realbz = bz.slice(1);
+        if (length != realbz.length) throw new RangeError("Wrong length")
+        if (!Utils.isEqual(realbz.slice(0, 4), typeInfo.prefix)) {
             throw new TypeError("prefix not match")
         }
         realbz = bz.slice(5)
-        BinaryDecoder.decodeBinary(realbz,instance)
+        BinaryDecoder.decodeBinary(realbz, instance)
 
     }
     get typeMap() {
@@ -108,6 +111,3 @@ class Codec {
 module.exports = {
     Codec
 }
-
-
-
