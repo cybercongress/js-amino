@@ -37,7 +37,7 @@ const encodeInt64 = input => {
 const encodeSlice = input => {
     let encodedData = input.slice();
 
-    return [encodeUVarint(input.length)].concat(encodedData)
+    return encodeUVarint(input.length).concat(encodedData)
 }
 
 const encodeString = input => {
@@ -79,11 +79,9 @@ module.exports = {
 }
 
 if (require.main == module) {
-    let arr = [4, 66, 153, 172, 244, 182, 160, 156, 54, 242, 103, 168, 146, 69, 89, 181, 159, 160, 108, 93, 62, 42, 93, 252, 4, 232,
-        56, 176, 21, 70, 198, 18, 48, 42, 124, 225, 1, 52, 30, 72, 142, 47, 87, 44, 217, 113, 131, 20, 117, 155, 23, 226, 47, 118, 11,
-        140, 178, 199, 13, 157, 229, 105, 196, 193, 161
-    ]
+    let arr = [4, 66, 153, 172, 244, 1]
+   
 
     let result = encodeSlice(arr)
-    console.log(result.toString())
+    console.log(result)
 }
