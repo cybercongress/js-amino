@@ -40,7 +40,7 @@ let SimpleStruct = TypeFactory.create('SimpleStruct', [{
     },
     {
         name: "b",
-        type: Types.Array
+        type: Types.ArrayStruct
     },
     {
         name: "c",
