@@ -6,6 +6,7 @@ let {
     WireType,
     WireMap
 } = require('./types')
+let { Buffer } = require('safe-buffer')
 
 const decodeSignedVarint = input => {
     if( !input ) throw new TypeError("Can not decodeSignedVarint invalid input")
@@ -58,11 +59,7 @@ const decodeString = input => {
     
     let str = input.slice(byteLength,strLength+1); */
     let decodedSlice = decodeSlice(input)
-    let str = decodedSlice.data
-    str.forEach( (element,idx) => { //for-each instead of map to prevent copy js array
-        str[idx] = String.fromCharCode(element)                
-    });
-    str = str.join('')    
+    let str = Buffer.from(decodedSlice.data).toString('utf8')
 
     return {
         data:str,

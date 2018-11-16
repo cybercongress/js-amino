@@ -1,6 +1,7 @@
 let varint = require('varint')
 var svarint = require('signed-varint')
 let Int53 = require('int53')
+let { Buffer } = require('safe-buffer')
 
 const encodeSignedVarint = input => {
     let buf = svarint.encode(input)
@@ -41,13 +42,7 @@ const encodeSlice = input => {
 }
 
 const encodeString = input => {
-    let data = input.split('')
-    let encodedData = []
-    data.forEach(element => {
-        encodedData = encodedData.concat(encodeUVarint(element.charCodeAt()))
-    });
-
-    return [input.length].concat(encodedData)
+    return encodeSlice(Array.from(Buffer.from(input)))
 }
 
 const encodeUint8 = input => {
