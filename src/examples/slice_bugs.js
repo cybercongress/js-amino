@@ -150,5 +150,10 @@ const {
   let stdTx = new StdTx([sendMsg], /*fee,*/ [sig], 'test')
   let binary = codec.marshalBinary(stdTx)
   console.log(toHex(binary))
-  console.log(codec.marshalJson(stdTx))
+  let json = codec.marshalJson(stdTx)
+  console.log(json)
+
+  let stdTx2 = new StdTx()
+  codec.unMarshalJson(json, stdTx2)
+  console.log(stdTx2)
   

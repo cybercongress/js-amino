@@ -2,6 +2,8 @@ const RegisteredType = require("./registeredType").RegisteredType
 const Reflection = require("./reflect")
 const BinaryEncoder = require("./binaryEncoder")
 const BinaryDecoder = require("./binaryDecoder")
+const JsonEncoder = require("./jsonEncoder")
+const JsonDecoder = require("./jsonDecoder")
 const Encoder = require("./encoder")
 const TypeFactory = require("./typeFactory")
 const Utils = require("./utils")
@@ -51,14 +53,17 @@ class Codec {
     marshalJson(obj) {
         if (!obj) return null;
         let typeInfo = this.lookup(Reflection.typeOf(obj))
-        let serializedObj = {
-            type: typeInfo.disfix.toString('hex'),
-            value: {}
+        let value = JsonEncoder.encodeJson(obj, obj.type)
+        // if this object was not registered with prefix
+        let serializedObj = value
+        // if this object was registered with prefix
+        if (typeInfo && typeInfo.name) {
+            serializedObj = {
+                type: typeInfo.name,
+                value: value,
+            }    
         }
-        serializedObj.value = Object.assign({}, obj)
-
-        return JSON.stringify(serializedObj);
-
+        return JSON.stringify(serializedObj)
     }
 
     unMarshalJson(json, instance) {
@@ -67,8 +72,15 @@ class Codec {
         if (!this.lookup(typeName)) {
             throw new Error(`No ${typeName} was registered`)
         }
-        Object.assign(instance, deserializedObj.value)
-
+        let value = deserializedObj
+        let typeInfo = this.lookup(Reflection.typeOf(instance))
+        if (typeInfo && typeInfo.name) {
+            if (deserializedObj.type !== typeInfo.name) {
+                throw new Error(`Type not match. expected: ${typeInfo.name}, but: ${deserializedObj.type}`)
+            }
+            value = deserializedObj.value
+        }
+        JsonDecoder.decodeJson(value, instance)
     }
 
     marshalBinary(obj) {
