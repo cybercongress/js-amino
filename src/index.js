@@ -1,4 +1,4 @@
-let {Codec} = require("./codec")
+let {Codec, FieldOtions} = require("./codec")
 const TypeFactory = require("./typeFactory")
 
 let {Types,WireType} = require('./types')
@@ -10,6 +10,7 @@ const Utils = require("./utils")
 
 module.exports = {
     Codec,
+    FieldOtions,
     TypeFactory,
     Utils,
     Types,

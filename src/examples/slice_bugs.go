@@ -42,7 +42,7 @@ type StdSignature struct {
 	crypto.PubKey `json:"pub_key"` // optional
 	Signature     []byte           `json:"signature"`
 	AccountNumber int8             `json:"account_number"`
-	Sequence      int8             `json:"sequence"`
+	Sequence      int64            `json:"sequence"`
 }
 
 type StdTx struct {

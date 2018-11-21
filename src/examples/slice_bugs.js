@@ -1,12 +1,15 @@
 
 const {
     Codec,
+    FieldOtions,
     TypeFactory,
     Utils,
     Types,
     WireTypes,
   } = require('../index')
   
+  
+
   const toHex = (buffer) => {
     let s = ''
     buffer.forEach((b) => {
@@ -86,7 +89,7 @@ const {
     },
     {
       name: 'sequence',
-      type: Types.Int8,
+      type: Types.Int64,
     }
   ])
   

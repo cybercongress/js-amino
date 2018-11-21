@@ -6,7 +6,7 @@ let {
     WireMap
 } = require('./types')
 
-const encodeBinary = (instance, type, isBare = true) => {
+const encodeBinary = (instance, type, opts, isBare = true) => {
 
     let tmpInstance = instance;
 
@@ -33,14 +33,23 @@ const encodeBinary = (instance, type, isBare = true) => {
             }
 
         case Types.Int32:
-            {
-                data = Encoder.encodeInt32(tmpInstance)
+            {   
+                if( opts.binFix32 ) {
+                    data = Encoder.encodeInt32(tmpInstance)
+                } else {
+                    data = Encoder.encodeUVarint(tmpInstance)
+                }
+                
                 break;
             }
 
         case Types.Int64:
             {
-                data = Encoder.encodeInt64(tmpInstance)
+                if( opts.binFixed64 ) {
+                    data = Encoder.encodeInt64(tmpInstance)
+                } else {
+                    data = Encoder.encodeUVarint(tmpInstance)
+                }
                 break;
             }
         case Types.Boolean:
@@ -57,7 +66,7 @@ const encodeBinary = (instance, type, isBare = true) => {
 
         case Types.Struct:
             {
-                data = encodeBinaryStruct(tmpInstance, isBare)
+                data = encodeBinaryStruct(tmpInstance, opts, isBare)
                 break;
             }
         case Types.ByteSlice:
@@ -68,19 +77,19 @@ const encodeBinary = (instance, type, isBare = true) => {
 
         case Types.ArrayStruct:
             {
-                data = encodeBinaryArray(tmpInstance,Types.ArrayStruct, isBare)
+                data = encodeBinaryArray(tmpInstance, Types.ArrayStruct,opts, isBare)
                 break;
             }
 
         case Types.ArrayInterface:
             {
-                data = encodeBinaryArray(tmpInstance,Types.ArrayInterface, isBare)
+                data = encodeBinaryArray(tmpInstance, Types.ArrayInterface, opts, isBare)
                 break;
             }
 
         case Types.Interface:
             {
-                let data = encodeBinaryInterface(tmpInstance, isBare)
+                let data = encodeBinaryInterface(tmpInstance, opts, isBare)
                 return data; //dirty hack
             }
         default:
@@ -94,9 +103,9 @@ const encodeBinary = (instance, type, isBare = true) => {
 
 }
 
-const encodeBinaryInterface = (instance, isBare) => {    
-    let data = encodeBinary(instance, instance.type, true) //dirty-hack
-    data = instance.info.prefix.concat(data)    
+const encodeBinaryInterface = (instance, opts,isBare) => {
+    let data = encodeBinary(instance, instance.type, opts, true) //dirty-hack
+    data = instance.info.prefix.concat(data)
     if (!isBare) {
         data = Encoder.encodeUVarint(data.length).concat(data)
     }
@@ -105,12 +114,12 @@ const encodeBinaryInterface = (instance, isBare) => {
 }
 
 
-const encodeBinaryStruct = (instance, isBare = true) => {
+const encodeBinaryStruct = (instance, opts,isBare = true) => {
     let result = []
     Reflection.ownKeys(instance).forEach((key, idx) => {
         let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking 
         let encodeData = null;
-        encodeData = encodeBinaryField(instance[key], idx, type, isBare)
+        encodeData = encodeBinaryField(instance[key], idx, type, opts)
         if (encodeData) {
             result = result.concat(encodeData)
         }
@@ -125,12 +134,12 @@ const encodeBinaryStruct = (instance, isBare = true) => {
 
 
 
-const encodeBinaryField = (typeInstance, idx, type, isBare) => {
+const encodeBinaryField = (typeInstance, idx, type, opts) => {
     let encodeData = null
     if (type == Types.ArrayStruct || type == Types.ArrayInterface) {
-        encodeData = encodeBinaryArray(typeInstance,type, true, idx)
+        encodeData = encodeBinaryArray(typeInstance, type, opts,true, idx)
     } else {
-        encodeData = encodeBinary(typeInstance, type, false)
+        encodeData = encodeBinary(typeInstance, type, opts, false)
         let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[type])
         encodeData = encodeField.concat(encodeData)
     }
@@ -138,15 +147,15 @@ const encodeBinaryField = (typeInstance, idx, type, isBare) => {
     return encodeData
 }
 
-const encodeBinaryArray = (instance, arrayType, isBare = true, idx = 0) => {
+const encodeBinaryArray = (instance, arrayType, opts,isBare = true, idx = 0) => {
     let result = []
 
     for (let i = 0; i < instance.length; ++i) {
         let item = instance[i]
 
-        let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.ArrayStruct])        
+        let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.ArrayStruct])
         let itemType = arrayType == Types.ArrayInterface ? Types.Interface : Types.Struct
-        let data = encodeBinary(item, itemType, false)
+        let data = encodeBinary(item, itemType, opts, false)
         if (data) {
             data = encodeField.concat(data)
             result = result.concat(data)

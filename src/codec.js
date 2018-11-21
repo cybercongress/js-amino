@@ -20,6 +20,20 @@ let privObj = {
     typeMap: null
 }
 
+class FieldOtions {
+
+    constructor(opts = {}) {
+        this.jsonName = opts.jsonName || "";
+        this.jsonOmitEmpty = opts.jsonOmitEmpty || "";
+        this.binFixed64 = opts.binFixed64 || false; // (Binary) Encode as fixed64
+        this.binFix32 = opts.binFix32 || false; // (Binary) Encode as fixed32
+        this.unsafe = opts.unsafe || false; // e.g. if this field is a float.
+        this.writeEmpty = opts.writeEmpty || false; // write empty structs and lists (default false except for pointers)
+        this.emptyElements = opts.emptyElements || false; // Slice and Array elements are never nil, decode 0x00 as empty struct.
+
+    }
+}
+
 class Codec {
 
     constructor() {
@@ -61,7 +75,7 @@ class Codec {
             serializedObj = {
                 type: typeInfo.name,
                 value: value,
-            }    
+            }
         }
         return JSON.stringify(serializedObj)
     }
@@ -83,11 +97,11 @@ class Codec {
         JsonDecoder.decodeJson(value, instance)
     }
 
-    marshalBinary(obj) {
+    marshalBinary(obj, fieldOpts = new FieldOtions()) {
         if (!obj) return null
         // let typeInfo = this.lookup(Reflection.typeOf(obj))        
         // if (!typeInfo) return null;
-        let encodedData = BinaryEncoder.encodeBinary(obj, obj.type)
+        let encodedData = BinaryEncoder.encodeBinary(obj, obj.type, fieldOpts)
         if (obj.info) { //if this object was registered with prefix
             if (obj.info.registered) {
                 encodedData = obj.info.prefix.concat(encodedData)
@@ -121,5 +135,6 @@ class Codec {
 }
 
 module.exports = {
-    Codec
+    Codec,
+    FieldOtions
 }
