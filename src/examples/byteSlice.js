@@ -54,7 +54,7 @@ let AuthSignature = TypeFactory.create('AuthSignature', [{
 {
     name: "nonce",
     type: Types.Int8
-}    
+}
 ])
 
 let AuthTx = TypeFactory.create('AuthTx', [{

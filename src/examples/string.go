@@ -30,7 +30,7 @@ func main() {
 	fmt.Println(bz)
 
 	strStruct2 := StrStruct{}
-	err = cdc.MarshalBinaryLengthPrefixed([]byte{21, 56, 46, 110, 101, 10, 5, 97, 115, 99, 105, 105, 18, 6, 236, 149, 136, 235, 133, 149, 24, 20}, &strStruct2)
+	err = cdc.UnmarshalBinaryLengthPrefixed([]byte{21, 56, 46, 110, 101, 10, 5, 97, 115, 99, 105, 105, 18, 6, 236, 149, 136, 235, 133, 149, 24, 20}, &strStruct2)
 	if err != nil {
 		panic(err)
 	}

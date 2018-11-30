@@ -42,7 +42,7 @@ func main() {
 	b2 := []byte{66, 74, 137, 196, 188, 8, 200, 1, 18, 5, 10, 3, 1, 2, 3, 18, 5, 10, 3, 2, 3, 4, 18, 5, 10, 3, 3, 4, 5, 24, 2, 34, 11, 74, 101, 32, 83, 117, 105, 115, 32, 84, 97, 110, 42, 21, 10, 5, 72, 101, 108, 108, 111, 16, 64, 26, 10, 10, 5, 87, 111, 114, 108, 100, 16, 160, 1}
 
 	var s SimpleStruct
-	err := cdc.UnmarshalBinary(b2, &s)
+	err := cdc.UnmarshalBinaryLengthPrefixed(b2, &s)
 	if err == nil {
 		fmt.Println("s=", s)
 		//fmt.Println(string(s.D.E))
