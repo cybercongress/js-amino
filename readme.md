@@ -6,7 +6,7 @@ For more information spec, please refer: https://github.com/tendermint/go-amino
 
 1. Run `npm install`
 
-## Running hte examples
+## Running The Examples
 
 1. `cd src/examples`
 2. `go get`
