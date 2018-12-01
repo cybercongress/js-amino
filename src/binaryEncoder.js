@@ -32,6 +32,12 @@ const encodeBinary = (instance, type, opts, isBare = true) => {
                 break;
             }
 
+        case Types.Int16:
+            {
+                data = Encoder.encodeSignedVarint(tmpInstance)
+                break;
+            }    
+
         case Types.Int32:
             {   
                 if( opts.binFix32 ) {
