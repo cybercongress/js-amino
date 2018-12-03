@@ -6,4 +6,5 @@ import (
 
 func main() {
 	test.PrintPrimitive()
+	test.PrintStruct()
 }
