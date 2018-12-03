@@ -8,8 +8,6 @@ import (
 )
 
 func PrintPrimitive() {
-	fmt.Println("test")
-
 	cdc := amino.NewCodec()
 
 	bz := cdc.MustMarshalBinaryLengthPrefixed(int8(123))

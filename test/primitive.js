@@ -1,9 +1,7 @@
 const {
   Codec,
   TypeFactory,
-  Utils,
   Types,
-  WireTypes
 } = require('../src/index')
 const { toHex } = require('./util')
 const assert = require('assert')
@@ -24,14 +22,14 @@ describe('Test encode primitive type int', () => {
     }
   ], Types.Int16)
 
-  const Int32 = TypeFactory.create('int32', [
+  const Int32 = TypeFactory.create('Int32', [
     {
       name: 'int32',
       type: Types.Int32,
     }
   ], Types.Int32)
 
-  const Int64 = TypeFactory.create('int64', [
+  const Int64 = TypeFactory.create('Int64', [
     {
       name: 'int64',
       type: Types.Int64,
@@ -43,7 +41,7 @@ describe('Test encode primitive type int', () => {
     Encode int16(12345) 03f2c001
     Encode int32(1234567) 0387ad4b
     Encode int64(123456789) 04959aef3a
-    */
+  */
   it('result of int8 should match', () => {
     let int8 = new Int8(123)
     assert.equal(toHex(codec.marshalBinary(int8)), '02f601')
@@ -76,7 +74,7 @@ describe('Test encode primitive type string', () => {
   ], Types.String)
 
   /*
-  Encode string(teststring유니코드) 171674657374737472696e67ec9ca0eb8b88ecbd94eb939c
+    Encode string(teststring유니코드) 171674657374737472696e67ec9ca0eb8b88ecbd94eb939c
   */
   it('result of string should match', () => {
     let str = new Str('teststring유니코드')
