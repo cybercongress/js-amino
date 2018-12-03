@@ -21,7 +21,7 @@ let WireType = {
 
 const WireMap = {
     [Types.Int64]: WireType.Varint,
-    [Types.Int32]: WireType.Type4Byte,
+    [Types.Int32]: WireType.Varint,
     [Types.Int16]: WireType.Varint,
     [Types.Int8]: WireType.Varint,
     [Types.String]: WireType.ByteLength,
