@@ -40,7 +40,7 @@ const encodeBinary = (instance, type, opts, isBare = true) => {
 
         case Types.Int32:
             {
-                if (opts.binFix32) {
+                if (opts.binFixed32) {
                     data = Encoder.encodeInt32(tmpInstance)
                 } else {
                     data = Encoder.encodeUVarint(tmpInstance)

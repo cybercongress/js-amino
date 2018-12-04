@@ -26,7 +26,7 @@ class FieldOtions {
         this.jsonName = opts.jsonName || "";
         this.jsonOmitEmpty = opts.jsonOmitEmpty || "";
         this.binFixed64 = opts.binFixed64 || false; // (Binary) Encode as fixed64
-        this.binFix32 = opts.binFix32 || false; // (Binary) Encode as fixed32
+        this.binFixed32 = opts.binFixed32 || false; // (Binary) Encode as fixed32
         this.unsafe = opts.unsafe || false; // e.g. if this field is a float.
         this.writeEmpty = opts.writeEmpty || false; // write empty structs and lists (default false except for pointers)
         this.emptyElements = opts.emptyElements || false; // Slice and Array elements are never nil, decode 0x00 as empty struct.
