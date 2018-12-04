@@ -36,28 +36,33 @@ const encodeBinary = (instance, type, opts, isBare = true) => {
             {
                 data = Encoder.encodeSignedVarint(tmpInstance)
                 break;
-            }    
+            }
 
         case Types.Int32:
-            {   
-                if( opts.binFix32 ) {
+            {
+                if (opts.binFix32) {
                     data = Encoder.encodeInt32(tmpInstance)
                 } else {
                     data = Encoder.encodeUVarint(tmpInstance)
                 }
-                
+
                 break;
             }
 
         case Types.Int64:
             {
-                if( opts.binFixed64 ) {
+                if (opts.binFixed64) {
                     data = Encoder.encodeInt64(tmpInstance)
                 } else {
                     data = Encoder.encodeUVarint(tmpInstance)
                 }
                 break;
             }
+       /* case Types.Time:
+            {
+                data = encodeTime(tmpInstance, isBare) //Encoder.encodeTime(tmpInstance)
+                break;
+            }*/
         case Types.Boolean:
             {
                 data = Encoder.encodeBoolean(tmpInstance)
@@ -83,7 +88,7 @@ const encodeBinary = (instance, type, opts, isBare = true) => {
 
         case Types.ArrayStruct:
             {
-                data = encodeBinaryArray(tmpInstance, Types.ArrayStruct,opts, isBare)
+                data = encodeBinaryArray(tmpInstance, Types.ArrayStruct, opts, isBare)
                 break;
             }
 
@@ -109,7 +114,7 @@ const encodeBinary = (instance, type, opts, isBare = true) => {
 
 }
 
-const encodeBinaryInterface = (instance, opts,isBare) => {
+const encodeBinaryInterface = (instance, opts, isBare) => {
     let data = encodeBinary(instance, instance.type, opts, true) //dirty-hack
     data = instance.info.prefix.concat(data)
     if (!isBare) {
@@ -120,7 +125,7 @@ const encodeBinaryInterface = (instance, opts,isBare) => {
 }
 
 
-const encodeBinaryStruct = (instance, opts,isBare = true) => {
+const encodeBinaryStruct = (instance, opts, isBare = true) => {
     let result = []
     Reflection.ownKeys(instance).forEach((key, idx) => {
         let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking 
@@ -129,6 +134,7 @@ const encodeBinaryStruct = (instance, opts,isBare = true) => {
         if (encodeData) {
             result = result.concat(encodeData)
         }
+
     })
     if (!isBare) {
         result = Encoder.encodeUVarint(result.length).concat(result)
@@ -143,7 +149,9 @@ const encodeBinaryStruct = (instance, opts,isBare = true) => {
 const encodeBinaryField = (typeInstance, idx, type, opts) => {
     let encodeData = null
     if (type == Types.ArrayStruct || type == Types.ArrayInterface) {
-        encodeData = encodeBinaryArray(typeInstance, type, opts,true, idx)
+        encodeData = encodeBinaryArray(typeInstance, type, opts, true, idx)
+    } else if (type == Types.Time) {
+        encodeData = encodeTime(typeInstance, idx,false)
     } else {
         encodeData = encodeBinary(typeInstance, type, opts, false)
         let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[type])
@@ -153,7 +161,7 @@ const encodeBinaryField = (typeInstance, idx, type, opts) => {
     return encodeData
 }
 
-const encodeBinaryArray = (instance, arrayType, opts,isBare = true, idx = 0) => {
+const encodeBinaryArray = (instance, arrayType, opts, isBare = true, idx = 0) => {
     let result = []
 
     for (let i = 0; i < instance.length; ++i) {
@@ -172,6 +180,21 @@ const encodeBinaryArray = (instance, arrayType, opts,isBare = true, idx = 0) => 
     }
 
     return result;
+}
+
+const encodeTime = (time, idx, isBare) => {
+    let result = []
+    let encodeData = null;
+    encodeData = Encoder.encodeTime(time);
+    result = result.concat(encodeData);
+
+    if (!isBare) {
+        result = Encoder.encodeUVarint(result.length).concat(result)
+    }
+    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, WireMap[Types.Struct]) //notice: use Types.Struct -> Time is a special of Struct
+    result = encodeField.concat(result)
+    return result
+
 }
 
 

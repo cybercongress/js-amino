@@ -69,8 +69,12 @@ const isEqual = (value, other) => {
 Number.MaxInt8 = 1 << 7 - 1;
 Number.MaxInt16 = 1 << 15 - 1;
 
+const MinSecond = -62135596800; // seconds of 01-01-0001
+const MaxSecond = 253402300800; // seconds of 10000-01-01
+const MaxNano = 999999999 //nanos have to be in interval: [0, 999999999]
+
 //extension for String
-String.toBytes = str => {
+String.prototype.toBytes = str => {
     let bytes = [];
     for (let i = 0, n = str.length; i < n; i++) {
         let char = str.charCodeAt(i);
@@ -89,5 +93,8 @@ String.fromBytes = bytes => {
 
 module.exports = {
     getHash256,
-    isEqual
+    isEqual,
+    MinSecond,
+    MaxSecond,
+    MaxNano
 }

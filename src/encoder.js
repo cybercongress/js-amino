@@ -1,7 +1,16 @@
 let varint = require('varint')
 var svarint = require('signed-varint')
 let Int53 = require('int53')
-let { Buffer } = require('safe-buffer')
+const nano = require('nanoseconds');
+let {
+    Buffer
+} = require('safe-buffer')
+const Utils = require("./utils")
+let {
+    Types,
+    WireType,
+    WireMap
+} = require('./types')
 
 const encodeSignedVarint = input => {
     let buf = svarint.encode(input)
@@ -54,6 +63,32 @@ const encodeBoolean = input => {
     return encodeUint8(0)
 }
 
+const encodeTime = time => {
+    let data = []    
+    let s = time.getTime() / 1000 //get the second
+   
+    if (s != 0) {
+        if (s < Utils.MinSecond && s >= Utils.MaxSecond) {
+            throw new RangeError(`Second have to be >= ${Utils.MinSecond}, and <: ${Utils.MaxSecond}`)
+        }
+        let encodeField = encodeFieldNumberAndType(1, WireMap[Types.Time])
+        data = encodeField.concat(encodeUVarint(s))
+    }
+   
+    /*let ns = nano([0, s*1000000]);    
+    ns = 0
+    if (ns != 0) {
+        if (ns < 0 && ns > Utils.MaxNano) {
+            throw new RangeError(`NanoSecond have to be >= 0, and <=: ${Utils.MaxNano}`)
+        }
+        let encodeField = encodeFieldNumberAndType(2, WireMap[Types.Time])
+        data = data.concat(encodeField.concat(encodeUVarint(ns)))
+    }
+    */
+    return data;
+
+}
+
 const encodeFieldNumberAndType = (num, type) => { //reference:https://developers.google.com/protocol-buffers/docs/encoding
     let encodedVal = (num << 3 | type)
     return varint.encode(encodedVal)
@@ -70,13 +105,14 @@ module.exports = {
     encodeInt64,
     encodeSlice,
     encodeBoolean,
-    encodeUVarint
+    encodeUVarint,
+    encodeTime
 }
 
 if (require.main == module) {
-    let arr = [4, 66, 153, 172, 244, 1]
-   
+    let time = new Date('01 Dec 2018 00:12:00 GMT');
 
-    let result = encodeSlice(arr)
+
+    let result = encodeTime(time)
     console.log(result)
 }
