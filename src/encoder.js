@@ -33,7 +33,7 @@ const encodeInt16 = input => {
 const encodeInt32 = input => {
     let buffer = new ArrayBuffer(4); //4 byte
     let view = new DataView(buffer);
-    view.setUint32(0, input); // big endiant
+    view.setUint32(0, input, true); // little endiant
     return Array.from(new Uint8Array(buffer));
 }
 

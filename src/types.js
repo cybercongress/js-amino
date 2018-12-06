@@ -32,8 +32,6 @@ const WireMap = {
     [Types.ArrayStruct]: WireType.ByteLength,
     [Types.ArrayInterface]: WireType.ByteLength,
     [Types.Interface]: WireType.ByteLength,
-   
-
 }
 
 WireType.keysOf = number => {

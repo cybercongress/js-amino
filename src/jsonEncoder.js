@@ -1,9 +1,6 @@
 const Reflection = require("./reflect")
-const Encoder = require("./encoder")
 let {
     Types,
-    WireType,
-    WireMap
 } = require('./types')
 let { Buffer } = require('safe-buffer')
 
