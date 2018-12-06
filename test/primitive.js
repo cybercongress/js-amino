@@ -2,6 +2,7 @@ const {
   Codec,
   TypeFactory,
   Types,
+  FieldOtions,
 } = require('../src/index')
 const { toHex } = require('./util')
 const assert = require('assert')
@@ -60,6 +61,27 @@ describe('Test encode primitive type int', () => {
   it('result of int64 should match', () => {
     let int64 = new Int64(123456789)
     assert.equal(toHex(codec.marshalBinary(int64)), '04959aef3a')
+  })
+
+  /*
+    FixedInt{
+      Int32(fixed32): 1234567,
+      Int64(fixed64):123456789,
+    } 0e0d87d612001115cd5b0700000000
+  */
+  it('result of fixed int32 and int64 should match', () => {
+    const FixedInt = TypeFactory.create('FixedInt', [
+      {
+        name: 'int32',
+        type: Types.Int32,
+      },
+      {
+        name: 'int64',
+        type: Types.Int64,
+      }
+    ])
+    let fixedInt = new FixedInt(1234567, 123456789)
+    assert.equal(toHex(codec.marshalBinary(fixedInt, new FieldOtions({binFixed64: true, binFixed32: true}))), '0e0d87d612001115cd5b0700000000')
   })
 })
 

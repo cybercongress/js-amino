@@ -1,4 +1,7 @@
-let { Types } = require('./types')
+let {
+    Types,
+    WireType,
+} = require('./types')
 let Factory = require('./typeFactory')
 
 const typeOf = instance => {
@@ -24,7 +27,44 @@ const ownKeys = instance => {
     })
 }
 
+const typeToTyp3 = (type, opts) => {
+    switch (type) {
+        case Types.Interface:
+            return WireType.ByteLength
+        case Types.ArrayInterface:
+        case Types.ArrayStruct:   
+            return WireType.ByteLength
+        case Types.String:
+            return WireType.ByteLength
+        case Types.Struct:
+        // case Types.Map:
+            return WireType.ByteLength
+        case Types.Int64:
+            if (opts.binFixed64) {
+                return WireType.Type8Byte
+            } else {
+                return WireType.Varint
+            }
+        case Types.Int32:
+            if (opts.binFixed32) {
+                return WireType.Type4Byte
+            } else {
+                return WireType.Varint
+            }
+        case Types.Int8:
+        case Types.Int16:
+            return WireType.Varint 
+        // case Types.Float64:
+        //      return WireType.Type8Byte
+        // case Types.Float32:
+        //      return WireType.Type4Byte
+        default:
+            throw new Error('"unsupported field type ' + type)       
+    }
+}
+
 module.exports = {
     typeOf,
-    ownKeys
+    ownKeys,
+    typeToTyp3,
 }
