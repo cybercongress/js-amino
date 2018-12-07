@@ -3,6 +3,7 @@ const Reflection = require("./reflect")
 const BinaryEncoder = require("./binaryEncoder")
 const BinaryDecoder = require("./binaryDecoder")
 const Encoder = require("./encoder")
+const Decoder = require("./decoder")
 const TypeFactory = require("./typeFactory")
 const Utils = require("./utils")
 
@@ -44,8 +45,7 @@ class Codec {
         }
         let type = new RegisteredType(name, typeName)
         type.registered = true
-        instance.info = type
-        //console.log("instance.info=",instance.info)
+        instance.info = type        
         this.set(typeName, type)
 
     }
@@ -65,7 +65,7 @@ class Codec {
 
     unMarshalJson(json, instance) {
         let deserializedObj = JSON.parse(json)
-        let typeName = Reflection.typeOf(instance);        
+        let typeName = Reflection.typeOf(instance);
         if (!this.lookup(typeName)) {
             throw new Error(`No ${typeName} was registered`)
         }
@@ -74,30 +74,39 @@ class Codec {
     }
 
     marshalBinary(obj) {
-        if (!obj) return null        
+        if (!obj) return null
         //let typeInfo = this.lookup(Reflection.typeOf(obj))
         //if (!typeInfo) return null;
-        let encodedData = BinaryEncoder.encodeBinary(obj,obj.type)  
+        let encodedData = BinaryEncoder.encodeBinary(obj, obj.type)
         let lenBz = Encoder.encodeUVarint(encodedData.length)
-        
+
         return lenBz.concat(encodedData)
 
     }
 
-    unMarshalBinary(bz, instance) {
+    unMarshalBinary(bz, instance) {        
         if (bz.length == 0) throw new RangeError("UnmarshalBinary cannot decode empty bytes")
         if (!instance) throw new TypeError("UnmarshalBinary cannot decode to Null instance")
         let typeName = Reflection.typeOf(instance)
         let typeInfo = this.lookup(typeName)
         if (!typeInfo) throw new TypeError(`No ${typeName} was registered`)
-        let length = bz[0]
-        let realbz = bz.slice(1);
-        if (length != realbz.length) throw new RangeError("Wrong length")
+
+        let {
+            data,
+            byteLength
+        } = Decoder.decodeUVarint(bz)
+        let realbz = bz.slice(byteLength)
+       
+        if (data != realbz.length) throw new RangeError("Wrong length")
+        /*
         if (!Utils.isEqual(realbz.slice(0, 4), typeInfo.prefix)) {
+            // console.log("typeInfo.prefix=",typeInfo.prefix)
+            // console.log("realbz.slice(0, 4)=",realbz.slice(0, 4))
             throw new TypeError("prefix not match")
         }
-        realbz = bz.slice(5)
-        BinaryDecoder.decodeBinary(realbz, instance)
+        realbz = realbz.slice(5)
+       */
+        BinaryDecoder.decodeBinary(realbz, instance,instance.type)
 
     }
     get typeMap() {

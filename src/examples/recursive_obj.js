@@ -108,13 +108,13 @@ let c = new C(100,10,"Toi La Tan", new subC("Truong Huynh Anh Thu"),slice)
 let binary = codec.marshalBinary(c)
  console.log("binary=",binary.toString())
  //console.log("fullObj=",aObj.type)
-
-/*codec.unMarshalBinary(binary,bObj)
+let bObj = new A()
+codec.unMarshalBinary(binary,bObj)
 if( Utils.isEqual(aObj,bObj)) {
     console.log("equal")
 }
 else console.log("Not equal")
-*/
+
 
 
 
