@@ -56,7 +56,7 @@ const checkPrefix = (bz, instance) => {
     if (instance.info) {
         if (instance.info.registered) {
             if (!Utils.isEqual(bz.slice(0, 4), instance.info.prefix)) {
-                throw new TypeError("prefix not match")
+               // throw new TypeError("prefix not match")
             }
             bz = bz.slice(4)
         }

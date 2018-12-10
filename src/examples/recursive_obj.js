@@ -106,7 +106,7 @@ let c = new C(100,10,"Toi La Tan", new subC("Truong Huynh Anh Thu"),slice)
 
 
 let binary = codec.marshalBinary(c)
- console.log("binary=",binary.toString())
+ //console.log("binary=",binary.toString())
  //console.log("fullObj=",aObj.type)
 let bObj = new A()
 codec.unMarshalBinary(binary,bObj)

@@ -51,7 +51,7 @@ const Reflection = {
     typeOf: _typeOf,
 }
 
-let privateInfo = Symbol("privateObj")
+let privateInfo = Symbol("privateInfo")
 
 class BaseAminoType {
 
@@ -68,7 +68,7 @@ class BaseAminoType {
     lookup(name) {
         return this[privTypeMap].get(name)
     }
-
+   /*
     get info() {
         return this[privateInfo]
     }
@@ -76,6 +76,7 @@ class BaseAminoType {
     set info(_info) {
         this[privateInfo]= _info;
     } 
+    */
    
 
 }
@@ -129,14 +130,14 @@ let create = (className, properties, type = Types.Struct) => {
         baseName() {
             return 'AminoType';
         }
-
-       /* get info() {
+      
+       get info() {
             return AminoType.info
         }
-
+        //info  was set as static property
         set info(_info) {
             AminoType.info = _info;
-        }*/
+        }
 
         get type() {
             return AminoType.type
