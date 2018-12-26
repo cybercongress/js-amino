@@ -91,6 +91,7 @@ const encodeBinary = (instance, type) => {
     }
     if (instance.info) {
         if (instance.info.registered) {
+           // console.log("encoding prefix=",instance.info.prefix)
             instance.info.prefix[3] |= WireMap[type] //new code
             data = instance.info.prefix.concat(data)
         }

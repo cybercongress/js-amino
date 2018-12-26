@@ -1,28 +1,35 @@
-let {Codec,TypeFactory,Utils, Types, WireTypes} = require('../index')
+let {
+    Codec,
+    TypeFactory,
+    Utils,
+    Types,
+    WireTypes
+} = require('../index')
 
 let codec = new Codec();
 
 let SubA = TypeFactory.create('SubA', [{
-    name: "a",
-    type: Types.String
-},
-{
-    name: "b",
-    type: Types.Int8
-},
-{
-    name: "sub2",
-    type: Types.Struct
-}])
+        name: "a",
+        type: Types.String
+    },
+    {
+        name: "b",
+        type: Types.Int8
+    },
+    {
+        name: "sub2",
+        type: Types.Struct
+    }
+])
 
-let SubA2 = TypeFactory.create('SubA2', [ {
-   name: "a",
-    type: Types.String
-},
-{
-    name: "b",
-    type: Types.Int8
-}
+let SubA2 = TypeFactory.create('SubA2', [{
+        name: "a",
+        type: Types.String
+    },
+    {
+        name: "b",
+        type: Types.Int8
+    }
 ])
 
 
@@ -41,79 +48,83 @@ let A = TypeFactory.create('A', [{
 ])
 
 let B = TypeFactory.create('B', [{
-    name: "a",
-    type: Types.String
-},
-{
-    name: "b",
-    type: Types.Int8
-},
-{
-    name: "c",
-    type: Types.Int8
-},
+        name: "a",
+        type: Types.String
+    },
+    {
+        name: "b",
+        type: Types.Int8
+    },
+    {
+        name: "c",
+        type: Types.Int8
+    },
 
-{
-    name: "d",
-    type: Types.Struct
-}
+    {
+        name: "d",
+        type: Types.Struct
+    }
 ])
-let subC = TypeFactory.create('SubC', [ {
-     name: "a",
-     type: Types.String
- }
- ])
+let subC = TypeFactory.create('SubC', [{
+        name: "a",
+        type: Types.String
+    },
+    {
+        name: "e",
+        type: Types.ByteSlice
+    }
+])
 
 let C = TypeFactory.create('C', [{
-    name: "a",
-    type: Types.Int64
-},
-{
-    name: "b",
-    type: Types.Int8
-},
-{
-    name: "c",
-    type: Types.String
-},
-{
-    name: "d",
-    type: Types.Struct
-},
-{
-    name: "e",
-    type: Types.ByteSlice
-}
+        name: "a",
+        type: Types.Int8
+    },
+    {
+        name: "b",
+        type: Types.Int8
+    },
+    {
+        name: "c",
+        type: Types.String
+    },
+    {
+        name: "d",
+        type: Types.Struct
+    }
 ])
 
 let Slice = TypeFactory.create('Slice', [{
     name: "a",
     type: Types.ByteSlice
-}
-],Types.ByteSlice)
+}], Types.ByteSlice)
 
-codec.registerConcrete(new A(), "SimpleStruct", {}) 
-codec.registerConcrete(new C(), "shareledger/MsgSend", {}) 
+codec.registerConcrete(new A(), "SimpleStruct", {})
+codec.registerConcrete(new C(), "shareledger/MsgSend", {})
 codec.registerConcrete(new Slice(), "shareledger/PubSecp256k1", {})
-//codec.registerConcrete(new subC(),"shareledger/SubStruct",{})
-let subObj = new SubA(10)
-let subObj2 = new SubA2("Do Ngoc Tan",21)
-let aObj = new A(23,"Sanh la tin", new SubA("Toi la Tan",12,subObj2))    
+codec.registerConcrete(new subC(),"shareledger/SubStruct",{})
 
-let arr =[100,221,124,1,35]
+let subObj2 = new SubA2("Do Ngoc Tan", 21)
+let aObj = new A(23, "Sanh la tin", new SubA("Toi la Tan", 12, subObj2))
+
+let arr = [100, 80, 124, 1, 35]
 let slice = new Slice(arr)
-let c = new C(100,10,"Toi La Tan", new subC("Truong Huynh Anh Thu"),slice)
+let subCObj = new subC("Truong Huynh Anh Thu",slice)
+let c = new C(100, 10, "Toi La Tan",subCObj)
 
 
+
+//console.log("binary=",binary.toString())
+//console.log("fullObj=",aObj.type)
 let binary = codec.marshalBinary(c)
- //console.log("binary=",binary.toString())
- //console.log("fullObj=",aObj.type)
-let bObj = new A()
-codec.unMarshalBinary(binary,bObj)
-if( Utils.isEqual(aObj,bObj)) {
+let cObj = new C()
+codec.unMarshalBinary(binary, cObj)
+/*
+if (Utils.isEqual(c, cObj)) {
     console.log("equal")
-}
-else console.log("Not equal")
+    console.log(cObj.JsObject())
+} else console.log("Not equal")
+*/
+console.log(cObj.JsObject())
 
 
 

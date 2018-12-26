@@ -30,7 +30,7 @@ const decodeUVarint = input => {
 }
 
 const decodeInt8 = input => {  
-    let result = decodeSignedVarint(input)
+    let result = decodeSignedVarint(input)    
     if( result.data > Number.MaxInt8) throw new TypeError("EOF decoding int8")
     let int8Buffer = Int8Array.from([result.data]);       
 
@@ -90,7 +90,7 @@ const decodeFieldNumberAndType = bz => {
     //console.log("wiretypeNumber=",wiretypeNumber)
     let type = WireMap.keysOf(wiretypeNumber)  
     let idx =  decodedData.data >> 3    
-     //console.log("bz in decodeField=",bz)
+    //console.log("bz in decodeField=",idx)
     return  {
         type: type,
         byteLength: decodedData.byteLength,

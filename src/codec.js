@@ -45,7 +45,7 @@ class Codec {
         }
         let type = new RegisteredType(name, typeName)
         type.registered = true
-        instance.info = type        
+        instance.info = type               
         this.set(typeName, type)
 
     }
@@ -88,8 +88,10 @@ class Codec {
         if (bz.length == 0) throw new RangeError("UnmarshalBinary cannot decode empty bytes")
         if (!instance) throw new TypeError("UnmarshalBinary cannot decode to Null instance")
         let typeName = Reflection.typeOf(instance)
-        let typeInfo = this.lookup(typeName)
+        let typeInfo = this.lookup(typeName)       
         if (!typeInfo) throw new TypeError(`No ${typeName} was registered`)
+        //console.log("unMarShallBinary.Info=",typeInfo)
+        //instance.info = typeInfo //assign back type info
 
         let {
             data,

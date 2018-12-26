@@ -66,8 +66,8 @@ const isEqual = (value, other) => {
 
 };
 //extension for Number global type
-Number.MaxInt8 = 1 << 7 - 1;
-Number.MaxInt16 = 1 << 15 - 1;
+Number.MaxInt8 = (1 << 7) - 1;
+Number.MaxInt16 = (1 << 15) - 1;
 
 //extension for String
 String.toBytes = str => {
