@@ -18,7 +18,7 @@ const decodeSignedVarint = input => {
     };
 }
 
-const decodeUVarint = input => {
+const decodeUVarint = input => {    
     if( !input || !Array.isArray(input) ) throw new TypeError("Can not decodeSignedVarint invalid input")
     if( !input.length ) throw new TypeError("Can not decodeSignedVarint invalid input length")
     let buf = uVarint.decode(input)
@@ -84,13 +84,13 @@ const decodeSlice = input =>{
     } 
 }
 
-const decodeFieldNumberAndType = bz => {  
+const decodeFieldNumberAndType = bz => {      
     let decodedData = decodeUVarint(bz)   
-    let wiretypeNumber = decodedData.data & 0x07
-    //console.log("wiretypeNumber=",wiretypeNumber)
+    let wiretypeNumber = decodedData.data & 0x07   
     let type = WireMap.keysOf(wiretypeNumber)  
     let idx =  decodedData.data >> 3    
-    //console.log("bz in decodeField=",idx)
+   
+    
     return  {
         type: type,
         byteLength: decodedData.byteLength,

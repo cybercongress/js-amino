@@ -17,7 +17,7 @@ let Signature = TypeFactory.create('Signature', [{
 
 let MsgSend = TypeFactory.create('MsgSend', [{
     name: "nonce",
-    type: Types.Int64
+    type: Types.Int8
 },
 {
     name: "from",
@@ -39,7 +39,7 @@ let Coin = TypeFactory.create('Coin', [{
 },
 {
     name: "amount",
-    type: Types.Int64
+    type: Types.Int8
 }
 ])
 
@@ -53,7 +53,7 @@ let AuthSignature = TypeFactory.create('AuthSignature', [{
 },
 {
     name: "nonce",
-    type: Types.Int64
+    type: Types.Int8
 }    
 ])
 
@@ -92,8 +92,11 @@ let authSig = new AuthSignature(pubSecp256k1,signature,nonce)
 let authTx = new AuthTx(msgSend,authSig)
 
 let binary = codec.marshalBinary(authTx)
-console.log("length=",binary.length)
+//console.log("length=",binary.length)
+let decodedData = new AuthTx()
+
+codec.unMarshalBinary(binary, decodedData)
+console.log(decodedData.JsObject())
 
 
-
-console.log(binary.toString())
+//console.log(binary.toString())

@@ -6,7 +6,7 @@ let {
     WireMap
 } = require('./types')
 
-const encodeBinary = (instance, type) => {
+const encodeBinary = (instance, type, isBare = true) => {
 
     let tmpInstance = instance;
     //retrieve the single property of the Registered AminoType
@@ -90,8 +90,7 @@ const encodeBinary = (instance, type) => {
             }
     }
     if (instance.info) {
-        if (instance.info.registered) {
-           // console.log("encoding prefix=",instance.info.prefix)
+        if (instance.info.registered) {           
             instance.info.prefix[3] |= WireMap[type] //new code
             data = instance.info.prefix.concat(data)
         }

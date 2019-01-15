@@ -35,10 +35,8 @@ const encodeInt64 = input => {
 }
 
 const encodeSlice = input => {
-    let encodedData = input.slice();
-
-    return [encodeUVarint(input.length)].concat(encodedData)
-
+    let encodedData = input.slice();   
+    return encodeUVarint(input.length).concat(encodedData)
 }
 
 const encodeString = input => {

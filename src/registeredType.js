@@ -88,10 +88,12 @@ let privObject = Symbol("privateObj")
 module.exports = {
     RegisteredType
 }
+
 if (require.main === module) {
-    let type = new RegisteredType("SimpleStruct");
+    /*let type = new RegisteredType("SimpleStruct");
     console.log("disAmb=",type.disamb)
     console.log("prefix=",type.prefix)
-    console.log("disfix=", type.disfix)
+    console.log("disfix=", type.disfix)*/
+    
 
 }

@@ -28,7 +28,7 @@ const WireMap = {
     [Types.Int16]: WireType.Varint,
     [Types.Int8]: WireType.Varint,
     [Types.String]: WireType.ByteLength,
-    [Types.Struct]: WireType.ByteStruct, //compatible
+    [Types.Struct]: WireType.Struct,//WireType.ByteStruct, //compatible
     [Types.ByteSlice]: WireType.ByteLength, //compatible
     [Types.Interface]: WireType.Interface //compatible
    

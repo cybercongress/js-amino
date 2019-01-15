@@ -90,15 +90,14 @@ class Codec {
         let typeName = Reflection.typeOf(instance)
         let typeInfo = this.lookup(typeName)       
         if (!typeInfo) throw new TypeError(`No ${typeName} was registered`)
-        //console.log("unMarShallBinary.Info=",typeInfo)
-        //instance.info = typeInfo //assign back type info
+       
 
         let {
             data,
             byteLength
         } = Decoder.decodeUVarint(bz)
         let realbz = bz.slice(byteLength)
-       
+        
         if (data != realbz.length) throw new RangeError("Wrong length")
         /*
         if (!Utils.isEqual(realbz.slice(0, 4), typeInfo.prefix)) {

@@ -52,7 +52,7 @@ const Reflection = {
     typeOf: _typeOf,
 }
 
-const defaultTypes = [Types.Struct, Types.ByteSlice] //list of type needs to init default value before decoding
+const defaultTypes = [Types.Struct, Types.ByteSlice, Types.Interface] //list of type needs to init default value before decoding
 
 class BaseAminoType {
 
@@ -93,8 +93,8 @@ let create = (className, properties, type = Types.Struct) => {
                             this[prop[key]] = args[idx++]
                         } else if (key == 'type') {
                             this.set(prop['name'], prop['type'])
-                            if ( defaultTypes.includes(prop['type']) ) { //action for decoding: set up the default value for Type.Struct field
-                                if (this[prop['name']]) {                                    
+                            if (defaultTypes.includes(prop['type'])) { //action for decoding: set up the default value for Type.Struct field
+                                if (this[prop['name']]) {
                                     // let defaultAminotye = Object.assign({}, this[prop['name']])                                 
 
                                     // Object.setPrototypeOf(defaultAminotye, objAmino[className].prototype)
@@ -107,7 +107,7 @@ let create = (className, properties, type = Types.Struct) => {
                 })
                 if (args.length == 0) { //retreive the default value for this class : it necessary for decoding phase
                     this[privTypeMap].forEach((value, key, map) => {
-                        if ( defaultTypes.includes(value) ) {
+                        if (defaultTypes.includes(value)) {
                             this[key] = objAmino[className].prototype.defaultMap.get(key)
                         }
                     })
@@ -135,21 +135,41 @@ let create = (className, properties, type = Types.Struct) => {
                 return objAmino[className].prototype.privateType
             }
 
-            JsObject() {
+            /*JsObject() {
                 let obj = {}
 
-                Reflect.ownKeys(this).forEach((key) => {
-
-                    if (typeof key != 'symbol' && this.lookup(key) != Types.Struct) {
+                Reflect.ownKeys(this).forEach((key) => {                  
+                    let typeLookup =  this.lookup(key)
+                    if (typeof key != 'symbol' && typeLookup != Types.Struct) {                       
                         if (this[key]) {
                             obj[key] = this[key]
                         }
-                    } else if (this.lookup(key) == Types.Struct) {
+                    } else if (typeLookup == Types.Struct) {
+                        
                         obj[key] = this[key].JsObject()
                     }
                 })
                 return obj;
+            }*/
+
+            JsObject() {
+                let obj = {}
+
+                Reflect.ownKeys(this).forEach((key) => {
+                    let typeLookup = this.lookup(key)
+                    if (typeof key != 'symbol') {
+                        if (typeof this[key].JsObject !== 'function') { //check if this property has recursive JsObject
+                            obj[key] = this[key]
+                        }
+                        else {
+                            obj[key] = this[key].JsObject()
+                        }
+                    } 
+                })
+                return obj;
             }
+
+
         }
     }
 
@@ -205,63 +225,5 @@ if (require.main === module) {
 
     console.log(aObj)
     console.log(bObj)
-    //console.log(aObj2.info)
-    // console.log(aObj.info)
-    // console.log(aObj)
-    // console.log(bObj)
-
-
-    // console.log(aObj.JsObject())
-
-
-
-    /*
-    const nameIt = (name, cls) => {
-
-        let obj = {
-            [name]: class extends cls {
-                getNumber() {
-                    //console.log("name=",[name])
-                    return obj[name].prototype.test;
-                }
-                setNumber(num) {
-                    obj[name].prototype.test = num;
-                }
-
-            }
-            //sanh.constructor.name = name;
-
-        }
-        obj[name].prototype.test = 100;
-        return obj[name];
-
-
-    };
-
-
-
-    class Dummy {};
-
-    const NamedDummy = nameIt('NamedDummy', Dummy);
-    const NamedDummyMore = nameIt('NamedDummyMore', class {});
-    //console.log(nameIt)
-    console.log('Here are the classes:');
-    console.log(Dummy);
-    console.log(NamedDummy);
-    console.log(NamedDummyMore);
-
-    const dummy = new Dummy();
-    const namedDummy = new NamedDummy();
-    const namedDummy2 = new NamedDummy();
-    const namedDummyMore = new NamedDummyMore();
-
-    namedDummy.setNumber(1000);
-    namedDummyMore.setNumber(2000);
-
-    console.log('\nHere are the objects:');
-    // console.log(dummy.getNumber);
-    console.log(namedDummy2.getNumber());
-    console.log(namedDummyMore.getNumber());
-
-*/
+   
 }

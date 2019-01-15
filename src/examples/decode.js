@@ -66,12 +66,13 @@ const toHex = (buffer) => {
 codec.registerConcrete(new A(), "A", {})
 codec.registerConcrete(new SubA, "SubA",{})
 codec.registerConcrete(new SubB, "SubB",{})
-
-let a = new A("Tan",45,new SubA("Hello World",5, new SubB("Do Ngoc Tan")))
+let subB = new SubB("Do Ngoc Tan")
+let subA =  new SubA("Hello World",5, subB)
+let a = new A("Tan",45,subA)
 
 
 let binary = codec.marshalBinary(a)
-console.log(toHex(binary))
+console.log("binary.length=",binary.length)
 //let decodedData = new A()
 let decodedData = new A()
 //console.log("A=",new A())
