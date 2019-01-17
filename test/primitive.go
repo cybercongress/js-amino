@@ -7,6 +7,11 @@ import (
 	"github.com/tendermint/go-amino"
 )
 
+type FixedInt struct {
+	Int32 int32 `binary:"fixed32"`
+	Int64 int64 `binary:"fixed64"`
+}
+
 func PrintPrimitive() {
 	cdc := amino.NewCodec()
 
@@ -24,4 +29,13 @@ func PrintPrimitive() {
 
 	bz = cdc.MustMarshalBinaryLengthPrefixed("teststring유니코드")
 	fmt.Println("Encode string(teststring유니코드)", hex.EncodeToString(bz))
+
+	bz = cdc.MustMarshalBinaryLengthPrefixed(FixedInt{
+		Int32: 1234567,
+		Int64: 123456789,
+	})
+	fmt.Println(`FixedInt{
+	Int32(fixed32): 1234567,
+	Int64(fixed64):123456789,
+}`, hex.EncodeToString(bz))
 }
