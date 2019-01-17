@@ -151,7 +151,7 @@ const encodeBinaryField = (typeInstance, idx, type, opts) => {
     } else if (type == Types.Time) {
         encodeData = encodeTime(typeInstance, idx,false)
     } else {
-        encodeData = encodeBinary(typeInstance, type, opts, false)
+        encodeData = encodeBinary(typeInstance, type, opts, false)        
         let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, Reflection.typeToTyp3(type, opts))
         encodeData = encodeField.concat(encodeData)
     }
@@ -189,7 +189,7 @@ const encodeTime = (time, idx, isBare) => {
     if (!isBare) {
         result = Encoder.encodeUVarint(result.length).concat(result)
     }
-    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, Reflection.typeToTyp3(Types.Struct, opts)) //notice: use Types.Struct -> Time is a special of Struct
+    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, Reflection.typeToTyp3(Types.Struct/*, opts*/)) //notice: use Types.Struct -> Time is a special of Struct
     result = encodeField.concat(result)
     return result
 

@@ -32,6 +32,7 @@ const typeToTyp3 = (type, opts) => {
         case Types.Interface:
             return WireType.ByteLength
         case Types.ArrayInterface:
+        case Types.ByteSlice:
         case Types.ArrayStruct:   
             return WireType.ByteLength
         case Types.String:
