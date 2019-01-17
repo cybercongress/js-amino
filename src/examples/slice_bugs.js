@@ -10,26 +10,7 @@ const {
   
   
 
-  const toHex = (buffer) => {
-    let s = ''
-    buffer.forEach((b) => {
-        b = b.toString(16)
-        if (b.length == 1) {
-            b = '0' + b
-        }
-        s += b
-    })
-    return s
-  }
   
-  const fromHex = (str) => {
-    let buffer = []
-    for (let i = 0; i < str.length; i += 2) {
-      let hex = str.slice(i, i+2)
-      buffer.push(parseInt(hex, 16))
-    }
-    return buffer
-  }
   
   let codec = new Codec()
   
@@ -145,18 +126,18 @@ const {
   let sendMsg = new MsgSend(1)
   let fee = new Fee(new Coin('test', 0), 200000)
   let sig = new Signature(
-    new PubKeySecp256k1(fromHex('02745e346835ef675e880413ed29303e9e41cff37079525868ae986ee613b3f542')),
+    new PubKeySecp256k1(Utils.fromHex('02745e346835ef675e880413ed29303e9e41cff37079525868ae986ee613b3f542')),
     [1,2,3],
     0,
     0)
   
   let stdTx = new StdTx([sendMsg], /*fee,*/ [sig], 'test')
   let binary = codec.marshalBinary(stdTx)
-  console.log(toHex(binary))
-  let json = codec.marshalJson(stdTx)
-  console.log(json)
+  console.log(Utils.toHex(binary))
+  //let json = codec.marshalJson(stdTx)
+  //console.log(json)
 
-  let stdTx2 = new StdTx()
+  /*let stdTx2 = new StdTx()
   codec.unMarshalJson(json, stdTx2)
-  console.log(stdTx2)
+  console.log(stdTx2)*/
   

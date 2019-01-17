@@ -15,15 +15,17 @@ const isExisted = name => {
 }
 
 
+const defaultTypes = [Types.Struct, Types.ByteSlice, Types.Interface] //list of type needs to init default value before decoding
+
 class BaseAminoType {
 
     constructor() {
-        this[privTypeMap] = new Map();       
+        this[privTypeMap] = new Map();
 
     }
 
     set(name, type) {
-        if( this[privTypeMap].has(name) ) throw new RangeError(`property '${name}' existed`)
+        if (this[privTypeMap].has(name)) throw new RangeError(`property '${name}' existed`)
         this[privTypeMap].set(name, type)
     }
 
@@ -34,97 +36,112 @@ class BaseAminoType {
 }
 
 
-let create = (className, properties,type = Types.Struct) => {
+let create = (className, properties, type = Types.Struct) => {
 
     if (!properties) {
-        throw new Error("Type List can not be empty")        
+        throw new Error("Type List can not be empty")
     }
     if (!properties.length) {
-        throw new Error("Need to provide TypeList")        
+        throw new Error("Need to provide TypeList")
     }
 
+
+
     /*AminoType*/
-    class AminoType extends BaseAminoType {
+    let objAmino = {
 
-        constructor(...args) {
-            super()
-            let idx = 0;
-            properties.forEach(prop => {
-                Reflect.ownKeys(prop).forEach(key => {
+        [className]: class extends BaseAminoType {
 
-                    if (key == 'name') {
-                        this.idx = idx;
-                        this[prop[key]] = args[idx++]                        
-                    } else if (key == 'type') {
-                        this.set(prop['name'], prop['type'])
-                        if (prop['type'] == Types.Struct) { //set up the default value for Type.Struct field
-                            if (this[prop['name']]) {
-                                let defaultAminotye = Object.assign({}, this[prop['name']])
-                                Object.setPrototypeOf(defaultAminotye, AminoType.prototype);
-                                AminoType.defaultMap.set(prop['name'], defaultAminotye)
+            constructor(...args) {
+                super()
+                let idx = 0;
+                properties.forEach(prop => {
+                    Reflect.ownKeys(prop).forEach(key => {
+
+                        if (key == 'name') {
+                            this.idx = idx;
+                            this[prop[key]] = args[idx++]
+                        } else if (key == 'type') {
+                            this.set(prop['name'], prop['type'])
+                            if (defaultTypes.includes(prop['type'])) { //action for decoding: set up the default value for Type.Struct field
+                                if (this[prop['name']]) {
+                                    // let defaultAminotye = Object.assign({}, this[prop['name']])                                 
+
+                                    // Object.setPrototypeOf(defaultAminotye, objAmino[className].prototype)
+                                    // objAmino[className].prototype.defaultMap.set(prop['name'], defaultAminotye)
+                                    objAmino[className].prototype.defaultMap.set(prop['name'], this[prop['name']])
+                                }
                             }
+                        }
+                    })
+                })
+                if (args.length == 0) {
+                    this[privTypeMap].forEach((value, key, map) => {
+                        if (defaultTypes.includes(value)) {
+                            this[key] = objAmino[className].prototype.defaultMap.get(key)
+                        }
+                    })
+                }
+
+            }
+
+            typeName() {
+                return className;
+            }
+
+            baseName() {
+                return 'AminoType';
+            }
+
+            get info() {
+                return objAmino[className].prototype.privateInfo;
+            }
+
+            set info(_info) {
+                objAmino[className].prototype.privateInfo = _info
+            }
+
+            /*  get index() {
+                return this.idx
+            }
+    
+            set index(_idx) {
+                console.log('set index=',_idx)
+                this.idx = _idx
+            } */
+
+            get type() {
+                return objAmino[className].prototype.privateType
+            }
+
+            JsObject() {
+                let obj = {}
+
+                Reflect.ownKeys(this).forEach((key) => {
+                    let typeLookup = this.lookup(key)
+                    if (typeof key != 'symbol') {
+                        if (typeof this[key].JsObject !== 'function') { //check if this property has recursive JsObject
+                            obj[key] = this[key]
+                        } else {
+                            obj[key] = this[key].JsObject()
                         }
                     }
                 })
-            })
-            if (args.length == 0) {
-                this[privTypeMap].forEach((value, key, map) => {
-                    if (value == Types.Struct) {
-                        this[key] = AminoType.defaultMap.get(key)
-                    }
-                })
-            }          
+                return obj;
+            }
+
 
         }
 
-        typeName() {
-            return className;
-        }
-
-        get info() {
-            return AminoType.info
-        }
-
-        set info(_info) {
-            AminoType.info = _info;
-        }
-
-       /*  get index() {
-            return this.idx
-        }
-
-        set index(_idx) {
-            console.log('set index=',_idx)
-            this.idx = _idx
-        } */
-
-        get type() {
-            return AminoType.type
-        }
-
-        JsObject() {
-            let obj = {}
-            Reflect.ownKeys(this).forEach((key) => {               
-                if( typeof key != 'symbol' &&  this.lookup(key) != Types.Struct) {
-                    if( this[key] ) {
-                       obj[key] = this[key]
-                    }                
-                }
-                else if( this.lookup(key) == Types.Struct ) {
-                    obj[key] = this[key].JsObject()
-                }
-            })
-            return obj;
-        }
-
-       
     }
-    aminoTypes.push(className)
-    AminoType.defaultMap = new Map(); //static map for default value-dirty hack
-    AminoType.info = null //static registered type info
-    AminoType.type = type //describe the type(Struct,Array) for encode/decode
 
-    return AminoType;
+    aminoTypes.push(className)
+    objAmino[className].prototype.defaultMap = new Map()
+    objAmino[className].prototype.privateInfo = null;
+    objAmino[className].prototype.privateType = type;
+
+    //return AminoType;
+    return objAmino[className]
 
 }
 

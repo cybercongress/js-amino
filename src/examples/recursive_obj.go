@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	amino "github.com/tendermint/go-amino"
@@ -39,7 +40,7 @@ func main() {
 	cdc.RegisterConcrete(SimpleStruct{}, "SimpleStruct", nil)
 	cdc.RegisterConcrete(SubStruct{}, "SubStruct", nil)
 
-	b2 := []byte{66, 74, 137, 196, 188, 8, 200, 1, 18, 5, 10, 3, 1, 2, 3, 18, 5, 10, 3, 2, 3, 4, 18, 5, 10, 3, 3, 4, 5, 24, 2, 34, 11, 74, 101, 32, 83, 117, 105, 115, 32, 84, 97, 110, 42, 21, 10, 5, 72, 101, 108, 108, 111, 16, 64, 26, 10, 10, 5, 87, 111, 114, 108, 100, 16, 160, 1}
+	b2, _ := hex.DecodeString("424a89c4bc08c80112050a0301020312050a0302030412050a030304051802220b4a6520537569732054616e2a150a0548656c6c6f10401a0a0a05576f726c6410a001")
 
 	var s SimpleStruct
 	err := cdc.UnmarshalBinaryLengthPrefixed(b2, &s)

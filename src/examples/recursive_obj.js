@@ -79,7 +79,7 @@ let aObj = new A(23,"Sanh la tin", new SubA("Toi la Tan",12,subObj2))
 let bObj = new A()
 */
 let binary = codec1.marshalBinary(obj)
-console.log(binary.toString())
+console.log(Utils.toHex(binary))
 
 /*
 codec1.unMarshalBinary(binary,bObj)

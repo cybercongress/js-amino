@@ -52,12 +52,7 @@ const decodeInt16 = input => {
     };   
 }
 
-const decodeString = input => {
-    /* let {data,byteLength} = decodeUVarint(input)
-    let strLength = data
-    if(input.length < strLength) throw new RangeError(`insufficient bytes decoding string of length ${strLength}`)
-    
-    let str = input.slice(byteLength,strLength+1); */
+const decodeString = input => {       
     let decodedSlice = decodeSlice(input)
     let str = Buffer.from(decodedSlice.data).toString('utf8')
 

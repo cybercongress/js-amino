@@ -4,6 +4,28 @@ const getHash256 = input => {
     return hash2.array();
 }
 
+const fromHex = str => {
+    let buffer = []
+    for (let i = 0; i < str.length; i += 2) {
+      let hex = str.slice(i, i+2)
+      buffer.push(parseInt(hex, 16))
+    }
+    return buffer
+  }
+
+  const toHex = (buffer) => {
+    let s = ''
+    buffer.forEach((b) => {
+        b = b.toString(16)
+        if (b.length == 1) {
+            b = '0' + b
+        }
+        s += b
+    })
+    return s
+  }
+  
+
 const isEqual = (value, other) => {
 
     // Get the value type
@@ -74,7 +96,7 @@ const MaxSecond = 253402300800; // seconds of 10000-01-01
 const MaxNano = 999999999 //nanos have to be in interval: [0, 999999999]
 
 //extension for String
-String.prototype.toBytes = str => {
+/*const fromHex = str => {
     let bytes = [];
     for (let i = 0, n = str.length; i < n; i++) {
         let char = str.charCodeAt(i);
@@ -83,16 +105,20 @@ String.prototype.toBytes = str => {
     return bytes;
 }
 
-String.fromBytes = bytes => {
+const toHex = bytes => {
     let chars = [];
     for(var i = 0, n = bytes.length; i < n;) {
         chars.push(((bytes[i++] & 0xff) << 8) | (bytes[i++] & 0xff));
     }
     return String.fromCharCode.apply(null, chars);
-}
+}*/
+
+
 
 module.exports = {
     getHash256,
+    fromHex,
+    toHex,
     isEqual,
     MinSecond,
     MaxSecond,

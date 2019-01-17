@@ -42,7 +42,7 @@ let pubKey = new PubSecp256k1([1,2,3])
 let tx2 = new Tx2(pubKey)
 let binary2 = codec.marshalBinary(tx2)
 
-console.log(binary.toString())
+console.log(Utils.toHex(binary))
 console.log(binary2.toString())
 
 //console.log(bObj)
