@@ -5,6 +5,7 @@ const BinaryDecoder = require("./binaryDecoder")
 const JsonEncoder = require("./jsonEncoder")
 const JsonDecoder = require("./jsonDecoder")
 const Encoder = require("./encoder")
+const Decoder = require("./decoder")
 const TypeFactory = require("./typeFactory")
 const Utils = require("./utils")
 
@@ -119,14 +120,18 @@ class Codec {
         let typeName = Reflection.typeOf(instance)
         let typeInfo = this.lookup(typeName)
         if (!typeInfo) throw new TypeError(`No ${typeName} was registered`)
-        let length = bz[0]
-        let realbz = bz.slice(1);
-        if (length != realbz.length) throw new RangeError("Wrong length")
+        let {
+            data, //length of buffer
+            byteLength
+        } = Decoder.decodeUVarint(bz)
+        let realbz = bz.slice(byteLength)
+        
+        if (data != realbz.length) throw new RangeError("Wrong length of Encoded Buffer")
         if (!Utils.isEqual(realbz.slice(0, 4), typeInfo.prefix)) {
             throw new TypeError("prefix not match")
         }
         realbz = bz.slice(5)
-        BinaryDecoder.decodeBinary(realbz, instance)
+        BinaryDecoder.decodeBinary(realbz, instance, instance.type)
 
     }
     get typeMap() {

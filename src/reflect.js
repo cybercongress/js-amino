@@ -52,6 +52,7 @@ const typeToTyp3 = (type, opts) => {
             } else {
                 return WireType.Varint
             }
+        case Types.Time:
         case Types.Int8:
         case Types.Int16:
             return WireType.Varint 
@@ -60,6 +61,7 @@ const typeToTyp3 = (type, opts) => {
         // case Types.Float32:
         //      return WireType.Type4Byte
         default:
+            console.log("unsupport:",type)
             throw new Error('"unsupported field type ' + type)       
     }
 }

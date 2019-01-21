@@ -92,8 +92,11 @@ let authSig = new AuthSignature(pubSecp256k1,signature,nonce)
 let authTx = new AuthTx(msgSend,authSig)
 
 let binary = codec.marshalBinary(authTx)
-//console.log("length=",binary.length)
+console.log("length=",binary.length)
 
+let decodedData = new AuthTx()
+//let binary = fromHex(hex)
+console.log("encode=",Utils.toHex(binary))
+codec.unMarshalBinary(binary, decodedData)
 
-
-console.log(binary.toString())
+//console.log(binary.toString())

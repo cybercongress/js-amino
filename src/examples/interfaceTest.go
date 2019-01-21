@@ -10,7 +10,7 @@ import (
 	"github.com/btcsuite/btcd/btcec"
 	amino "github.com/tendermint/go-amino"
 	crypto "github.com/tendermint/go-crypto"
-	cmn "github.com/tendermint/tmlibs/common"
+	//cmn "github.com/tendermint/tmlibs/common"
 )
 
 type PubKeySecp256k1 [65]byte

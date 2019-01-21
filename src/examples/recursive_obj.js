@@ -73,13 +73,12 @@ for (let i = 0; i < 3; ++i) {
     subStructs.push(subStruct)
 }
 let obj = new SimpleStruct(100, subStructs, 1, "Je Suis Tan", new SubA('Hello', 32, new SubA2('World', 80)))
-/*let subObj = new SubA(10)
-let subObj2 = new SubA2("Do Ngoc Tan",21)
-let aObj = new A(23,"Sanh la tin", new SubA("Toi la Tan",12,subObj2))    
-let bObj = new A()
-*/
+
 let binary = codec1.marshalBinary(obj)
 console.log(Utils.toHex(binary))
+
+let decodedObj = new SimpleStruct()
+codec1.unMarshalBinary(binary,decodedObj)
 
 /*
 codec1.unMarshalBinary(binary,bObj)

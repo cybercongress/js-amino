@@ -55,6 +55,11 @@ const decodeInt16 = input => {
 const decodeString = input => {       
     let decodedSlice = decodeSlice(input)
     let str = Buffer.from(decodedSlice.data).toString('utf8')
+    //new code
+  /*  str.forEach( (element,idx) => { //for-each instead of map to prevent copy js array
+        str[idx] = String.fromCharCode(element)                
+    });
+    str = str.join('')   */
 
     return {
         data:str,
@@ -78,17 +83,20 @@ const decodeSlice = input =>{
 const decodeFieldNumberAndType = bz => {  
     let decodedData = decodeUVarint(bz)   
     let wiretypeNumber = decodedData.data & 0x07
-    let type = WireMap.keysOf(wiretypeNumber)  
+    //let type = WireMap.keysOf(wiretypeNumber)
+    
     let idx =  decodedData.data >> 3    
+    if( idx > (1<<29) -1 ) throw new RangeError("Invalid Field Num:",idx)    
 
     return  {
-        type: type,
+        type: wiretypeNumber,//type,
         byteLength: decodedData.byteLength,
         idx: idx
     }
 }
 
 module.exports = {
+    decodeUVarint,
     decodeInt8,
     decodeInt16,
     decodeString,

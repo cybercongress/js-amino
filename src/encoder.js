@@ -90,7 +90,7 @@ const encodeTime = time => {
 }
 
 const encodeFieldNumberAndType = (num, type) => { //reference:https://developers.google.com/protocol-buffers/docs/encoding
-    let encodedVal = (num << 3 | type)
+    let encodedVal = (num << 3 | type)    
     return varint.encode(encodedVal)
 }
 

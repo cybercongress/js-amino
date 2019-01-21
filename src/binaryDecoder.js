@@ -1,5 +1,6 @@
 const Reflection = require("./reflect")
 const Decoder = require("./decoder")
+const Utils = require("./utils")
 
 let {
     Types,
@@ -7,45 +8,21 @@ let {
     WireMap
 } = require('./types')
 
-const decodeBinary = (bz, instance, isBare = true) => {
-   
-    Reflection.ownKeys(instance).forEach((key, idx) => {    
-         
-        let type = instance.lookup(key) //only valid with BaseTypeAmino.todo: checking         
-                     
-        let {data, newBz} = decodeBinaryField(bz, idx, type,instance[key])
-        instance[key] = data
-        bz = newBz  
-    })
-    if(!isBare) {
-       // console.log("data=",instance)
-        return {
-            data: instance,
-            newBz:bz
-        }
-    }
-    else return;
+const decodeBinary = (bz, instance, type, isBare = true) => {
 
-}
-
-const decodeBinaryField = (bz, idx, type,instance) => {
-    let decodedFieldtype = Decoder.decodeFieldNumberAndType(bz)     
-    //if (type.toString() != decodedFieldtype.type.toString()) throw new TypeError("Type does not match in decoding")
-    if (WireMap[type] != WireMap[decodedFieldtype.type]) throw new TypeError("Type does not match in decoding")
-    
-    if (idx + 1 != decodedFieldtype.idx) throw new RangeError("Index of Field is not match while decoding")
-    bz = bz.slice(decodedFieldtype.byteLength)
     let decodedData = null;
+
     switch (type) {
 
         case Types.Int64:
             {
-               //todo
+                //todo
                 break;
             }
         case Types.String:
             {
-               decodedData = Decoder.decodeString(bz)
+
+                decodedData = Decoder.decodeString(bz)
                 break;
             }
         case Types.Int8:
@@ -55,23 +32,143 @@ const decodeBinaryField = (bz, idx, type,instance) => {
                 break;
             }
         case Types.Struct:
-            {   let firstField = Decoder.decodeSlice(bz)
-                bz = bz.slice(1)                
-                decodedData = decodeBinary(bz, instance, false)               
+            {
+                decodedData = decodeBinaryStruct(bz, instance, isBare)
                 break;
             }
+        case Types.ByteSlice:
+            {
+                decodedData = Decoder.decodeSlice(bz)
+                break;
+
+            }
+
+        case Types.Interface:
+            {
+
+                decodedData = decodeInterface(bz, instance, instance.type, isBare)
+                // return decodedData;
+                break;
+            }
+
         default:
             {
-                console.log("There is no data type to decode")
-                break;
+                console.log("There is no data type to decode:", type)
+                throw new Error("There is no data type to decode:", type)
+
             }
     }
-    if (decodedData) {
-        bz = bz.slice(decodedData.byteLength)        
+
+    return {
+        data: decodedData ? decodedData.data : null,
+        byteLength: decodedData.byteLength > 0 ? decodedData.byteLength : 0
     }
+
+}
+
+
+const decodeBinaryField = (bz, idx, type, instance, isBare) => {
+    let decodedFieldtype = Decoder.decodeFieldNumberAndType(bz)
+    let expectedTyp3 = Reflection.typeToTyp3(type, {})
+    let buffTyp3 = decodedFieldtype.type //Reflection.typeToTyp3(decodedFieldtype.type, {})
+    let excludeTypes = [WireType.Interface, WireType.Struct, WireType.ByteSlice]
+    if (expectedTyp3 != buffTyp3 /*WireMap[decodedFieldtype.type]*/ //also check that interface can be any time
+        &&
+        !excludeTypes.includes(WireMap[type]) && !excludeTypes.includes(WireMap[decodedFieldtype.type])) {
+        // && (WireMap[type] != WireType.Interface || WireMap[decodedFieldtype.type] != WireType.Interface)) {
+
+        throw new TypeError("Type does not match in decoding. Expecting:" + type.toString() +
+            " But got:" + decodedFieldtype.type.toString())
+    }
+
+    if (idx + 1 != decodedFieldtype.idx) {
+
+        throw new RangeError("Index of Field is not match. Expecting:" + (idx + 1) +
+            " But got:" + decodedFieldtype.idx)
+    }
+
+    bz = bz.slice(decodedFieldtype.byteLength)
+
+    let decodedData = decodeBinary(bz, instance, type, isBare)
+
     return {
         data: decodedData.data,
-        newBz: bz
+        byteLength: decodedFieldtype.byteLength + decodedData.byteLength
+    }
+
+}
+
+const decodeBinaryStruct = (bz, instance, isBare = true) => {
+
+    let totalLength = 0;
+    if (!isBare) { // Read byte-length prefixed byteslice.
+        let prefixSlice = Decoder.decodeUVarint(bz)
+        bz = bz.slice(prefixSlice.byteLength)
+        if (bz.length < prefixSlice.data) throw new RangeError("Wrong length prefix for Struct")
+        totalLength += prefixSlice.byteLength;
+    }
+
+
+    Reflection.ownKeys(instance).forEach((key, idx) => {
+
+        let type = instance.lookup(key)
+        let {
+            data,
+            byteLength
+        } = decodeBinaryField(bz, idx, type, instance[key], false)
+        instance[key] = data
+        totalLength += byteLength;
+        bz = bz.slice(byteLength)
+
+    })
+
+    return {
+        data: instance,
+        byteLength: totalLength
+    }
+
+
+
+}
+
+const verifyPrefix = (bz, instance) => {
+    let shiftedPrefixByte = 0;
+    if (instance.info) {
+        if (instance.info.registered) {
+
+            if (!Utils.isEqual(bz.slice(0, 4), instance.info.prefix)) {
+                //console.log("instance.info.prefix)=",instance.info)
+                throw new TypeError("prefix not match")
+            }
+            // bz = bz.slice(4)
+            shiftedPrefixByte = 4;
+        }
+    }
+    return shiftedPrefixByte;
+
+}
+
+const decodeInterface = (bz, instance, type, isBare = true) => {
+
+    let totalLength = 0;
+    if (!isBare) { // Read byte-length prefixed byteslice.
+        let prefixSlice = Decoder.decodeUVarint(bz)
+        bz = bz.slice(prefixSlice.byteLength)
+        if (bz.length < prefixSlice.data) throw new RangeError("Wrong length prefix for Interface")
+        totalLength += prefixSlice.byteLength;
+    }
+
+    let shiftedByte = verifyPrefix(bz, instance)
+    if (shiftedByte > 0) bz = bz.slice(shiftedByte)
+    totalLength += shiftedByte
+
+
+    let decodedData = decodeBinary(bz, instance, type, true)
+    totalLength += decodedData.byteLength;    
+
+    return {
+        data: decodedData.data,
+        byteLength: totalLength
     }
 
 }

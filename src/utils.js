@@ -88,8 +88,8 @@ const isEqual = (value, other) => {
 
 };
 //extension for Number global type
-Number.MaxInt8 = 1 << 7 - 1;
-Number.MaxInt16 = 1 << 15 - 1;
+Number.MaxInt8 = (1 << 7) - 1;
+Number.MaxInt16 = (1 << 15) - 1;
 
 const MinSecond = -62135596800; // seconds of 01-01-0001
 const MaxSecond = 253402300800; // seconds of 10000-01-01
