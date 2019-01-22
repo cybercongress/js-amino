@@ -64,21 +64,37 @@ let SubStruct = TypeFactory.create('SubStruct', [{
 }])
 
 
+let SubStruct2 = TypeFactory.create('SubStruct2', [{
+    name: "a",
+    type: Types.Int8
+}])
+
+
 
 codec1.registerConcrete(new SimpleStruct(), "SimpleStruct", {})
 codec1.registerConcrete(new SubStruct(), "SubStruct", {})
 let subStructs = []
-for (let i = 0; i < 3; ++i) {
+let subStructs2 = []
+for (let i = 0; i < 1; ++i) {
     let subStruct = new SubStruct([i + 1, i + 2, i + 3]);
     subStructs.push(subStruct)
 }
+
+for (let i = 0; i < 1; ++i) {
+    let subStruct2 = new SubStruct2(i+1);
+    subStructs2.push(subStruct2)
+}
+
 let obj = new SimpleStruct(100, subStructs, 1, "Je Suis Tan", new SubA('Hello', 32, new SubA2('World', 80)))
 
 let binary = codec1.marshalBinary(obj)
-console.log(Utils.toHex(binary))
+//console.log("binary=",binary)
+//console.log(Utils.toHex(binary))
 
 let decodedObj = new SimpleStruct()
 codec1.unMarshalBinary(binary,decodedObj)
+let jsObj = decodedObj.JsObject();
+console.log("decodedObj=",JSON.stringify(jsObj))
 
 /*
 codec1.unMarshalBinary(binary,bObj)

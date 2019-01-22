@@ -15,7 +15,9 @@ const isExisted = name => {
 }
 
 
-const defaultTypes = [Types.Struct, Types.ByteSlice, Types.Interface] //list of type needs to init default value before decoding
+const defaultTypes = [Types.Struct, Types.ByteSlice, Types.Interface,
+    Types.ArrayStruct, Types.ArrayInterface
+] //list of type needs to init default value before decoding
 
 class BaseAminoType {
 
@@ -59,7 +61,7 @@ let create = (className, properties, type = Types.Struct) => {
                     Reflect.ownKeys(prop).forEach(key => {
 
                         if (key == 'name') {
-                            this.idx = idx;
+                            // this.idx = idx;
                             this[prop[key]] = args[idx++]
                         } else if (key == 'type') {
                             this.set(prop['name'], prop['type'])
@@ -80,6 +82,10 @@ let create = (className, properties, type = Types.Struct) => {
                         if (defaultTypes.includes(value)) {
                             this[key] = objAmino[className].prototype.defaultMap.get(key)
                         }
+                        /*else if (value == Types.ArrayStruct || value == Types.ArrayInterface) {
+                                                   console.log("default for array struct=",objAmino[className].prototype.defaultMap.get(key))
+                                                   this[key] = []
+                                               }*/
                     })
                 }
 
@@ -120,11 +126,26 @@ let create = (className, properties, type = Types.Struct) => {
                 Reflect.ownKeys(this).forEach((key) => {
                     let typeLookup = this.lookup(key)
                     if (typeof key != 'symbol') {
-                        if (typeof this[key].JsObject !== 'function') { //check if this property has recursive JsObject
-                            obj[key] = this[key]
+                        if (typeLookup == Types.ArrayStruct || typeLookup == Types.ArrayInterface) {
+                            obj[key] = []
+                            let values = this[key];
+                            values.forEach((value, idx) => {
+                                if (typeof value.JsObject == 'function') { //check if this property has recursive JsObject                                   
+                                    obj[key].push(value.JsObject());
+                                } else {
+                                    console.log("not jsObject")
+                                    obj[key].push(value);
+                                }
+                            })
                         } else {
-                            obj[key] = this[key].JsObject()
+                            if (typeof this[key].JsObject !== 'function') { //check if this property has recursive JsObject
+                                obj[key] = this[key]
+                            } else {
+                                obj[key] = this[key].JsObject()
+                            }
+
                         }
+
                     }
                 })
                 return obj;
