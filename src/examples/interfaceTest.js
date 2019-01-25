@@ -1,5 +1,6 @@
 let {
     Codec,
+    FieldOtions,
     TypeFactory,
     Utils,
     Types,
@@ -15,7 +16,7 @@ let Tx = TypeFactory.create('Tx', [{
 
 let MsgSend = TypeFactory.create('MsgSend', [{
     name: "nonce",
-    type: Types.Int8
+    type: Types.Int64
 }])
 
 //interface 2 with byte-slice array
@@ -43,14 +44,19 @@ codec.registerConcrete(new PubSecp256k1(), "shareledger/PubSecp256k1", {})
 
 let msgSend = new MsgSend(3)
 let tx = new Tx(msgSend)
+let binary = codec.marshalBinary(tx,new FieldOtions({binFixed64: true, binFixed32: true}))
+console.log("binary=",binary)
+let decodedTx = new Tx();
+codec.unMarshalBinary(binary,decodedTx, new FieldOtions({binFixed64: true, binFixed32: true}))
+console.log("decodedTx=",JSON.stringify(decodedTx.JsObject()))
 
-let binary = codec.marshalBinary(tx)
 
 let pubKey = new PubSecp256k1([1, 2, 3])
-let tx2 = new Tx2(pubKey)
-let binary2 = codec.marshalBinary(tx2)
+//let tx2 = new Tx2(pubKey)
+//let binary2 = codec.marshalBinary(tx2,new FieldOtions({binFixed64: true, binFixed32: true}))
 
-console.log(Utils.toHex(binary))
-console.log(binary2.toString())
+
+//console.log(Utils.toHex(binary))
+//console.log(binary2.toString())
 
 //console.log(bObj)

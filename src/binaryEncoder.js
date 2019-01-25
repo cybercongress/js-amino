@@ -177,7 +177,7 @@ const encodeBinaryArray = (instance, arrayType, opts, isBare = true, idx = 0) =>
 
     for (let i = 0; i < instance.length; ++i) {
         let item = instance[i]
-        let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, Reflection.typeToTyp3(Types.ArrayStruct, opts))
+        let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, Reflection.typeToTyp3(Types.ArrayStruct, opts))        
         let itemType = arrayType == Types.ArrayInterface ? Types.Interface : Types.Struct
         let data = encodeBinary(item, itemType, opts, false)
         if (data) {
@@ -187,8 +187,7 @@ const encodeBinaryArray = (instance, arrayType, opts, isBare = true, idx = 0) =>
     }
     if (!isBare) {
         result = Encoder.encodeUVarint(result.length).concat(result)
-    }
-
+    }    
     return result;
 }
 
@@ -201,7 +200,7 @@ const encodeTime = (time, idx, isBare) => {
     if (!isBare) {
         result = Encoder.encodeUVarint(result.length).concat(result)
     }
-    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, Reflection.typeToTyp3(Types.Struct /*, opts*/ )) //notice: use Types.Struct -> Time is a special of Struct
+    let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, Reflection.typeToTyp3(Types.Struct , opts )) //notice: use Types.Struct -> Time is a special of Struct
     result = encodeField.concat(result)
     return result
 

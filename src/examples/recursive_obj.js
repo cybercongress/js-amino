@@ -75,12 +75,12 @@ codec1.registerConcrete(new SimpleStruct(), "SimpleStruct", {})
 codec1.registerConcrete(new SubStruct(), "SubStruct", {})
 let subStructs = []
 let subStructs2 = []
-for (let i = 0; i < 1; ++i) {
+for (let i = 0; i < 10; ++i) {
     let subStruct = new SubStruct([i + 1, i + 2, i + 3]);
     subStructs.push(subStruct)
 }
 
-for (let i = 0; i < 1; ++i) {
+for (let i = 0; i < 15; ++i) {
     let subStruct2 = new SubStruct2(i+1);
     subStructs2.push(subStruct2)
 }
@@ -88,8 +88,8 @@ for (let i = 0; i < 1; ++i) {
 let obj = new SimpleStruct(100, subStructs, 1, "Je Suis Tan", new SubA('Hello', 32, new SubA2('World', 80)))
 
 let binary = codec1.marshalBinary(obj)
-//console.log("binary=",binary)
-//console.log(Utils.toHex(binary))
+//console.log("binary=",binary.toString())
+console.log(Utils.toHex(binary))
 
 let decodedObj = new SimpleStruct()
 codec1.unMarshalBinary(binary,decodedObj)

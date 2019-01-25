@@ -1,6 +1,8 @@
 let uVarint = require('varint')
 var sVarint = require('signed-varint')
+let Int53 = require('int53')
 let Utils = require('./utils')
+
 let {
     Types,
     WireType,
@@ -52,6 +54,19 @@ const decodeInt16 = input => {
     };   
 }
 
+const decodeInt64 = input => {
+    let offset = 0;
+    let buf = Buffer.from(input.slice(0,8))    
+    var number = Int53.readInt64LE(buf, offset)
+    
+    return {
+        data: number,
+        byteLength: 8
+    };   
+
+   
+}
+
 const decodeString = input => {       
     let decodedSlice = decodeSlice(input)
     let str = Buffer.from(decodedSlice.data).toString('utf8')
@@ -99,6 +114,7 @@ module.exports = {
     decodeUVarint,
     decodeInt8,
     decodeInt16,
+    decodeInt64,
     decodeString,
     decodeFieldNumberAndType,
     decodeSlice

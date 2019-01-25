@@ -102,6 +102,7 @@ class Codec {
         if (!obj) return null
         // let typeInfo = this.lookup(Reflection.typeOf(obj))        
         // if (!typeInfo) return null;
+        
         let encodedData = BinaryEncoder.encodeBinary(obj, obj.type, fieldOpts)
         if (obj.info) { //if this object was registered with prefix
             if (obj.info.registered) {
@@ -114,7 +115,7 @@ class Codec {
         return lenBz.concat(encodedData)
     }
 
-    unMarshalBinary(bz, instance) {
+    unMarshalBinary(bz, instance, fieldOpts = new FieldOtions()) {
         if (bz.length == 0) throw new RangeError("UnmarshalBinary cannot decode empty bytes")
         if (!instance) throw new TypeError("UnmarshalBinary cannot decode to Null instance")
         let typeName = Reflection.typeOf(instance)
@@ -131,7 +132,8 @@ class Codec {
             throw new TypeError("prefix not match")
         }
         realbz = bz.slice(5)
-        BinaryDecoder.decodeBinary(realbz, instance, instance.type)
+        
+        BinaryDecoder.decodeBinary(realbz, instance, instance.type/*, fieldOpts*/)
 
     }
     get typeMap() {

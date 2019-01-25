@@ -42,6 +42,7 @@ const typeToTyp3 = (type, opts) => {
             return WireType.ByteLength
         case Types.Int64:
             if (opts.binFixed64) {
+                console.log("type 8 byte================")
                 return WireType.Type8Byte
             } else {
                 return WireType.Varint
