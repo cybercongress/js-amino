@@ -41,8 +41,7 @@ const typeToTyp3 = (type, opts) => {
         // case Types.Map:
             return WireType.ByteLength
         case Types.Int64:
-            if (opts.binFixed64) {
-                console.log("type 8 byte================")
+            if (opts.binFixed64) {                
                 return WireType.Type8Byte
             } else {
                 return WireType.Varint
@@ -54,6 +53,7 @@ const typeToTyp3 = (type, opts) => {
                 return WireType.Varint
             }
         case Types.Time:
+        case Types.Boolean:
         case Types.Int8:
         case Types.Int16:
             return WireType.Varint 
