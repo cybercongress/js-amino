@@ -133,7 +133,7 @@ class Codec {
         }
         realbz = bz.slice(5)
         
-        BinaryDecoder.decodeBinary(realbz, instance, instance.type/*, fieldOpts*/)
+        BinaryDecoder.decodeBinary(realbz, instance, instance.type,fieldOpts)
 
     }
     get typeMap() {

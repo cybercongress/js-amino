@@ -1,5 +1,6 @@
 let {
     Codec,
+    FieldOtions,
     TypeFactory,
     Utils,
     Types,
@@ -14,7 +15,7 @@ let SubA = TypeFactory.create('SubA', [{
     },
     {
         name: "b",
-        type: Types.Int8
+        type: Types.Int64
     },
     {
         name: "sub2",
@@ -28,7 +29,7 @@ let SubA2 = TypeFactory.create('SubA2', [{
     },
     {
         name: "b",
-        type: Types.Int8
+        type: Types.Int64
     }
 ])
 
@@ -36,7 +37,7 @@ let SubA2 = TypeFactory.create('SubA2', [{
 
 let SimpleStruct = TypeFactory.create('SimpleStruct', [{
         name: "a",
-        type: Types.Int8
+        type: Types.Int64
     },
     {
         name: "b",
@@ -44,7 +45,7 @@ let SimpleStruct = TypeFactory.create('SimpleStruct', [{
     },
     {
         name: "c",
-        type: Types.Int8
+        type: Types.Int64
     },
     {
         name: "d",
@@ -66,7 +67,7 @@ let SubStruct = TypeFactory.create('SubStruct', [{
 
 let SubStruct2 = TypeFactory.create('SubStruct2', [{
     name: "a",
-    type: Types.Int8
+    type: Types.Int64
 }])
 
 
@@ -75,26 +76,30 @@ codec1.registerConcrete(new SimpleStruct(), "SimpleStruct", {})
 codec1.registerConcrete(new SubStruct(), "SubStruct", {})
 let subStructs = []
 let subStructs2 = []
-for (let i = 0; i < 10; ++i) {
+for (let i = 0; i < 5; ++i) {
     let subStruct = new SubStruct([i + 1, i + 2, i + 3]);
     subStructs.push(subStruct)
 }
 
-for (let i = 0; i < 15; ++i) {
-    let subStruct2 = new SubStruct2(i+1);
+for (let i = 0; i < 5; ++i) {
+    let subStruct2 = new SubStruct2(i + 1);
     subStructs2.push(subStruct2)
 }
 
-let obj = new SimpleStruct(100, subStructs, 1, "Je Suis Tan", new SubA('Hello', 32, new SubA2('World', 80)))
+let obj = new SimpleStruct(100, subStructs2, 1, "Je Suis Tan", new SubA('Hello', 32, new SubA2('World', 8000)))
 
-let binary = codec1.marshalBinary(obj)
+let binary = codec1.marshalBinary(obj, new FieldOtions({
+    binFixed64: true
+}))
 //console.log("binary=",binary.toString())
 console.log(Utils.toHex(binary))
 
 let decodedObj = new SimpleStruct()
-codec1.unMarshalBinary(binary,decodedObj)
+codec1.unMarshalBinary(binary, decodedObj, new FieldOtions({
+    binFixed64: true
+}))
 let jsObj = decodedObj.JsObject();
-console.log("decodedObj=",JSON.stringify(jsObj))
+console.log("decodedObj=", JSON.stringify(jsObj))
 
 /*
 codec1.unMarshalBinary(binary,bObj)
