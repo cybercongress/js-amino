@@ -162,7 +162,7 @@ const encodeBinaryField = (typeInstance, idx, type, opts) => {
     if (type == Types.ArrayStruct || type == Types.ArrayInterface) {
         encodeData = encodeBinaryArray(typeInstance, type, opts, true, idx)
     } else if (type == Types.Time) {
-        encodeData = encodeTime(typeInstance, idx, false)
+        encodeData = encodeTime(typeInstance, idx, opts, false)
     } else {
         encodeData = encodeBinary(typeInstance, type, opts, false)
         let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, Reflection.typeToTyp3(type, opts))
@@ -191,7 +191,7 @@ const encodeBinaryArray = (instance, arrayType, opts, isBare = true, idx = 0) =>
     return result;
 }
 
-const encodeTime = (time, idx, isBare) => {
+const encodeTime = (time, idx, opts, isBare) => {
     let result = []
     let encodeData = null;
     encodeData = Encoder.encodeTime(time);
