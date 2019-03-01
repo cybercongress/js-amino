@@ -98,8 +98,7 @@ const decodeSlice = input =>{
 const decodeFieldNumberAndType = bz => {  
     let decodedData = decodeUVarint(bz)   
     let wiretypeNumber = decodedData.data & 0x07
-    //let type = WireMap.keysOf(wiretypeNumber)
-    
+   
     let idx =  decodedData.data >> 3    
     if( idx > (1<<29) -1 ) throw new RangeError("Invalid Field Num:",idx)    
 

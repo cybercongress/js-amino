@@ -1,6 +1,6 @@
 {
   "name": "js-amino",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JS Implementation of Amino ",
   "main": "src/index.js",
   "dependencies": {
@@ -19,9 +19,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/shareringvn/shrcrypto.git"
+    "url": "https://github.com/TanNgocDo/Js-Amino.git"
   },
   "author": "TanDo",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/shareringvn/shrcrypto#readme"
+  "homepage": "https://github.com/TanNgocDo/Js-Amino"
 }

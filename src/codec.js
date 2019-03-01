@@ -127,12 +127,12 @@ class Codec {
         } = Decoder.decodeUVarint(bz)
         let realbz = bz.slice(byteLength)
         
+        
         if (data != realbz.length) throw new RangeError("Wrong length of Encoded Buffer")
         if (!Utils.isEqual(realbz.slice(0, 4), typeInfo.prefix)) {
             throw new TypeError("prefix not match")
         }
-        realbz = bz.slice(5)
-        
+        realbz = bz.slice(byteLength + 4)        
         BinaryDecoder.decodeBinary(realbz, instance, instance.type,fieldOpts)
 
     }

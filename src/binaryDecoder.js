@@ -103,8 +103,7 @@ const decodeBinaryField = (bz, idx, type, instance, opts, isBare) => {
                 " But got:" + decodedFieldtype.type.toString())
         }
 
-        if (idx + 1 != decodedFieldtype.idx) {
-            console.log("decodedFieldtype=", decodedFieldtype)
+        if (idx + 1 != decodedFieldtype.idx) {            
             throw new RangeError("Index of Field is not match. Expecting:" + (idx + 1) +
                 " But got:" + decodedFieldtype.idx)
         }
@@ -123,14 +122,17 @@ const decodeBinaryField = (bz, idx, type, instance, opts, isBare) => {
 const decodeBinaryStruct = (bz, instance, opts, isBare = true) => {
 
     let totalLength = 0;
+    
     if (!isBare) { // Read byte-length prefixed byteslice.
-        let prefixSlice = Decoder.decodeUVarint(bz)
+        let prefixSlice = Decoder.decodeUVarint(bz)        
         bz = bz.slice(prefixSlice.byteLength)
+        
         if (bz.length < prefixSlice.data) {
             throw new RangeError("Wrong length prefix for Struct")
         }
         totalLength += prefixSlice.byteLength;
     }
+    
 
 
     Reflection.ownKeys(instance).forEach((key, idx) => {
@@ -204,6 +206,7 @@ const verifyPrefix = (bz, instance) => {
 const decodeInterface = (bz, instance, type, opts, isBare = true) => {
 
     let totalLength = 0;
+    
     if (!isBare) { // Read byte-length prefixed byteslice.
         let prefixSlice = Decoder.decodeUVarint(bz)
         bz = bz.slice(prefixSlice.byteLength)

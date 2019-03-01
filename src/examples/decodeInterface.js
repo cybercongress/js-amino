@@ -33,7 +33,7 @@ let Coin = TypeFactory.create('Coin', [
     },
     {
         name: "amount",
-        type: Types.Int8
+        type: Types.Int64
     }
 ])
 
@@ -62,7 +62,7 @@ let AuthSignature = TypeFactory.create('AuthSignature', [{
     },
     {
         name: "nonce",
-        type: Types.Int8
+        type: Types.Int64
     }
 ])
 
@@ -107,9 +107,13 @@ let hex = "b601ad0f11bb0f845234e30a0423456708130a0353485210140404138d819c3b0fd73
 let bz = fromHex(hex)
 
 
-let pubKey = [1, 2, 3]
-let nonce = 10
-let bzSig = [5,6,7]
+let pubKey = [4,66,153,172,244,182,160,156,54,242,103,168,146,69,89,181,159,160,108,93,62,42,93,252,4,232,56,176,21,70,198,18,48,42,124,225,1,52,30,72,142,47,87,44,217,113,131,20,117,155,23,226,47,118,11,140,178,199,13,157,229,105,196,193,161]
+let bzSig = [48,68,2,32,8,103,69,197,205,156,48,192,109,2,173,72,93,138,182,206,40,72,54,131,81,19,126,68,136,232,132,233,245,40,178,10,2,32,0,249,95,6,105,145,171,59,227,21,231,242,42,131,52,157,27,223,18,90,234,251,163,55,40,63,160,143,173,26,82,247]
+//bzSig = [1,2,3]
+//let pubKey = [4,66,153,172,244,182,160,156,54,242,103,168,146,69,89,181,159,160,108,93,62]
+//let bzSig = [4,66,153,172,244,182,160,156,54,242,103,168,146,69,89,181,159,160,108,93,62,4,66,153,172,244,182,160,156,54,242,103,168,146,69,89,181,159,160,108,93,62]
+
+let nonce = 1000
 let pubSecp256k1 = new PubKeySecp256k1(pubKey)
 
 let coin = new Coin("SHR", 10)
@@ -126,6 +130,8 @@ let binary = codec.marshalBinary(authTx)
 //binary = [21,82,11,174,219,15,60,255,134,83,8,2,4,23,25,159,107,155,8,4,4,4]
 let decodedData = new AuthTx()
 //let binary = fromHex(hex)
+console.log("hex encode=",Utils.toHex(binary))
+console.log("binary=",binary.toString())
 codec.unMarshalBinary(binary, decodedData)
 
 console.log("Decode Data=", decodedData.JsObject())
