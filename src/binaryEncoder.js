@@ -165,6 +165,7 @@ const encodeBinaryField = (typeInstance, idx, type, opts) => {
         encodeData = encodeTime(typeInstance, idx, opts, false)
     } else {
         encodeData = encodeBinary(typeInstance, type, opts, false)
+        if (encodeData.toString() == [ 0 ]) return [];
         let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, Reflection.typeToTyp3(type, opts))
         encodeData = encodeField.concat(encodeData)
     }
