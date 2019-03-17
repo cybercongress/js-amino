@@ -2,7 +2,10 @@
 
 For more information spec, please refer: https://github.com/tendermint/go-amino 
 
-## Installation
+## Install From NPM:
+Run `npm i js-amino`
+
+## Install From Source
 
 1. Run `npm install`
 
