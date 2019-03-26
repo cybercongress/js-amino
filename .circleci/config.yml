@@ -9,6 +9,7 @@ workflows:
             branches:
               only: master
 
+jobs:
   update_changelog:
       working_directory: ~/build
       docker:
