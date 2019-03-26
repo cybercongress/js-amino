@@ -1,6 +1,8 @@
+[![Coverage Status](https://coveralls.io/repos/github/cybercongress/js-amino/badge.svg)](https://coveralls.io/github/cybercongress/js-amino)
+
 # An Implementation of Amino in Javascript and TypeScript
 
-For more information spec, please refer: https://github.com/tendermint/go-amino 
+For more information spec, please refer: https://github.com/tendermint/go-amino
 
 ## Install From NPM:
 Run `npm i js-amino`
@@ -18,7 +20,7 @@ Run `npm i js-amino`
 ## Running The Unit Test
 
 1. Run `npm test`
-   
+
 
 ## Usage
 ```js
@@ -84,7 +86,7 @@ let PubKeySecp256k1 = TypeFactory.create('PubKeySecp256k1', [{
   type: Types.ByteSlice
 }], Types.ByteSlice)
 
-codec.registerConcrete(new BaseAccount(), "auth/Account") 
+codec.registerConcrete(new BaseAccount(), "auth/Account")
 codec.registerConcrete(new PubKeySecp256k1(), "tendermint/PubKeySecp256k1", {});
 
 let address = Utils.fromHex('00CAFE00DEADBEEF00CAFE00')
@@ -97,4 +99,3 @@ let publicKey = new PubKeySecp256k1(publicKeySlice)
 let baseAcc = new BaseAccount(address, coins, publicKey, 1234, 77777)
 let binary = Utils.toHex(codec.marshalBinary(baseAcc))
 ```
-
