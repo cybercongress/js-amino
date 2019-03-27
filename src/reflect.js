@@ -9,14 +9,26 @@ const typeOf = instance => {
         throw new Error("Undefined Type");
     }
     if( instance in Types ) return Types[instane]
-    
-    if (typeof instance == 'object') {
-        if( instance.constructor.name == 'AminoType' ) return instance.typeName()
-        return instance.constructor.name;
 
+
+    // fix for React-Native as instance.constructor.name return _class
+    try {
+        return instance.typeName()
+    } catch(err) {
+        try {
+            return instance.constructor.name
+        } catch (error){
+            return typeof instance
+        }
     }
+    
+    // if (typeof instance == 'object') {
+    //     if( instance.constructor.name == 'AminoType' ) return instance.typeName()
+    //     return instance.constructor.name;
+
+    // }
  
-    return typeof instance;
+    // return typeof instance;
 }
 
 const ownKeys = instance => {    
