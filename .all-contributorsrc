@@ -50,6 +50,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cyberadmin",
+      "name": "Cyber Admin",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/36439031?v=4",
+      "profile": "https://github.com/cyberadmin",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
