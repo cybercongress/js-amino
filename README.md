@@ -22,6 +22,15 @@ Run `npm i js-amino`
 
 1. Run `npm test`
 
+## Features:
+1. Encode and Decode simple types: int8,int16,int32,int64
+2. Encode and Decode recursive Struct and Interface
+3. Encode simple Time data
+
+## Todo:
+1. Full support for Time encoding and decoding
+2. Add more Unit test
+3. Benchmark
 
 ## Usage
 ```js
