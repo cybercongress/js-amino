@@ -59,6 +59,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "ethanfrey",
+      "name": "Ethan Frey",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5689864?v=4",
+      "profile": "https://github.com/ethanfrey",
+      "contributions": [
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
