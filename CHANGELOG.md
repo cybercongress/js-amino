@@ -21,6 +21,7 @@
 
 **Merged pull requests:**
 
+- docs: add ethanfrey as a contributor [\#37](https://github.com/cybercongress/js-amino/pull/37) ([allcontributors[bot]](https://github.com/apps/allcontributors))
 - docs: add cyberadmin as a contributor [\#36](https://github.com/cybercongress/js-amino/pull/36) ([allcontributors[bot]](https://github.com/apps/allcontributors))
 - docs: add litvintech as a contributor [\#35](https://github.com/cybercongress/js-amino/pull/35) ([allcontributors[bot]](https://github.com/apps/allcontributors))
 - docs: add SaveTheAles as a contributor [\#34](https://github.com/cybercongress/js-amino/pull/34) ([allcontributors[bot]](https://github.com/apps/allcontributors))
