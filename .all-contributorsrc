@@ -23,6 +23,15 @@
         "code",
         "maintenance"
       ]
+    },
+    {
+      "login": "philipstanislaus",
+      "name": "philipstanislaus",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6912756?v=4",
+      "profile": "https://github.com/philipstanislaus",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
