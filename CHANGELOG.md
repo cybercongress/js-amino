@@ -21,6 +21,7 @@
 
 **Merged pull requests:**
 
+- docs: add philipstanislaus as a contributor [\#33](https://github.com/cybercongress/js-amino/pull/33) ([allcontributors[bot]](https://github.com/apps/allcontributors))
 - docs: add TanNgocDo as a contributor [\#32](https://github.com/cybercongress/js-amino/pull/32) ([allcontributors[bot]](https://github.com/apps/allcontributors))
 - docs: add Thunnini as a contributor [\#31](https://github.com/cybercongress/js-amino/pull/31) ([allcontributors[bot]](https://github.com/apps/allcontributors))
 - Fixed default encoding [\#28](https://github.com/cybercongress/js-amino/pull/28) ([litvintech](https://github.com/litvintech))
