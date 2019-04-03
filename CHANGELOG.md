@@ -21,6 +21,7 @@
 
 **Merged pull requests:**
 
+- docs: add Thunnini as a contributor [\#31](https://github.com/cybercongress/js-amino/pull/31) ([allcontributors[bot]](https://github.com/apps/allcontributors))
 - Fixed default encoding [\#28](https://github.com/cybercongress/js-amino/pull/28) ([litvintech](https://github.com/litvintech))
 - Add test interface array [\#26](https://github.com/cybercongress/js-amino/pull/26) ([Thunnini](https://github.com/Thunnini))
 - Fix encoding int32, 64 to binFixed [\#25](https://github.com/cybercongress/js-amino/pull/25) ([Thunnini](https://github.com/Thunnini))
