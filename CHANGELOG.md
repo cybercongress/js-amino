@@ -8,6 +8,7 @@
 - Converting type to typ3 with considering options. [\#24](https://github.com/cybercongress/js-amino/issues/24)
 - Typo on field options [\#23](https://github.com/cybercongress/js-amino/issues/23)
 - webpack babel package error [\#17](https://github.com/cybercongress/js-amino/issues/17)
+- publish to npm [\#16](https://github.com/cybercongress/js-amino/issues/16)
 - Add options for encode/decode Like Go-Amino [\#14](https://github.com/cybercongress/js-amino/issues/14)
 - Encoding int32, int64 to signed varint?  [\#9](https://github.com/cybercongress/js-amino/issues/9)
 - Bug when encoding byte slice [\#8](https://github.com/cybercongress/js-amino/issues/8)
