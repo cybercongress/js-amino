@@ -1,4 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/cybercongress/js-amino/badge.svg)](https://coveralls.io/github/cybercongress/js-amino)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 # An Implementation of Amino in Javascript and TypeScript
 
@@ -99,3 +100,15 @@ let publicKey = new PubKeySecp256k1(publicKeySlice)
 let baseAcc = new BaseAccount(address, coins, publicKey, 1234, 77777)
 let binary = Utils.toHex(codec.marshalBinary(baseAcc))
 ```
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table><tr><td align="center"><a href="https://github.com/Thunnini"><img src="https://avatars2.githubusercontent.com/u/16339680?v=4" width="100px;" alt="JungHwan Tony Yun"/><br /><sub><b>JungHwan Tony Yun</b></sub></a><br /><a href="https://github.com/cybercongress/js-amino/commits?author=Thunnini" title="Code">💻</a></td></tr></table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
