@@ -13,26 +13,25 @@
 
 <div align="center">
 <img src="https://img.shields.io/github/issues-raw/cybercongress/js-amino.svg?color=green&style=flat-square" alt="opened issues"/>
-![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/cybercongress/js-amino.svg?color=blue&style=flat-square)
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/cybercongress/js-amino.svg?color=green&style=flat-square)
+<img src="https://img.shields.io/github/issues-closed-raw/cybercongress/js-amino.svg?color=blue&style=flat-square" alt="closed issues" />
+<img src="https://img.shields.io/github/issues-pr-closed/cybercongress/js-amino.svg?color=green&style=flat-square" alt="closed PR"/>
 </div>
 <br/>
 <div align="center">
-[![CircleCI](https://circleci.com/gh/cybercongress/js-amino/tree/master.svg?style=svg)](https://circleci.com/gh/cybercongress/js-amino/tree/master)
-[![Coverage Status](https://coveralls.io/repos/github/cybercongress/js-amino/badge.svg)](https://coveralls.io/github/cybercongress/js-amino)
+<img src="https://circleci.com/gh/cybercongress/js-amino/tree/master.svg?style=svg" alt="CircleCI" />
+<a href='https://coveralls.io/github/cybercongress/js-amino?branch=30-add-ci-components-for-release'><img src='https://coveralls.io/repos/github/cybercongress/js-amino/badge.svg?branch=30-add-ci-components-for-release' alt='Coverage Status' /></a>
 </div>
 <br/>
 <div align="center">
 <img src="https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square" alt="contributors"/>
   <img src="https://img.shields.io/badge/contributions-welcome-orange.svg?style=flat-square" alt="Contributions Welcome" />
   <a href="https://t.me/fuckgoogle"> <img src="https://img.shields.io/badge/Join%20Us%20On-Telegram-2599D2.svg?style=flat-square" alt="Join Us On Telegram" /></a>
-  ![GitHub](https://img.shields.io/github/license/cybercongress/js-amino.svg?style=flat-square)
+  <img src="https://img.shields.io/github/license/cybercongress/js-amino.svg?style=flat-square" alt="MIT license"/>
 </div>
 <br/>
 
-<div align="center">
 [![NPM](https://nodei.co/npm/js-amino.png)](https://npmjs.org/package/@cybercongress/js-amino)
-</div>
+
 
 <div align="center">
   <sub>Built and maintenance by
