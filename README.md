@@ -29,6 +29,7 @@
   <img src="https://img.shields.io/github/license/cybercongress/js-amino.svg?style=flat-square" alt="MIT license"/>
 </div>
 
+<br/>
 [![NPM](https://nodei.co/npm/js-amino.png)](https://npmjs.org/package/@cybercongress/js-amino)
 
 
@@ -71,6 +72,9 @@ Run `npm i js-amino`
 3. Benchmarking
 
 ## Gitcoin program
+<a href="https://gitcoin.co/explorer?q=js-amino">
+    <img src="https://gitcoin.co/funding/embed?repo=https://github.com/cybercongress/js-amino">
+</a>
 
 ## Our cosmos ecosystem initiative
 
@@ -215,6 +219,8 @@ Decoded data:
 ```
 
 ## Contributing Guide
+
+Contribution are welcome! Please read this [guide](https://github.com/cybercongress/js-amino/blob/master/CONTRIBUTING.md) before contributing.
 
 ## Contributors
 
