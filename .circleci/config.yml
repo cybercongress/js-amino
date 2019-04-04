@@ -48,12 +48,3 @@ jobs:
                   git commit -m "Circle CI: Update Changelog"
                   git push -q https://${DOCS_GITHUB_TOKEN}@github.com/cybercongress/js-amino.git master
                 fi
-workflows:
-  version: 2
-  default_workflow:
-    jobs:
-      - build:
-      - update_changelog:
-          filters:
-            branches:
-              only: master
