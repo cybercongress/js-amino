@@ -3,6 +3,9 @@ workflows:
   default_workflow:
     jobs:
       - build:
+          filters:
+            branches:
+              ignore: /.*/
       - update_changelog:
           filters:
             branches:
