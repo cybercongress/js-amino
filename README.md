@@ -12,7 +12,7 @@
 
 
 <div align="center">
-![GitHub issues](https://img.shields.io/github/issues-raw/cybercongress/js-amino.svg?color=green&style=flat-square)
+<img src="https://img.shields.io/github/issues-raw/cybercongress/js-amino.svg?color=green&style=flat-square" alt="opened issues"/>
 ![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/cybercongress/js-amino.svg?color=blue&style=flat-square)
 ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/cybercongress/js-amino.svg?color=green&style=flat-square)
 </div>
