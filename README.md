@@ -1,6 +1,6 @@
 <h1 align="center">
   <img src="logo.png"
-  alt="chaingear" width="470"></a>
+  alt="js-amino" width="470"></a>
 </h1>
 
 <h3 align="center">An Implementation of Amino for clients with Javascript</h3>
