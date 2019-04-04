@@ -3,16 +3,13 @@ workflows:
   default_workflow:
     jobs:
       - build:
-          filters:
-            branches:
-              ignore: /.*/
       - update_changelog:
           filters:
             branches:
               only: master
 
 jobs:
-  build_tests:
+  build:
       working_directory: ~/build
       docker:
         - image: circleci/node:4.8.2
