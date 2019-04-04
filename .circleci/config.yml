@@ -1,8 +1,14 @@
+version: 2
+
+
 workflows:
   version: 2
   default_workflow:
     jobs:
       - build:
+          working_directory: ~/build
+          docker:
+            - image: circleci/node:4.8.2
       - update_changelog:
           filters:
             branches:
@@ -10,9 +16,6 @@ workflows:
 
 jobs:
   build:
-      working_directory: ~/build
-      docker:
-        - image: circleci/node:4.8.2
       steps:
         - checkout
         - run:
