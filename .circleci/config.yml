@@ -1,13 +1,8 @@
-version: 2
-
 workflows:
   version: 2
   js-amino_build:
     jobs:
       - build:
-          filters:
-            branches:
-              ignore: /.*/
       - update_changelog:
           filters:
             branches:
