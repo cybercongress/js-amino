@@ -1,8 +1,37 @@
-[![Coverage Status](https://coveralls.io/repos/github/cybercongress/js-amino/badge.svg)](https://coveralls.io/github/cybercongress/js-amino)
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors)
+<h1 align="center">
+  <img src="logo.png"
+  alt="chaingear" width="470"></a>
+</h1>
 
-# An Implementation of Amino in Javascript and TypeScript
-This is a work in progress implementation of the Amino serialization for Tendermint/Cosmos in the Javascript Language. For details on amino, see: https://github.com/tendermint/go-amino.
+<h3 align="center">An Implementation of Amino for clients with Javascript</h3>
+<div align="center">
+  Current state: 1.0.0 First major public release
+</div>
+
+<br />
+
+[![Coverage Status](https://coveralls.io/repos/github/cybercongress/js-amino/badge.svg)](https://coveralls.io/github/cybercongress/js-amino)
+<div align="center">
+<img src="https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square" alt="contributors"/>
+  <img src="https://img.shields.io/badge/contributions-welcome-orange.svg?style=flat-square" alt="Contributions Welcome" />
+  <a href="https://t.me/fuckgoogle"> <img src="https://img.shields.io/badge/Join%20Us%20On-Telegram-2599D2.svg?style=flat-square" alt="Join Us On Telegram" /></a>
+</div>
+
+<div align="center">
+  <sub>Built and maintenance by
+  <a href="https://github.com/cybercongress/js-amino/graphs/contributors">
+    contributors
+  </a>
+  and
+  <a href="https://twitter.com/cyber_devs">cyber•Congress</a> 
+</div>
+
+For more information spec, please refer: https://github.com/tendermint/go-amino
+
+## Features:
+1. Encode and Decode simple types: ints 8/16/32/64, booleans, strings, bytes
+2. Encode and Decode recursive Structs and Interfaces, Arrays
+3. Encode simple Time data
 
 ## Install From NPM:
 Run `npm i js-amino`
@@ -21,93 +50,156 @@ Run `npm i js-amino`
 
 1. Run `npm test`
 
-## Features:
-1. Encode and Decode simple types: int8,int16,int32,int64
-2. Encode and Decode recursive Struct and Interface
-3. Encode simple Time data
-
-## Todo:
+## To Do:
 1. Full support for Time encoding and decoding
-2. Add more Unit test
-3. Benchmark
+2. More Unit test
+3. Benchmarking
 
-## Usage
+## Gitcoin program
+
+## Our cosmos ecosystem initiative
+
+## Usage (MsgMultiSend example)
+
 ```js
 const {
-  Codec,
-  FieldOtions,
-  TypeFactory,
-  Types,
-  Utils
-} = require('js-amino')
+    Codec,
+    FieldOtions,
+    TypeFactory,
+    Utils,
+    Types,
+    WireTypes,
+} = require('../index');
 
+let StdTx = TypeFactory.create('StdTx', [{
+        name: 'msg',
+        type: Types.ArrayInterface,
+    },
+    {
+        name: 'fee',
+        type: Types.Struct,
+    },
+    {
+        name: 'signatures',
+        type: Types.ArrayStruct,
+    },
+    {
+        name: 'memo',
+        type: Types.String,
+    },
+]);
 
-let codec = new Codec() //init codec
+let MsgMultiSend = TypeFactory.create('MsgMultiSend', [{
+        name: "inputs",
+        type: Types.ArrayStruct
+    },
+    {
+        name: "outputs",
+        type: Types.ArrayStruct 
+    }
+]);
 
-//Equivalent Structure in Go-lang
-// // BaseAccount - a base account structure.
-// // This can be extended by embedding within in your AppAccount.
-// // There are examples of this in: examples/basecoin/types/account.go.
-// // However one doesn't have to use BaseAccount as long as your struct
-// // implements Account.
-// type BaseAccount struct {
-// 	Address sdk.AccAddress `json:"address"`
-// 	Coins   sdk.Coins      `json:"coins"`
-// 	PubKey  crypto.PubKey  `json:"public_key"`
-// 	AccountNumber uint64         `json:"account_number"`
-// 	Sequence      uint64         `json:"sequence"`
-// }
+let Coin = TypeFactory.create('coin', [{
+        name: 'denom',
+        type: Types.String,
+    },
+    {
+        name: 'amount',
+        type: Types.String,
+    }
+]);
 
-const BaseAccount = TypeFactory.create('BaseAccount', [{
-    name: 'address',
-    type: Types.ByteSlice,
-  },
-  {
-    name: 'coins',
-    type: Types.ArrayStruct,
-  },
-  {
-    name: 'pubKey',
-    type: Types.Interface,
-  },
-  {
-    name: 'accountNumber',
-    type: Types.Int64,
-  },
-  {
-    name: 'sequence',
-    type: Types.Int64,
-  }
-])
+let Input = TypeFactory.create('input', [{
+        name: 'address',
+        type: Types.String,
+    },
+    {
+        name: 'coins',
+        type: Types.ArrayStruct,
+    }
+]);
 
-const Coin = TypeFactory.create('Coin', [{
-    name: 'denom',
-    type: Types.String,
-  },
-  {
-    name: 'amount',
-    type: Types.String,
-  }
-])
+let Output = TypeFactory.create('output', [{
+        name: 'address',
+        type: Types.String,
+    },
+    {
+        name: 'coins',
+        type: Types.ArrayStruct,
+    }
+]);
+
+let Fee = TypeFactory.create('fee', [{
+        name: 'amount',
+        type: Types.ArrayStruct,
+    },
+    {
+        name: 'gas',
+        type: Types.Int64,
+    }
+]);
 
 let PubKeySecp256k1 = TypeFactory.create('PubKeySecp256k1', [{
-  name: "bytes",
-  type: Types.ByteSlice
+    name: 's',
+    type: Types.ByteSlice,
 }], Types.ByteSlice)
 
-codec.registerConcrete(new BaseAccount(), "auth/Account")
-codec.registerConcrete(new PubKeySecp256k1(), "tendermint/PubKeySecp256k1", {});
+let Signature = TypeFactory.create('signature', [{
+        name: 'pub_key',
+        type: Types.Interface,
+    },
+    {
+        name: 'signature',
+        type: Types.ByteSlice,
+    }
+])
 
-let address = Utils.fromHex('00CAFE00DEADBEEF00CAFE00')
-let coins = []
-coins.push(new Coin("IOV", '87654321'))
-coins.push(new Coin("ATOM", '100200300'))
-let publicKeySlice = Utils.fromHex('024277B89F1752570C6F257E8BECEF1C9059312E636C6F171596AD44F56E7123DF')
-let publicKey = new PubKeySecp256k1(publicKeySlice)
+let codec = new Codec();
 
-let baseAcc = new BaseAccount(address, coins, publicKey, 1234, 77777)
-let binary = Utils.toHex(codec.marshalBinary(baseAcc))
+codec.registerConcrete(new StdTx(), 'auth/StdTx', {});
+codec.registerConcrete(new MsgMultiSend(), 'cosmos-sdk/MsgMultiSend', {});
+codec.registerConcrete(new PubKeySecp256k1(), 'tendermint/PubKeySecp256k1', {});
+
+let coin = new Coin('cyb', "10000");
+
+let addressFrom = [ 59,58,243,13,132,163,164,202,233,7,236,93,136,166,181,175,236,69,48,186 ]
+let addressTo = [ 94,222,114,42,196,107,51,203,139,142,219,243,137,60,54,250,139,153,46,168 ]
+  
+let input = new Input(addressFrom, [coin]);
+let output = new Output(addressTo, [coin]);
+let sendMultiMsg = new MsgMultiSend([input], [output]);
+let fee = new Fee([new Coin('cyb', '0')], 200000);
+
+let pubKey = new PubKeySecp256k1([2,27,24,0,255,96,147,21,64,29,132,192,108,219,59,134,206,201,126,224,63,160,24,236,170,124,164,95,43,180,6,246,250]);
+let signature = [165,76,109,61,53,129,190,147,52,224,34,106,235,208,224,36,190,25,204,36,226,129,97,109,35,130,217,228,144,106,10,134,14,183,95,252,219,235,22,92,37,53,3,89,111,173,12,158,146,71,82,113,236,241,170,121,217,20,236,23,131,35,80,29];
+
+let sig = new Signature(pubKey, signature);
+let stdTx = new StdTx([sendMultiMsg], fee, [sig], 'elonmusk');
+
+let jsonTx = codec.marshalJson(stdTx);
+let decodedDataTx = new StdTx();
+
+console.log("Binary stdTx:\n", (codec.marshalBinary(stdTx)).toString());
+console.log("Json:\n", jsonTx);
+codec.unMarshalBinary(codec.marshalBinary(stdTx), decodedDataTx);
+console.log("Decoded data:\n", decodedDataTx.JsObject());
 ```
+
+```js
+Binary stdTx:
+  220,1,240,98,93,238,10,80,194,104,154,209,10,36,10,20,59,58,243,13,132,163,164,202,233,7,236,93,136,166,181,175,236,69,48,186,18,12,10,3,99,121,98,18,5,49,48,48,48,48,18,36,10,20,94,222,114,42,196,107,51,203,139,142,219,243,137,60,54,250,139,153,46,168,18,12,10,3,99,121,98,18,5,49,48,48,48,48,18,14,10,8,10,3,99,121,98,18,1,48,16,192,154,12,26,106,10,38,235,90,233,135,33,2,27,24,0,255,96,147,21,64,29,132,192,108,219,59,134,206,201,126,224,63,160,24,236,170,124,164,95,43,180,6,246,250,18,64,165,76,109,61,53,129,190,147,52,224,34,106,235,208,224,36,190,25,204,36,226,129,97,109,35,130,217,228,144,106,10,134,14,183,95,252,219,235,22,92,37,53,3,89,111,173,12,158,146,71,82,113,236,241,170,121,217,20,236,23,131,35,80,29,34,8,101,108,111,110,109,117,115,107
+
+Json:
+ {"type":"auth/StdTx","value":{"msg":[{"type":"cosmos-sdk/MsgMultiSend","value":{"inputs":[{"address":[59,58,243,13,132,163,164,202,233,7,236,93,136,166,181,175,236,69,48,186],"coins":[{"denom":"cyb","amount":"10000"}]}],"outputs":[{"address":[94,222,114,42,196,107,51,203,139,142,219,243,137,60,54,250,139,153,46,168],"coins":[{"denom":"cyb","amount":"10000"}]}]}}],"fee":{"amount":[{"denom":"cyb","amount":"0"}],"gas":"200000"},"signatures":[{"pub_key":{"type":"tendermint/PubKeySecp256k1","value":"AhsYAP9gkxVAHYTAbNs7hs7JfuA/oBjsqnykXyu0Bvb6"},"signature":"pUxtPTWBvpM04CJq69DgJL4ZzCTigWFtI4LZ5JBqCoYOt1/82+sWXCU1A1lvrQyekkdScezxqnnZFOwXgyNQHQ=="}],"memo":"elonmusk"}}
+
+Decoded data:
+ { msg: [ { inputs: [Array], outputs: [Array] } ],
+  fee: { amount: [ [Object] ], gas: 200000 },
+  signatures: [ { pub_key: [Array], signature: [Array] } ],
+  memo: 'elonmusk' }
+```
+
+## Contributing Guide
 
 ## Contributors
 
@@ -120,3 +212,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+
+## License
+
+Code are licensed under [MIT](./LICENSE) license by [contributors](https://github.com/cybercongress/js-amino/graphs/contributors)
