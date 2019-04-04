@@ -8,30 +8,13 @@
   Current state: 1.0.0 First major public release
 </div>
 
-<br/>
+<br />
 
-
-<div align="center">
-![GitHub issues](https://img.shields.io/github/issues-raw/cybercongress/js-amino.svg?color=green&style=flat-square)
-![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/cybercongress/js-amino.svg?color=blue&style=flat-square)
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/cybercongress/js-amino.svg?color=green&style=flat-square)
-</div>
-<br/>
-<div align="center">
-[![CircleCI](https://circleci.com/gh/cybercongress/js-amino/tree/master.svg?style=svg)](https://circleci.com/gh/cybercongress/js-amino/tree/master)
 [![Coverage Status](https://coveralls.io/repos/github/cybercongress/js-amino/badge.svg)](https://coveralls.io/github/cybercongress/js-amino)
-</div>
-<br/>
 <div align="center">
 <img src="https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square" alt="contributors"/>
   <img src="https://img.shields.io/badge/contributions-welcome-orange.svg?style=flat-square" alt="Contributions Welcome" />
   <a href="https://t.me/fuckgoogle"> <img src="https://img.shields.io/badge/Join%20Us%20On-Telegram-2599D2.svg?style=flat-square" alt="Join Us On Telegram" /></a>
-  ![GitHub](https://img.shields.io/github/license/cybercongress/js-amino.svg?style=flat-square)
-</div>
-<br/>
-
-<div align="center">
-[![NPM](https://nodei.co/npm/js-amino.png)](https://npmjs.org/package/@cybercongress/js-amino)
 </div>
 
 <div align="center">
@@ -40,9 +23,8 @@
     contributors
   </a>
   and
-  <a href="https://twitter.com/cyber_devs">cyber•Congress</a>
+  <a href="https://twitter.com/cyber_devs">cyber•Congress</a> 
 </div>
-<br/>
 
 For more information spec, please refer: https://github.com/tendermint/go-amino
 
@@ -113,7 +95,7 @@ let MsgMultiSend = TypeFactory.create('MsgMultiSend', [{
     },
     {
         name: "outputs",
-        type: Types.ArrayStruct
+        type: Types.ArrayStruct 
     }
 ]);
 
@@ -182,7 +164,7 @@ let coin = new Coin('cyb', "10000");
 
 let addressFrom = [ 59,58,243,13,132,163,164,202,233,7,236,93,136,166,181,175,236,69,48,186 ]
 let addressTo = [ 94,222,114,42,196,107,51,203,139,142,219,243,137,60,54,250,139,153,46,168 ]
-
+  
 let input = new Input(addressFrom, [coin]);
 let output = new Output(addressTo, [coin]);
 let sendMultiMsg = new MsgMultiSend([input], [output]);
@@ -230,12 +212,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
-
-
-## Gitcoin tasks
-<a href="https://gitcoin.co/explorer?q=js-amino">
-    <img src="https://gitcoin.co/funding/embed?repo=https://github.com/cybercongress/js-amino">
-</a>
 
 
 ## License
