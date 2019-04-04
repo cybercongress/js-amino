@@ -21,6 +21,7 @@
 
 **Merged pull requests:**
 
+- 30 add ci components for release [\#40](https://github.com/cybercongress/js-amino/pull/40) ([SaveTheAles](https://github.com/SaveTheAles))
 - 30 add ci components for release [\#39](https://github.com/cybercongress/js-amino/pull/39) ([SaveTheAles](https://github.com/SaveTheAles))
 - docs for first major release  [\#38](https://github.com/cybercongress/js-amino/pull/38) ([litvintech](https://github.com/litvintech))
 - docs: add ethanfrey as a contributor [\#37](https://github.com/cybercongress/js-amino/pull/37) ([allcontributors[bot]](https://github.com/apps/allcontributors))
