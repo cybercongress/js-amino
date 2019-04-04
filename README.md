@@ -18,7 +18,7 @@
 </div>
 <br/>
 <div align="center">
-<img src="https://circleci.com/gh/cybercongress/js-amino/tree/master.svg?style=svg" alt="CircleCI" />
+<a href="https://circleci.com/gh/cybercongress/js-amino/tree/master"><img src="https://circleci.com/gh/cybercongress/js-amino/tree/master.svg?style=svg"></a>
 <a href='https://coveralls.io/github/cybercongress/js-amino?branch=30-add-ci-components-for-release'><img src='https://coveralls.io/repos/github/cybercongress/js-amino/badge.svg?branch=30-add-ci-components-for-release' alt='Coverage Status' /></a>
 </div>
 <br/>
