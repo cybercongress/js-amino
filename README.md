@@ -2,8 +2,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors)
 
 # An Implementation of Amino in Javascript and TypeScript
-
-For more information spec, please refer: https://github.com/tendermint/go-amino
+This is a work in progress implementation of the Amino serialization for Tendermint/Cosmos in the Javascript Language. For details on amino, see: https://github.com/tendermint/go-amino.
 
 ## Install From NPM:
 Run `npm i js-amino`
