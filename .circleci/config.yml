@@ -24,4 +24,4 @@ jobs: # a collection of steps
           command: npm test
       - run: # run coverage report
           name: code-coverage
-          command: './node_modules/coveralls/bin/coveralls.js'
+          command: 'npm run coverage'
