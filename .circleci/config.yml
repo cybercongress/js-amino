@@ -80,3 +80,10 @@ jobs:
               # Push quietly to prevent showing the token in log
               git push -q https://${DOCS_GITHUB_TOKEN}@github.com/cybercongress/library.git master
             fi
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - build
+    - update_changelog
+    - update_doc
