@@ -38,7 +38,7 @@
     contributors
   </a>
   and
-  <a href="https://twitter.com/cyber_devs">cyber•Congress</a> 
+  <a href="https://twitter.com/cyber_devs">cyber•Congress</a>
 </div>
 
 For more information spec, please refer: https://github.com/tendermint/go-amino
@@ -110,7 +110,7 @@ let MsgMultiSend = TypeFactory.create('MsgMultiSend', [{
     },
     {
         name: "outputs",
-        type: Types.ArrayStruct 
+        type: Types.ArrayStruct
     }
 ]);
 
@@ -179,7 +179,7 @@ let coin = new Coin('cyb', "10000");
 
 let addressFrom = [ 59,58,243,13,132,163,164,202,233,7,236,93,136,166,181,175,236,69,48,186 ]
 let addressTo = [ 94,222,114,42,196,107,51,203,139,142,219,243,137,60,54,250,139,153,46,168 ]
-  
+
 let input = new Input(addressFrom, [coin]);
 let output = new Output(addressTo, [coin]);
 let sendMultiMsg = new MsgMultiSend([input], [output]);
