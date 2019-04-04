@@ -85,5 +85,16 @@ workflows:
   workflow:
     jobs:
     - build
-    - update_changelog
-    - update_doc
+    - update_changelog:
+        filters:
+          branches:
+            only: master
+        requires:
+          - build
+    - update_doc:
+        filters:
+          branches:
+            only: master
+        requires:
+          - build
+          - update_changelog
