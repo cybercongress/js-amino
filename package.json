@@ -1,7 +1,7 @@
 {
   "name": "js-amino",
-  "version": "1.0.1",
-  "description": "JS Implementation of Amino ",
+  "version": "1.0.0",
+  "description": "JS Implementation of Amino",
   "main": "src/index.js",
   "dependencies": {
     "int53": "^0.2.4",
@@ -21,9 +21,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TanNgocDo/Js-Amino.git"
+    "url": "https://github.com/cybercongress/js-amino.git"
   },
   "author": "TanDo",
-  "license": "ISC",
-  "homepage": "https://github.com/TanNgocDo/Js-Amino"
+  "license": "MIT",
+  "homepage": "https://github.com/cybercongress/js-amino/"
 }
