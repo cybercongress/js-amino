@@ -18,27 +18,27 @@ jobs:
       working_directory: ~/build
       docker:
         - image: circleci/node:4.8.2
-        steps:
-          - checkout
-          - run:
-            name: update-npm
-            command: 'sudo npm install -g npm@latest'
-          - run:
-              name: install-npm-js-amino
-              command: npm install
-          - save_cache: # special step to save the dependency cache
-              key: dependency-cache-{{ checksum "package.json" }}
-              paths:
-                - ./node_modules
-          - run: # run tests
-              name: test
-              command: npm test
-          - run: # run coverage report
-              name: code-coverage
-              command: './node_modules/bin/coveralls.js'
-          - store_artifacts: # special step to save test results as as artifact
-              path: ./node_modules/coveralls/bin/coveralls.js
-              prefix: tests
+      steps:
+        - checkout
+        - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@latest'
+        - run:
+            name: install-npm-js-amino
+            command: npm install
+        - save_cache: # special step to save the dependency cache
+            key: dependency-cache-{{ checksum "package.json" }}
+            paths:
+              - ./node_modules
+        - run: # run tests
+            name: test
+            command: npm test
+        - run: # run coverage report
+            name: code-coverage
+            command: './node_modules/bin/coveralls.js'
+        - store_artifacts: # special step to save test results as as artifact
+            path: ./node_modules/coveralls/bin/coveralls.js
+            prefix: tests
 
   update_changelog:
       working_directory: ~/build
