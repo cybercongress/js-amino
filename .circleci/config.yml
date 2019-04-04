@@ -2,7 +2,7 @@ version: 2
 
 workflows:
   version: 2
-  default_workflow:
+  js-amino_build:
     jobs:
       - build:
           filters:
