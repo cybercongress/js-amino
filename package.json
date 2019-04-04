@@ -14,12 +14,10 @@
   "devDependencies": {
     "coveralls": "^3.0.3",
     "mocha": "^5.2.0",
-    "mocha-lcov-reporter": "^1.3.0",
-    "nyc": "^13.3.0"
+    "mocha-lcov-reporter": "^1.3.0"
   },
   "scripts": {
-    "test": "nyc mocha",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
