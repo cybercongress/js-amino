@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="./logo.png"
+  <img src="img/logo.png"
   alt="js-amino" width="470"></a>
 </h1>
 
