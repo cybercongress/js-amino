@@ -70,7 +70,7 @@ jobs:
             cp ~/build/README.md ./wiki/docs/js-amino/Overview.md
             cp ~/build/CHANGELOG.md ./wiki/docs/js-amino/Changelog.md
             cp ~/build/CONTRIBUTING.md ./wiki/docs/js-amino/Contributing.md
-            cp ~/build/img/. ./wiki/docs/js-amino/img
+            cp ~/build/img/. ./wiki/docs/js-amino/img/
             git add -N wiki/docs/js-amino
             diff=$(git diff wiki/docs/js-amino/)
             if [[  -n  "$diff" ]]; then
