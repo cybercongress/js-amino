@@ -21,7 +21,7 @@ let privObj = {
     typeMap: null
 }
 
-class FieldOtions {
+class FieldOptions {
 
     constructor(opts = {}) {
         this.jsonName = opts.jsonName || "";
@@ -98,7 +98,7 @@ class Codec {
         JsonDecoder.decodeJson(value, instance)
     }
 
-    marshalBinary(obj, fieldOpts = new FieldOtions()) {
+    marshalBinary(obj, fieldOpts = new FieldOptions()) {
         if (!obj) return null
         // let typeInfo = this.lookup(Reflection.typeOf(obj))        
         // if (!typeInfo) return null;
@@ -115,7 +115,7 @@ class Codec {
         return lenBz.concat(encodedData)
     }
 
-    unMarshalBinary(bz, instance, fieldOpts = new FieldOtions()) {
+    unMarshalBinary(bz, instance, fieldOpts = new FieldOptions()) {
         if (bz.length == 0) throw new RangeError("UnmarshalBinary cannot decode empty bytes")
         if (!instance) throw new TypeError("UnmarshalBinary cannot decode to Null instance")
         let typeName = Reflection.typeOf(instance)
@@ -143,5 +143,5 @@ class Codec {
 
 module.exports = {
     Codec,
-    FieldOtions
+    FieldOptions
 }
