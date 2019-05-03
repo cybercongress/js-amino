@@ -4,6 +4,7 @@
 
 **Closed issues:**
 
+- Question: Cosmos SDK types library [\#41](https://github.com/cybercongress/js-amino/issues/41)
 - Encoding of default values [\#27](https://github.com/cybercongress/js-amino/issues/27)
 - Converting type to typ3 with considering options. [\#24](https://github.com/cybercongress/js-amino/issues/24)
 - Typo on field options [\#23](https://github.com/cybercongress/js-amino/issues/23)
@@ -21,6 +22,7 @@
 
 **Merged pull requests:**
 
+- Rename comos\_base\_account.js to cosmos\_base\_account.js [\#42](https://github.com/cybercongress/js-amino/pull/42) ([jordansexton](https://github.com/jordansexton))
 - 30 add ci components for release [\#40](https://github.com/cybercongress/js-amino/pull/40) ([SaveTheAles](https://github.com/SaveTheAles))
 - 30 add ci components for release [\#39](https://github.com/cybercongress/js-amino/pull/39) ([SaveTheAles](https://github.com/SaveTheAles))
 - docs for first major release  [\#38](https://github.com/cybercongress/js-amino/pull/38) ([litvintech](https://github.com/litvintech))
