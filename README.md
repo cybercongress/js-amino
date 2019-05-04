@@ -86,7 +86,7 @@ We want to pay you for your contribution! We constantly fund our issues on [gitc
 ```js
 const {
     Codec,
-    FieldOtions,
+    FieldOptions,
     TypeFactory,
     Utils,
     Types,

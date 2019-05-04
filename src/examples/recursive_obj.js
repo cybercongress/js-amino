@@ -1,6 +1,6 @@
 let {
     Codec,
-    FieldOtions,
+    FieldOptions,
     TypeFactory,
     Utils,
     Types,
@@ -88,14 +88,14 @@ for (let i = 0; i < 5; ++i) {
 
 let obj = new SimpleStruct(100, subStructs2, 1, "Je Suis Tan", new SubA('Hello', 32, new SubA2('World', 8000)))
 
-let binary = codec1.marshalBinary(obj, new FieldOtions({
+let binary = codec1.marshalBinary(obj, new FieldOptions({
     binFixed64: true
 }))
 //console.log("binary=",binary.toString())
 console.log(Utils.toHex(binary))
 
 let decodedObj = new SimpleStruct()
-codec1.unMarshalBinary(binary, decodedObj, new FieldOtions({
+codec1.unMarshalBinary(binary, decodedObj, new FieldOptions({
     binFixed64: true
 }))
 let jsObj = decodedObj.JsObject();

@@ -1,6 +1,6 @@
 let {
   Codec,
-  FieldOtions,
+  FieldOptions,
   TypeFactory,
   Utils,
   Types,
@@ -23,11 +23,11 @@ codec.registerConcrete(new StrStruct(), 'test/StrStruct')
 
 let strStruct = new StrStruct('ascii', '안녕', 10)
 
-let binary = codec.marshalBinary(strStruct,new FieldOtions({binFixed64:false}))
+let binary = codec.marshalBinary(strStruct,new FieldOptions({binFixed64:false}))
 console.log(binary.toString())
 
 let strStruct2 = new StrStruct()
-codec.unMarshalBinary(binary, strStruct2,new FieldOtions({binFixed64:false}))
+codec.unMarshalBinary(binary, strStruct2,new FieldOptions({binFixed64:false}))
 //console.log(strStruct2)
 console.log(strStruct.str1 === strStruct2.str1 && strStruct.str2 === strStruct2.str2 && strStruct.int === strStruct2.int)
 

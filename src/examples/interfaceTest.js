@@ -1,6 +1,6 @@
 let {
     Codec,
-    FieldOtions,
+    FieldOptions,
     TypeFactory,
     Utils,
     Types,
@@ -44,16 +44,16 @@ codec.registerConcrete(new PubSecp256k1(), "shareledger/PubSecp256k1", {})
 
 let msgSend = new MsgSend(3)
 let tx = new Tx(msgSend)
-let binary = codec.marshalBinary(tx,new FieldOtions({binFixed64: true, binFixed32: true}))
+let binary = codec.marshalBinary(tx,new FieldOptions({binFixed64: true, binFixed32: true}))
 console.log("binary=",binary)
 let decodedTx = new Tx();
-codec.unMarshalBinary(binary,decodedTx, new FieldOtions({binFixed64: true, binFixed32: true}))
+codec.unMarshalBinary(binary,decodedTx, new FieldOptions({binFixed64: true, binFixed32: true}))
 console.log("decodedTx=",JSON.stringify(decodedTx.JsObject()))
 
 
 let pubKey = new PubSecp256k1([1, 2, 3])
 //let tx2 = new Tx2(pubKey)
-//let binary2 = codec.marshalBinary(tx2,new FieldOtions({binFixed64: true, binFixed32: true}))
+//let binary2 = codec.marshalBinary(tx2,new FieldOptions({binFixed64: true, binFixed32: true}))
 
 
 //console.log(Utils.toHex(binary))
