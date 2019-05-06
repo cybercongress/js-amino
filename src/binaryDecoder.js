@@ -14,64 +14,55 @@ const decodeBinary = (bz, instance, type, opts, isBare = true) => {
 
     switch (type) {
 
-        case Types.Int64:
-            {
-                if (opts.binFixed64) {                   
-                    decodedData = Decoder.decodeInt64(bz)
-                } else {
-                    decodedData = Decoder.decodeUVarint(bz)
-                }
-
-                break;
-            }
-        case Types.String:
-            {
-
-                decodedData = Decoder.decodeString(bz)
-                break;
-            }
-        case Types.Int8:
-            {
-                decodedData = Decoder.decodeInt8(bz)
-                break;
-            }
-        case Types.Struct:
-            {
-                decodedData = decodeBinaryStruct(bz, instance, opts, isBare)
-                break;
+        case Types.Int64: {
+            if (opts.binFixed64) {
+                decodedData = Decoder.decodeInt64(bz)
+            } else {
+                decodedData = Decoder.decodeUVarint(bz)
             }
 
-        case Types.ArrayStruct:
-            {
-                decodedData = decodeBinaryArray(bz, Types.ArrayStruct, instance, opts, isBare)
-                break;
-            }
+            break;
+        }
+        case Types.String: {
 
-        case Types.ArrayInterface:
-            {
-                decodedData = decodeBinaryArray(bz, Types.ArrayInterface, instance, opts, isBare)
-                break;
-            }
+            decodedData = Decoder.decodeString(bz)
+            break;
+        }
+        case Types.Int8: {
+            decodedData = Decoder.decodeInt8(bz)
+            break;
+        }
+        case Types.Struct: {
+            decodedData = decodeBinaryStruct(bz, instance, opts, isBare)
+            break;
+        }
 
-        case Types.ByteSlice:
-            {
-                decodedData = Decoder.decodeSlice(bz)
-                break;
-            }
+        case Types.ArrayStruct: {
+            decodedData = decodeBinaryArray(bz, Types.ArrayStruct, instance, opts, isBare)
+            break;
+        }
 
-        case Types.Interface:
-            {
+        case Types.ArrayInterface: {
+            decodedData = decodeBinaryArray(bz, Types.ArrayInterface, instance, opts, isBare)
+            break;
+        }
 
-                decodedData = decodeInterface(bz, instance, instance.type, opts, isBare)
-                break;
-            }
+        case Types.ByteSlice: {
+            decodedData = Decoder.decodeSlice(bz)
+            break;
+        }
 
-        default:
-            {
-                console.log("There is no data type to decode:", type)
-                throw new Error("There is no data type to decode:", type)
+        case Types.Interface: {
 
-            }
+            decodedData = decodeInterface(bz, instance, instance.type, opts, isBare)
+            break;
+        }
+
+        default: {
+            console.log("There is no data type to decode:", type)
+            throw new Error("There is no data type to decode:", type)
+
+        }
     }
 
     return {
@@ -89,6 +80,10 @@ const decodeBinaryField = (bz, idx, type, instance, opts, isBare) => {
     if (type == Types.ArrayStruct || type == Types.ArrayInterface) {
         decodedData = decodeBinaryArray(bz, type, instance, opts, true, idx)
         totalLength = decodedData.byteLength
+    } else if (type == Types.Time) {
+        bz = bz.slice(decodedFieldtype.byteLength)        
+        decodedData = decodeTime(bz, instance, idx, isBare)
+        totalLength = decodedFieldtype.byteLength + decodedData.byteLength
     } else {
 
         let expectedTyp3 = Reflection.typeToTyp3(type, opts)
@@ -103,7 +98,7 @@ const decodeBinaryField = (bz, idx, type, instance, opts, isBare) => {
                 " But got:" + decodedFieldtype.type.toString())
         }
 
-        if (idx + 1 != decodedFieldtype.idx) {            
+        if (idx + 1 != decodedFieldtype.idx) {
             throw new RangeError("Index of Field is not match. Expecting:" + (idx + 1) +
                 " But got:" + decodedFieldtype.idx)
         }
@@ -122,17 +117,17 @@ const decodeBinaryField = (bz, idx, type, instance, opts, isBare) => {
 const decodeBinaryStruct = (bz, instance, opts, isBare = true) => {
 
     let totalLength = 0;
-    
+
     if (!isBare) { // Read byte-length prefixed byteslice.
-        let prefixSlice = Decoder.decodeUVarint(bz)        
+        let prefixSlice = Decoder.decodeUVarint(bz)
         bz = bz.slice(prefixSlice.byteLength)
-        
+
         if (bz.length < prefixSlice.data) {
             throw new RangeError("Wrong length prefix for Struct")
         }
         totalLength += prefixSlice.byteLength;
     }
-    
+
 
 
     Reflection.ownKeys(instance).forEach((key, idx) => {
@@ -188,6 +183,28 @@ const decodeBinaryArray = (bz, arrayType, instance, opts, isBare = true, idx = 0
     }
 }
 
+const decodeTime = (bz, instance,idx, isBare) => {
+    let totalLength = 0;
+    
+    if (!isBare) { // Read byte-length prefixed byteslice.
+        let prefixSlice = Decoder.decodeUVarint(bz)
+        bz = bz.slice(prefixSlice.byteLength)        
+        
+       // if (bz.length < prefixSlice.data) throw new RangeError("Wrong length prefix for Time")
+        totalLength += prefixSlice.byteLength;
+    }
+   // console.log("bz=",bz);
+    let decodedData = Decoder.decodeTime(bz);
+    totalLength += decodedData.byteLength;
+    
+    return {
+        data: decodedData.data,
+        byteLength: totalLength
+    }
+
+}
+
+
 const verifyPrefix = (bz, instance) => {
     let shiftedPrefixByte = 0;
     if (instance.info) {
@@ -206,7 +223,7 @@ const verifyPrefix = (bz, instance) => {
 const decodeInterface = (bz, instance, type, opts, isBare = true) => {
 
     let totalLength = 0;
-    
+
     if (!isBare) { // Read byte-length prefixed byteslice.
         let prefixSlice = Decoder.decodeUVarint(bz)
         bz = bz.slice(prefixSlice.byteLength)
