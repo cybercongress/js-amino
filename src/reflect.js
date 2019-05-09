@@ -8,7 +8,7 @@ const typeOf = instance => {
     if ((typeof instance) === "undefined") {
         throw new Error("Undefined Type");
     }
-    if( instance in Types ) return Types[instane]
+    if( instance in Types ) return Types[instance]
     
     if (typeof instance == 'object') {
         if( instance.constructor.name == 'AminoType' ) return instance.typeName()
