@@ -22,6 +22,7 @@
 
 **Merged pull requests:**
 
+- Fixed typo in variable name [\#45](https://github.com/cybercongress/js-amino/pull/45) ([jordansexton](https://github.com/jordansexton))
 - FieldOtions -\> FieldOptions [\#43](https://github.com/cybercongress/js-amino/pull/43) ([jordansexton](https://github.com/jordansexton))
 - Rename comos\_base\_account.js to cosmos\_base\_account.js [\#42](https://github.com/cybercongress/js-amino/pull/42) ([jordansexton](https://github.com/jordansexton))
 - 30 add ci components for release [\#40](https://github.com/cybercongress/js-amino/pull/40) ([SaveTheAles](https://github.com/SaveTheAles))
