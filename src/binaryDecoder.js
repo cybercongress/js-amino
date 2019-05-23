@@ -75,6 +75,13 @@ const decodeBinary = (bz, instance, type, opts, isBare = true) => {
 
 const decodeBinaryField = (bz, idx, type, instance, opts, isBare) => {
     let decodedData = null;
+    //this dirty case occur of bz is empty. TODO: refactor it with more elegant code
+    if(bz.length== 0 ) {
+        return {
+            data: [],
+            byteLength: 0
+        } 
+    }
     let decodedFieldtype = Decoder.decodeFieldNumberAndType(bz)
     let totalLength = 0;
     if (type == Types.ArrayStruct || type == Types.ArrayInterface) {
