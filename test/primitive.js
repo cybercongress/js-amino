@@ -2,7 +2,7 @@ const {
   Codec,
   TypeFactory,
   Types,
-  FieldOtions,
+  FieldOptions,
 } = require('../src/index')
 const { toHex } = require('./util')
 const assert = require('assert')
@@ -81,7 +81,7 @@ describe('Test encode primitive type int', () => {
       }
     ])
     let fixedInt = new FixedInt(1234567, 123456789)
-    assert.equal(toHex(codec.marshalBinary(fixedInt, new FieldOtions({binFixed64: true, binFixed32: true}))), '0e0d87d612001115cd5b0700000000')
+    assert.equal(toHex(codec.marshalBinary(fixedInt, new FieldOptions({binFixed64: true, binFixed32: true}))), '0e0d87d612001115cd5b0700000000')
   })
 })
 

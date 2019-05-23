@@ -195,12 +195,14 @@ const encodeBinaryArray = (instance, arrayType, opts, isBare = true, idx = 0) =>
 const encodeTime = (time, idx, opts, isBare) => {
     let result = []
     let encodeData = null;
-    encodeData = Encoder.encodeTime(time);
+    encodeData = Encoder.encodeTime(time);    
+    
     result = result.concat(encodeData);
 
     if (!isBare) {
         result = Encoder.encodeUVarint(result.length).concat(result)
     }
+    
     let encodeField = Encoder.encodeFieldNumberAndType(idx + 1, Reflection.typeToTyp3(Types.Struct , opts )) //notice: use Types.Struct -> Time is a special of Struct
     result = encodeField.concat(result)
     return result

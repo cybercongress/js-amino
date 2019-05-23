@@ -1,0 +1,78 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Thunnini",
+      "name": "JungHwan Tony Yun",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16339680?v=4",
+      "profile": "https://github.com/Thunnini",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "TanNgocDo",
+      "name": "TanNgocDo",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/8816061?v=4",
+      "profile": "https://www.linkedin.com/in/do-ngoc-tan-64260072/",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "philipstanislaus",
+      "name": "philipstanislaus",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6912756?v=4",
+      "profile": "https://github.com/philipstanislaus",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "SaveTheAles",
+      "name": "Ales Puchilo",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/36516972?v=4",
+      "profile": "https://github.com/SaveTheAles",
+      "contributions": [
+        "projectManagement"
+      ]
+    },
+    {
+      "login": "litvintech",
+      "name": "Valery Litvin",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1690657?v=4",
+      "profile": "https://github.com/litvintech",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "cyberadmin",
+      "name": "Cyber Admin",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/36439031?v=4",
+      "profile": "https://github.com/cyberadmin",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ethanfrey",
+      "name": "Ethan Frey",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5689864?v=4",
+      "profile": "https://github.com/ethanfrey",
+      "contributions": [
+        "test"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "js-amino",
+  "projectOwner": "cybercongress",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}

@@ -66,7 +66,7 @@ const encodeBoolean = input => {
 const encodeTime = time => {
     let data = []    
     let s = time.getTime() / 1000 //get the second
-   
+    
     if (s != 0) {
         if (s < Utils.MinSecond && s >= Utils.MaxSecond) {
             throw new RangeError(`Second have to be >= ${Utils.MinSecond}, and <: ${Utils.MaxSecond}`)
@@ -85,6 +85,7 @@ const encodeTime = time => {
         data = data.concat(encodeField.concat(encodeUVarint(ns)))
     }
     */
+   
     return data;
 
 }

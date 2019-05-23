@@ -85,7 +85,7 @@ const decodeString = input => {
 const decodeSlice = input =>{
     let {data,byteLength} = decodeUVarint(input)
     let length = data
-    if(input.length < length) throw new RangeError(`insufficient bytes decoding string of length ${strLength}`)
+    if(input.length < length) throw new RangeError(`insufficient bytes decoding string of length ${length}`)
     
     let slicedData = input.slice(byteLength,length+1);
 
@@ -94,6 +94,37 @@ const decodeSlice = input =>{
         byteLength: byteLength + length
     } 
 }
+
+const decodeTime = input => {
+    let timeObj = decodeFieldNumberAndType(input)
+    
+    if( timeObj.type != WireMap[Types.Time]) {
+        throw TypeError("Decode Time type should be Types.Time ");
+    }
+    if( timeObj.idx != 1 ) {
+        throw TypeError("First Index of binary type should be 1");
+    } //not second
+    let sliceData = input.slice(timeObj.byteLength);
+    let second = decodeUVarint(sliceData);
+    
+   /* let length = data
+    if(input.length < length) throw new RangeError(`insufficient bytes decoding  length ${length}`)
+    if (s != 0) {
+        if (s < Utils.MinSecond && s >= Utils.MaxSecond) {
+            throw new RangeError(`Second have to be >= ${Utils.MinSecond}, and <: ${Utils.MaxSecond}`)
+        }
+        let encodeField = encodeFieldNumberAndType(1, WireMap[Types.Time])
+        data = encodeField.concat(encodeUVarint(s))
+    }
+   
+  */
+  return {
+    data:second.data,
+    byteLength: timeObj.byteLength + second.byteLength
+ } 
+
+}
+
 
 const decodeFieldNumberAndType = bz => {  
     let decodedData = decodeUVarint(bz)   
@@ -115,6 +146,7 @@ module.exports = {
     decodeInt16,
     decodeInt64,
     decodeString,
+    decodeTime,
     decodeFieldNumberAndType,
     decodeSlice
 }

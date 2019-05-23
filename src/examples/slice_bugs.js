@@ -1,7 +1,7 @@
 
 const {
     Codec,
-    FieldOtions,
+    FieldOptions,
     TypeFactory,
     Utils,
     Types,
