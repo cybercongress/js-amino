@@ -68,18 +68,18 @@ jobs:
           working_directory: ~/workdir/congress
           command: |
             # We need to remove current files in folder to avoid duplicating renamed files
-            rm -rf ./site/content/docs/cyberd/js-amino/*
-            cp -r ~/build/docs/. ./site/content/docs/cyberd/js-amino/
-            cp ~/build/README.md ./site/content/docs/cyberd/js-amino/Overview.md
-            cp ~/build/CHANGELOG.md ./site/content/docs/cyberd/Changelog.md
-            cp ~/build/CONTRIBUTING.md ./site/content/docs/cyberd/Contributing.md
-            cp ~/build/img/. -r ./site/content/docs/cyberd/img/.
-            git add -N site/content/docs/cyberd
-            diff=$(git diff site/content/docs/cyberdjs-amino/)
+            rm -rf ./site/content/docs/js-amino/*
+            cp -r ~/build/docs/. ./site/content/docs/js-amino/
+            cp ~/build/README.md ./site/content/docs/js-amino/Overview.md
+            cp ~/build/CHANGELOG.md ./site/content/docs/js-amino/Changelog.md
+            cp ~/build/CONTRIBUTING.md ./site/content/docs/js-amino/Contributing.md
+            cp ~/build/img/. -r ./site/content/docs/js-amino/img/.
+            git add -N site/content/docs/js-amino
+            diff=$(git diff site/content/docs/js-amino/)
             if [[  -n  "$diff" ]]; then
               git config user.email "cybercongress42@gmail.com"
               git config user.name "Cyber Admin"
-              git add site/content/docs/cyberd/js-amino/
+              git add site/content/docs/js-amino/
               git commit -m "Circle CI: Update Docs"
               # Push quietly to prevent showing the token in log
               git push -q https://${DOCS_GITHUB_TOKEN}@github.com/cybercongress/congress.git master
