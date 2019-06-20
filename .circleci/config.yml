@@ -70,7 +70,6 @@ jobs:
             # We need to remove current files in folder to avoid duplicating renamed files
             rm -rf ./site/content/docs/js-amino/*
             cp -r ~/build/docs/. ./site/content/docs/js-amino/
-            cp ~/build/README.md ./site/content/docs/js-amino/Overview.md
             cp ~/build/CHANGELOG.md ./site/content/docs/js-amino/Changelog.md
             cp ~/build/CONTRIBUTING.md ./site/content/docs/js-amino/Contributing.md
             cp ~/build/img/. -r ./site/content/docs/js-amino/img/
