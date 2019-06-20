@@ -4,6 +4,7 @@
 
 **Closed issues:**
 
+- The instance.constructor.name cannot get correct result, when I use babel-loader transformed. [\#47](https://github.com/cybercongress/js-amino/issues/47)
 - Question: Cosmos SDK types library [\#41](https://github.com/cybercongress/js-amino/issues/41)
 - Encoding of default values [\#27](https://github.com/cybercongress/js-amino/issues/27)
 - Converting type to typ3 with considering options. [\#24](https://github.com/cybercongress/js-amino/issues/24)
