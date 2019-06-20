@@ -101,4 +101,3 @@ workflows:
             only: master
         requires:
           - build
-          - update_changelog
