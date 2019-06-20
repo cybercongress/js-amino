@@ -73,7 +73,7 @@ jobs:
             cp ~/build/README.md ./site/content/docs/js-amino/Overview.md
             cp ~/build/CHANGELOG.md ./site/content/docs/js-amino/Changelog.md
             cp ~/build/CONTRIBUTING.md ./site/content/docs/js-amino/Contributing.md
-            cp ~/build/img/. -r ./site/content/docs/js-amino/img/.
+            cp ~/build/img/. -r ./site/content/docs/js-amino/img/
             git add -N site/content/docs/js-amino
             diff=$(git diff site/content/docs/js-amino/)
             if [[  -n  "$diff" ]]; then
