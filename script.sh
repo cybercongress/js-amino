@@ -28,3 +28,11 @@ project: js-amino
 cat CHANGELOG.md >> temp.md
 cat temp.md > CHANGELOG.md
 rm -rf temp.md
+
+touch temp.md
+echo "---
+project: js-amino
+---" >> temp.md
+cat README.md >> temp.md
+cat temp.md > README.md
+rm -rf temp.md
