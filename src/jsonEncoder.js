@@ -38,7 +38,7 @@ const encodeJson = (instance, type) => {
             }
         case Types.String:
             {
-                return tmpInstance
+                return tmpInstance.toString()
             }
 
         case Types.Struct:
